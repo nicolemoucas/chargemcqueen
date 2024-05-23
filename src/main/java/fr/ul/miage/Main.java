@@ -2,8 +2,17 @@ package fr.ul.miage;
 
 import java.util.*;
 
+/**
+ * Classe principale de l'application Charge McQueen.
+ */
 public class Main {
     private static List<String> optionsMenu = new ArrayList<>();
+
+    /**
+     * Méthode principale de l'application qui permet de la lancer et de gérer le flux de l'utilisateur.
+     *
+     * @param args Arguments de la ligne de commande
+     */
     public static void main(String[] args) {
         int ordreUtilisateur = -1;
 
@@ -13,14 +22,22 @@ public class Main {
             ordreUtilisateur = saisirChoixMenu();
             executerOrdre(ordreUtilisateur);
         }
-        aurevoir();
+        auRevoir();
     }
 
+    /**
+     * Créé une liste avec les options du menu principal de l'application.
+     *
+     * @return Liste des options disponibles
+     */
     private static List<String> chargerOptionsMenu() {
         return new ArrayList<String>(Arrays.asList("Trouver ma réservation",
                 "Saisir ma plaque d'immatriculation", "S'inscrire", "Se connecter"));
     }
 
+    /**
+     * Affiche un message de bienvenue à l'utilisateur.
+     */
     private static void bienvenue() {
         System.out.println("Bienvenue chez Charge McQueen !");
         System.out.println(
@@ -30,7 +47,10 @@ public class Main {
                         "      '--(_)-------(_)--'  \n\n");
     }
 
-    private static void aurevoir() {
+    /**
+     * Affiche un message d'au revoir à l'utilisateur.
+     */
+    private static void auRevoir() {
         System.out.println("\nÀ bientôt chez Charge McQueen⚡️ !");
         System.out.println(
                 "          ______\n" +
@@ -39,12 +59,20 @@ public class Main {
                 "  *- *--`-(_)--(_)-'");
     }
 
+    /**
+     * Affiche les options du menu à l'utilisateur.
+     */
     private static void afficherMenu() {
         for (int i = 0; i < optionsMenu.size(); i++) {
             System.out.println((i+1) + ". " + optionsMenu.get(i));
         }
     }
 
+    /**
+     * Demande à l'utilisateur de saisir un choix à partir du menu.
+     *
+     * @return choix (int) saisi par l'utilisateur
+     */
     protected static int saisirChoixMenu() {
         Scanner scanner = new Scanner(System.in);
         int choixSaisi = -1;
@@ -69,6 +97,11 @@ public class Main {
         return choixSaisi;
     }
 
+    /**
+     * Redirige vers l'action choisie par l'utilisateur en fonction du numéro d'ordre passé en paramètre.
+     *
+     * @param ordreUtilisateur Instruction (int) choisie par l'utilisateur
+     */
     private static void executerOrdre(int ordreUtilisateur) {
         switch (ordreUtilisateur) {
             case 1:
