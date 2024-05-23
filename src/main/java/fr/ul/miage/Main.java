@@ -16,6 +16,7 @@ public class Main {
      */
     public static void main(String[] args) {
 
+        new FormulaireInscriptionClient().procedureInscription();
         optionsMenuInitial = chargerOptionsMenuInitial();
         bienvenue();
         System.out.println("\nMenu principal");
