@@ -5,11 +5,14 @@ import java.util.*;
 public class Main {
     private static List<String> optionsMenu = new ArrayList<>();
     public static void main(String[] args) {
-        int choixMenu;
+        int ordreUtilisateur = -1;
 
         optionsMenu = chargerOptionsMenu();
         bienvenue();
-        choixMenu = saisirChoixMenu();
+        while (ordreUtilisateur != 0) {
+            ordreUtilisateur = saisirChoixMenu();
+            executerOrdre(ordreUtilisateur);
+        }
         aurevoir();
     }
 
@@ -18,7 +21,7 @@ public class Main {
                 "Saisir ma plaque d'immatriculation", "S'inscrire", "Se connecter"));
     }
 
-    public static void bienvenue() {
+    private static void bienvenue() {
         System.out.println("Bienvenue chez Charge McQueen !");
         System.out.println(
                 "           .--------.\n" +
@@ -27,7 +30,7 @@ public class Main {
                         "      '--(_)-------(_)--'  \n\n");
     }
 
-    public static void aurevoir() {
+    private static void aurevoir() {
         System.out.println("\nÀ bientôt chez Charge McQueen⚡️ !");
         System.out.println(
                 "          ______\n" +
@@ -36,13 +39,13 @@ public class Main {
                 "  *- *--`-(_)--(_)-'");
     }
 
-    public static void afficherMenu() {
+    private static void afficherMenu() {
         for (int i = 0; i < optionsMenu.size(); i++) {
             System.out.println((i+1) + ". " + optionsMenu.get(i));
         }
     }
 
-    public static int saisirChoixMenu() {
+    protected static int saisirChoixMenu() {
         Scanner scanner = new Scanner(System.in);
         int choixSaisi = -1;
         while (choixSaisi < 0 || choixSaisi > optionsMenu.size()) {
@@ -64,5 +67,40 @@ public class Main {
             }
         }
         return choixSaisi;
+    }
+
+    private static void executerOrdre(int ordreUtilisateur) {
+        switch (ordreUtilisateur) {
+            case 1:
+                chercherReservation();
+                break;
+            case 2:
+                saisirPlaque();
+                break;
+            case 3:
+                inscription();
+                break;
+            case 4:
+                connexion();
+                break;
+            default:
+                break;
+        }
+    }
+
+    private static void chercherReservation() {
+        System.out.println("Chercher une réservation");
+    }
+
+    private static void saisirPlaque() {
+        System.out.println("Saisir une plaque d'immatriculation");
+    }
+
+    private static void connexion() {
+        System.out.println("Se connecter à un compte");
+    }
+
+    private static void inscription() {
+        System.out.println("S'inscrire");
     }
 }
