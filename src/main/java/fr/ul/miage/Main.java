@@ -184,8 +184,25 @@ public class Main {
         System.out.println("Ajouter un véhicule");
     }
 
+    /**
+     * Affiche les clients à partir d'un nom et prénom saisis par l'utilisateur (qui doit être
+     * administrateur).
+     */
     private static void chercherClient() {
+        String nom;
+        String prenom;
+        List<String> listeClients = new ArrayList<String>();
+
         System.out.println("Chercher un client");
+        nom = Outils.saisirString("Nom du client : ");
+        prenom = Outils.saisirString("Prénom du client : ");
+        listeClients = getListeClientsBDD(nom, prenom);
+    }
+
+    private static List<String> getListeClientsBDD(String nom, String prenom) {
+        // mock pour simuler le retour de la bdd
+        return new ArrayList<String>() {
+        };
     }
 
     private static boolean deconnexion() {

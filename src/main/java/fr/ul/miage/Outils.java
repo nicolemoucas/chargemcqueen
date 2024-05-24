@@ -1,5 +1,6 @@
 package fr.ul.miage;
 
+import java.util.Scanner;
 import java.util.regex.Pattern;
 
 public class Outils {
@@ -18,5 +19,15 @@ public class Outils {
         return Pattern.compile(emailRegex)
                 .matcher(mail)
                 .matches();
+    }
+
+    protected static String saisirString(String message) {
+        Scanner scanner = new Scanner(System.in);
+        String saisie = "";
+        while (saisie.isEmpty()) {
+            System.out.print(message);
+            saisie = scanner.nextLine();
+        }
+        return saisie;
     }
 }
