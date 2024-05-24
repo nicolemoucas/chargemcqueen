@@ -15,7 +15,7 @@ public class MainTests {
     @DisplayName("La saisir de l'utilisateur est un entier")
     @Test
     public void testSaisieEntier() {
-        int result = Main.saisirChoixMenu();
+        int result = Main.saisirChoixMenu(Main.optionsMenuInitial);
         assertInstanceOf(int.class, result);
     }
 }

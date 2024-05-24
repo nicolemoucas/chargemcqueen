@@ -6,7 +6,8 @@ import java.util.*;
  * Classe principale de l'application Charge McQueen.
  */
 public class Main {
-    private static List<String> optionsMenu = new ArrayList<>();
+    protected static List<String> optionsMenuInitial = new ArrayList<>();
+    private static final boolean estAdmin = true;
 
     /**
      * Méthode principale de l'application qui permet de la lancer et de gérer le flux de l'utilisateur.
@@ -14,15 +15,32 @@ public class Main {
      * @param args Arguments de la ligne de commande
      */
     public static void main(String[] args) {
-        int ordreUtilisateur = -1;
 
-        optionsMenu = chargerOptionsMenu();
+        optionsMenuInitial = chargerOptionsMenuInitial();
         bienvenue();
-        while (ordreUtilisateur != 0) {
-            ordreUtilisateur = saisirChoixMenu();
-            executerOrdre(ordreUtilisateur);
-        }
+        System.out.println("\nMenu principal");
+        runMenuLoop(optionsMenuInitial, "menuPrincipal");
         auRevoir();
+    }
+
+    private static void runMenuLoop(List<String> optionsMenu, String typeMenu) {
+        int ordreUtilisateur = -1;
+        boolean stopApp = false;
+
+        while (ordreUtilisateur != 0 && !stopApp) {
+            ordreUtilisateur = saisirChoixMenu(optionsMenu);
+            switch (typeMenu) {
+                case "menuPrincipal":
+                    stopApp = executerOrdreMenuPrincipal(ordreUtilisateur);
+                    break;
+                case "menuCompte":
+                    stopApp = executerOrdreMenuCompte(ordreUtilisateur);
+                    break;
+                default:
+                    break;
+            }
+
+        }
     }
 
     /**
@@ -30,9 +48,16 @@ public class Main {
      *
      * @return Liste des options disponibles
      */
-    private static List<String> chargerOptionsMenu() {
+    private static List<String> chargerOptionsMenuInitial() {
         return new ArrayList<String>(Arrays.asList("Trouver ma réservation",
-                "Saisir ma plaque d'immatriculation", "S'inscrire", "Se connecter"));
+                "Saisir ma plaque d'immatriculation", "Se connecter", "S'inscrire",
+                """
+                         __
+                     \t /    \\
+                     \t| STOP |
+                     \t \\ __ /
+                     \t   ||
+                     \t ~~~~~~"""));
     }
 
     /**
@@ -41,68 +66,72 @@ public class Main {
     private static void bienvenue() {
         System.out.println("Bienvenue chez Charge McQueen !");
         System.out.println(
-                "           .--------.\n" +
-                        "      ____/_____|___ \\___\n" +
-                        "     O    _   - |   _   ,*\n" +
-                        "      '--(_)-------(_)--'  \n\n");
+                """
+                                   .--------.
+                              ____/_____|___ \\___
+                             O    _   - |   _   ,*
+                              '--(_)-------(_)--' \s
+
+                        """);
     }
 
     /**
      * Affiche un message d'au revoir à l'utilisateur.
      */
     private static void auRevoir() {
-        System.out.println("\nÀ bientôt chez Charge McQueen⚡️ !");
+        System.out.println("\nÀ bientôt chez Charge McQueen ! ⚡️");
         System.out.println(
-                "          ______\n" +
-                "  *-- *- /|_||_\\`.__\n" +
-                "*-- *-  (   _    _ _\\\n" +
-                "  *- *--`-(_)--(_)-'");
+                """
+                                  ______
+                          *-- *- /|_||_\\`.__
+                        *-- *-  (   _    _ _\\
+                          *- *--`-(_)--(_)-'""");
     }
 
     /**
-     * Affiche les options du menu à l'utilisateur.
+     * Affiche les options d'un menu à l'utilisateur.
      */
-    private static void afficherMenu() {
-        for (int i = 0; i < optionsMenu.size(); i++) {
-            System.out.println((i+1) + ". " + optionsMenu.get(i));
+    private static void afficherMenu(List<String> optionsMenu) {
+        for (int i = 1; i <= optionsMenu.size(); i++) {
+            System.out.println(i + ". " + optionsMenu.get(i-1));
         }
     }
 
     /**
-     * Demande à l'utilisateur de saisir un choix à partir du menu.
+     * Demande à l'utilisateur de saisir un choix à partir d'une liste d'options.
      *
      * @return choix (int) saisi par l'utilisateur
      */
-    protected static int saisirChoixMenu() {
+    protected static int saisirChoixMenu(List<String> optionsMenu) {
         Scanner scanner = new Scanner(System.in);
+        String messageErreur = "/!\\ Erreur : veuillez saisir un nombre entre 1 et " + optionsMenu.size();
         int choixSaisi = -1;
-        while (choixSaisi < 0 || choixSaisi > optionsMenu.size()) {
+        while (choixSaisi <= 0 || choixSaisi > optionsMenu.size()) {
             try {
                 System.out.println("\nChoissisez une option parmi les suivantes (ex : 1) :");
-                afficherMenu();
-                System.out.println("0.\t   __\n" +
-                        "\t /    \\\n" +
-                        "\t| STOP |\n" +
-                        "\t \\ __ /\n" +
-                        "\t   ||\n" +
-                        "\t ~~~~~~");
+                afficherMenu(optionsMenu);
                 System.out.print("\nQuel est votre choix ? : ");
                 choixSaisi = scanner.nextInt();
                 scanner.nextLine();
+                if (choixSaisi <=0 || choixSaisi > optionsMenu.size()) {
+                    System.out.println(messageErreur);
+                }
             } catch (InputMismatchException e) {
-                System.out.println("/!\\ Erreur : veuillez saisir un nombre entre 0 et " + optionsMenu.size());
+                System.out.println(messageErreur);
                 scanner.nextLine();
             }
         }
+        System.out.println();
         return choixSaisi;
     }
 
     /**
-     * Redirige vers l'action choisie par l'utilisateur en fonction du numéro d'ordre passé en paramètre.
+     * Redirige vers l'action choisie par l'utilisateur en fonction du numéro d'ordre passé en paramètre
+     * pour le menu principal de l'application.
      *
      * @param ordreUtilisateur Instruction (int) choisie par l'utilisateur
      */
-    private static void executerOrdre(int ordreUtilisateur) {
+    private static boolean executerOrdreMenuPrincipal(int ordreUtilisateur) {
         switch (ordreUtilisateur) {
             case 1:
                 chercherReservation();
@@ -111,14 +140,61 @@ public class Main {
                 saisirPlaque();
                 break;
             case 3:
-                inscription();
-                break;
-            case 4:
                 connexion();
                 break;
+            case 4:
+                inscription();
+                break;
+            case 5:
+                return true; // stopApp
+            default:
+                return false;
+        }
+        return false;
+    }
+
+    /**
+     * Redirige vers l'action choisie par l'utilisateur en fonction du numéro d'ordre passé en paramètre
+     * pour le menu quand le client est connecté à son compte.
+     *
+     * @param ordreUtilisateur Instruction (int) choisie par l'utilisateur
+     */
+    private static boolean executerOrdreMenuCompte(int ordreUtilisateur) {
+        switch (ordreUtilisateur) {
+            case 1:
+                chercherReservation();
+                break;
+            case 2:
+                faireReservation();
+                break;
+            case 3:
+                ajouterPlaque();
+                break;
+            case 4:
+                return deconnexion();
+            case 5:
+                chercherClient();
             default:
                 break;
         }
+        return false;
+    }
+
+    private static void ajouterPlaque() {
+        System.out.println("Ajouter un véhicule");
+    }
+
+    private static void chercherClient() {
+        System.out.println("Chercher un client");
+    }
+
+    private static boolean deconnexion() {
+        System.out.println("Se déconnecter");
+        return true; // stopApp
+    }
+
+    private static void faireReservation() {
+        System.out.println("Faire une réservation");
     }
 
     private static void chercherReservation() {
@@ -130,7 +206,18 @@ public class Main {
     }
 
     private static void connexion() {
-        System.out.println("Se connecter à un compte");
+        List<String> optionsMenuCompte = chargerOptionsMenuCompte();
+        System.out.println("Vous êtes connecté à votre compte");
+        runMenuLoop(optionsMenuCompte, "menuCompte");
+    }
+
+    private static List<String> chargerOptionsMenuCompte() {
+        List<String> options = new ArrayList<String>(Arrays.asList("Trouver ma réservation",
+                "Faire une réservation", "Ajouter un véhicule", "Se déconnecter"));
+        if (Main.estAdmin) {
+            options.add("Rechercher un client");
+        }
+        return options;
     }
 
     private static void inscription() {
