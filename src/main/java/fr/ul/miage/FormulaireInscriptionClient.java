@@ -6,6 +6,10 @@ import java.util.Scanner;
 
 public class FormulaireInscriptionClient {
 
+    /**
+     * Classe qui déroule la procédure d'inscription de l'utilisateur, et qui construit l'objet Client une fois toutes les informations récupérées.
+     * @return {ClientDto} le client ainsi inscrit pour qu'il soit rajouté en base de données.
+     */
     public ClientDto procedureInscription() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("FORMULAIRE D'INSCRIPTION: \n");
@@ -19,6 +23,11 @@ public class FormulaireInscriptionClient {
         return new ClientDto(nomDeFamille, prenom, telephone, mail, carteBancaire);
     }
 
+    /**
+     * Méthode utilisée pour écouter les inputs utilisateurs dans le cadre de l'ajout d'une plaqwue d'immatriculation lors de l'inscription .
+     * L'utilisateur n'est pas obligé de le faire, donc on lui laisse le choix.
+     * @param scanner le scanner qui écoute les inputs utilisateurs.
+     */
     private static void plaqueDImmatriculation(Scanner scanner) {
         System.out.println("Souhaitez-vous entrer la plaque d'immatriculation de votre véhicule personnel ? \n" +
                 "⚠ Ne choisissez jamais cette option pour un véhicule de location.\n" +
@@ -38,6 +47,12 @@ public class FormulaireInscriptionClient {
         }
     }
 
+    /**
+     * Méthode utilisée pour récupérer les inputs utilisateurs pour la carte bancaire.
+     * On continue de lui demander de rentrer un numéro tant que son numéro est invalide.
+     * @param scanner le scanner qui va écouter les réponses.
+     * @return {String} le numéro de carte bancaire valide de l'utilisateur.
+     */
     private static String recupererCarteBancaire(Scanner scanner) {
         System.out.println("Entrez votre numéro de carte bancaire sans espaces ou séparateurs :");
         String carteBancaire = scanner.nextLine();
@@ -49,6 +64,12 @@ public class FormulaireInscriptionClient {
         return carteBancaire;
     }
 
+    /**
+     * Méthode utilisée pour récupérer les inputs utilisateurs pour l'adresse mail.
+     * On continue de lui demander de rentrer une adresse mail tant que son adresse est invalide.
+     * @param scanner le scanner qui va écouter les réponses.
+     * @return {String} l'adresse mail valide de l'utilisateur.
+     */
     private static String recupererMail(Scanner scanner) {
         System.out.println("Entrez votre adresse mail :");
         String mail = scanner.nextLine();
@@ -60,6 +81,12 @@ public class FormulaireInscriptionClient {
         return mail;
     }
 
+    /**
+     * Méthode utilisée pour récupérer les inputs utilisateurs pour le numéro de téléphone.
+     * On continue de lui demander de rentrer un numéro tant que son numéro est invalide.
+     * @param scanner le scanner qui va écouter les réponses.
+     * @return {String} le numéro de téléphone valide de l'utilisateur.
+     */
     private static String recupererTelephone(Scanner scanner) {
         System.out.println("Entrez votre numéro de téléphone sans espaces ou séparateurs :");
         String telephone = scanner.nextLine();
@@ -71,6 +98,12 @@ public class FormulaireInscriptionClient {
         return telephone;
     }
 
+    /**
+     * Méthode utilisée pour récupérer les inputs utilisateurs pour le prénom de l'utilisateur.
+     * On continue de lui demander de rentrer un prénom tant que son prénom est invalide.
+     * @param scanner le scanner qui va écouter les réponses.
+     * @return {String} le prénom valide de l'utilisateur.
+     */
     private static String recupererPrenom(Scanner scanner) {
         System.out.println("Entrez votre prénom :");
         String prenom = scanner.nextLine();
@@ -82,6 +115,12 @@ public class FormulaireInscriptionClient {
         return prenom;
     }
 
+    /**
+     * Méthode utilisée pour récupérer les inputs utilisateurs pour le nom de famille de l'utilisateur.
+     * On continue de lui demander de rentrer un nom tant que son nom est invalide.
+     * @param scanner le scanner qui va écouter les réponses.
+     * @return {String} le nom de famille valide de l'utilisateur.
+     */
     private static String recupererNomDeFamille(Scanner scanner) {
         System.out.println("Entrez votre nom de famille : \n");
 
