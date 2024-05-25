@@ -1,5 +1,7 @@
 package fr.ul.miage;
 
+import fr.ul.miage.dtos.ClientDto;
+
 import java.util.*;
 
 /**
@@ -16,7 +18,6 @@ public class Main {
      */
     public static void main(String[] args) {
 
-        new FormulaireInscriptionClient().procedureInscription();
         optionsMenuInitial = chargerOptionsMenuInitial();
         bienvenue();
         System.out.println("\nMenu principal");
@@ -104,17 +105,23 @@ public class Main {
      * @return choix (int) saisi par l'utilisateur
      */
     protected static int saisirChoixMenu(List<String> optionsMenu) {
-        Scanner scanner = new Scanner(System.in);
-        String messageErreur = "/!\\ Erreur : veuillez saisir un nombre entre 1 et " + optionsMenu.size();
+        System.out.println("\nChoissisez une option parmi les suivantes (ex : 1) :");
+        afficherMenu(optionsMenu);
+        int choixSaisi = saisirInt(0, optionsMenu.size());
+        return choixSaisi;
+    }
+
+    protected static int saisirInt(int min, int max) {
         int choixSaisi = -1;
-        while (choixSaisi <= 0 || choixSaisi > optionsMenu.size()) {
+        Scanner scanner = new Scanner(System.in);
+        String messageErreur = "/!\\ Erreur : veuillez saisir un nombre entre 1 et " + max;
+
+        while (choixSaisi <= min || choixSaisi > max) {
             try {
-                System.out.println("\nChoissisez une option parmi les suivantes (ex : 1) :");
-                afficherMenu(optionsMenu);
                 System.out.print("\nQuel est votre choix ? : ");
                 choixSaisi = scanner.nextInt();
                 scanner.nextLine();
-                if (choixSaisi <=0 || choixSaisi > optionsMenu.size()) {
+                if (choixSaisi <= min || choixSaisi > max) {
                     System.out.println(messageErreur);
                 }
             } catch (InputMismatchException e) {
@@ -192,18 +199,67 @@ public class Main {
     private static void chercherClient() {
         String nom;
         String prenom;
-        List<String> listeClients = new ArrayList<String>();
+        List<ClientDto> listeClients = new ArrayList<ClientDto>();
+        int numClient;
 
         System.out.println("Chercher un client");
         nom = Outils.saisirString("Nom du client : ");
         prenom = Outils.saisirString("Prénom du client : ");
         listeClients = getListeClientsBDD(nom, prenom);
+        afficherClients(listeClients, nom, prenom);
+        numClient = saisirInt(0, listeClients.size()) - 1;
+        afficherProfilClient(listeClients, numClient);
     }
 
-    private static List<String> getListeClientsBDD(String nom, String prenom) {
+    private static List<ClientDto> getListeClientsBDD(String nom, String prenom) {
         // mock pour simuler le retour de la bdd
-        return new ArrayList<String>() {
-        };
+        List<ClientDto> clients = new ArrayList<ClientDto>();
+
+        if (estAdmin) {
+            // Add some clients to the list
+            clients.add(new ClientDto("Doe", "John", "123-456-7890", "john.doe@example.com",
+                    "1234-5678-9012-3456"));
+            clients.add(new ClientDto("Doe", "John", "987-456-0439", "john.doe2@example.com",
+                    "1234-5678-9012-3456"));
+            clients.add(new ClientDto("Doe", "John", "567-123-0433", "john.doe3@example.com",
+                    "1234-5678-9012-3456"));
+            clients.add(new ClientDto("Smith", "Jane", "987-654-3210", "jane.smith@example.com",
+                    "5678-9012-3456-7890"));
+
+            return clients;
+        }
+        return new ArrayList<ClientDto>();
+    }
+
+    private static void afficherClients(List<ClientDto> listeClients, String nom, String prenom) {
+        if (listeClients.isEmpty()) {
+            System.out.println("Aucun client appelé \"" + nom + " " + prenom + "\" n'a été trouvé");
+        } else {
+            System.out.println("\nVoici les clients trouvés appelés \"" + nom + " " + prenom + "\" :");
+            for (int i = 0; i < listeClients.size(); i++) {
+                System.out.print("\n" + (i + 1) + ". ");
+                System.out.println("Nom : " + listeClients.get(i).getNom());
+                System.out.println("Prénom : " + listeClients.get(i).getPrenom());
+                System.out.println("Mail : " + listeClients.get(i).getEmail());
+            }
+        }
+    }
+
+    private static void afficherProfilClient(List<ClientDto> listeClients, int numClient) {
+        System.out.println("""
+                _\\|/^
+                 (_oo
+                  |     
+                 /|\\
+                  |
+                  LL""");
+        System.out.println("Voici le profil du client sélectionné :");
+        ClientDto client = listeClients.get(numClient);
+
+        System.out.println("Nom : " + client.getNom());
+        System.out.println("Prénom : " + client.getPrenom());
+        System.out.println("Mail : " + client.getEmail());
+        System.out.println("Numéro de téléphone : " + client.getTelephone());
     }
 
     private static boolean deconnexion() {
@@ -239,6 +295,6 @@ public class Main {
     }
 
     private static void inscription() {
-        System.out.println("S'inscrire");
+        new FormulaireInscriptionClient().procedureInscription();
     }
 }
