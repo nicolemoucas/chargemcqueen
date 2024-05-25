@@ -1,5 +1,6 @@
 package fr.ul.miage;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
@@ -90,5 +91,27 @@ public class Outils {
             saisie = scanner.nextLine();
         }
         return saisie;
+    }
+
+    protected static int saisirInt(int min, int max) {
+        int choixSaisi = -1;
+        Scanner scanner = new Scanner(System.in);
+        String messageErreur = "/!\\ Erreur : veuillez saisir un nombre entre 1 et " + max;
+
+        while (choixSaisi <= min || choixSaisi > max) {
+            try {
+                System.out.print("\nQuel est votre choix ? : ");
+                choixSaisi = scanner.nextInt();
+                scanner.nextLine();
+                if (choixSaisi <= min || choixSaisi > max) {
+                    System.out.println(messageErreur);
+                }
+            } catch (InputMismatchException e) {
+                System.out.println(messageErreur);
+                scanner.nextLine();
+            }
+        }
+        System.out.println();
+        return choixSaisi;
     }
 }
