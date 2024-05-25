@@ -1,5 +1,12 @@
 package fr.ul.miage;
 
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
+import java.nio.charset.StandardCharsets;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.KeySpec;
 import java.util.regex.Pattern;
 
 /**
@@ -25,8 +32,11 @@ public class Outils {
     /**
      * Constante qui contient le pattern de numéros de carte bancaire acceptés par l'application.
      */
-    private static final String regexCarteBancaire = "^[0-9]{15,16}$";
+    private static final String regexCarteBancaire = "^[0-9]{14,16}$";
 
+    private static final String mdpRegex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])*(?=.*[@#$!%^&+=])*(?=\\S+$).{8,}$";
+
+    private static final String regexPlaqueImmatriculation = "^[a-zA-Z]{2}[0-9]{3}[a-zA-Z]{2}$";
     /**
      * Méthode utilisée pour controler que l'adresse mail est valide.
      * @param mail l'adresse mail à contrôler.
@@ -69,6 +79,54 @@ public class Outils {
         return Pattern.compile(regexCarteBancaire)
                 .matcher(numeroCarte)
                 .matches();
+    }
+
+
+    public static boolean verificationMotDePasse(String motDePasse) {
+        return Pattern.compile(mdpRegex)
+                .matcher(motDePasse)
+                .matches();
+    }
+
+    public static boolean verificationPlaqueImmatriculation(String immat) {
+        return Pattern.compile(regexPlaqueImmatriculation)
+                .matcher(immat)
+                .matches();
+    }
+
+
+    public static String convertByteArrayToString(byte[] bytes) {
+        return new String(bytes, StandardCharsets.UTF_8);
+    }
+
+    public static byte[] convertStringToByteArray(String str) {
+        return str.getBytes(StandardCharsets.UTF_8);
+    }
+
+    private static final int ITERATIONS = 10000;
+    private static final int KEY_LENGTH = 128;
+    private static final String ALGORITHM = "PBKDF2WithHmacSHA1";
+
+    public static byte[] generateSalt(int saltLength) {
+        SecureRandom secureRandom = new SecureRandom();
+        byte[] salt = new byte[saltLength];
+        secureRandom.nextBytes(salt);
+        return salt;
+    }
+
+    public static byte[] hashPassword(char[] password, byte[] salt) {
+        KeySpec keySpec = new PBEKeySpec(password, salt, ITERATIONS, KEY_LENGTH);
+        SecretKeyFactory secretKeyFactory = null;
+        try {
+            secretKeyFactory = SecretKeyFactory.getInstance(ALGORITHM);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            return secretKeyFactory.generateSecret(keySpec).getEncoded();
+        } catch (InvalidKeySpecException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }
