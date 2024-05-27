@@ -1,6 +1,7 @@
 package fr.ul.miage.dtos;
 
 public class ClientDto {
+
     /**
      * Le nom du client.
      */
@@ -42,4 +43,22 @@ public class ClientDto {
         this.email = email;
         this.carteBancaire = carteBancaire;
     }
+
+    // Getters et Setters
+    public String getNom() {
+        return nom;
+    }
+
+    public String getPrenom() {
+        return prenom;
+    }
+
+    public String getTelephone() {
+        return telephone;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+    // Fin Getters et Setters
 }

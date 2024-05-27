@@ -7,6 +7,8 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
+import java.util.InputMismatchException;
+import java.util.Scanner;
 import java.util.regex.Pattern;
 
 /**
@@ -39,6 +41,7 @@ public class Outils {
     private static final String regexPlaqueImmatriculation = "^[a-zA-Z]{2}[0-9]{3}[a-zA-Z]{2}$";
     /**
      * Méthode utilisée pour controler que l'adresse mail est valide.
+     *
      * @param mail l'adresse mail à contrôler.
      * @return {boolean} true si l'adresse est valide, false sinon.
      */
@@ -49,7 +52,8 @@ public class Outils {
     }
 
     /**
-     * Méthode utilisée pour controler que le nom/prénom du client est valide.
+     * Méthode utilisée pour contrôler que le nom/prénom du client est valide.
+     *
      * @param nom le nom ou prénom à contrôler.
      * @return {boolean} true si le nom/prénom est valide, false sinon.
      */
@@ -60,7 +64,8 @@ public class Outils {
     }
 
     /**
-     * Méthode utilisée pour controler que le numéro de téléphone est valide.
+     * Méthode utilisée pour contrôler que le numéro de téléphone est valide.
+     *
      * @param numero le numéro de téléphone à contrôler.
      * @return {boolean} true si le numéro de téléphone est valide, false sinon.
      */
@@ -71,7 +76,8 @@ public class Outils {
     }
 
     /**
-     * Méthode utilisée pour controler que le numéro de carte bancaire est valide.
+     * Méthode utilisée pour contrôler que le numéro de carte bancaire est valide.
+     *
      * @param numeroCarte le numéro de carte bancaire à contrôler.
      * @return {boolean} true si le numéro de carte bancaire est valide, false sinon.
      */
@@ -127,6 +133,44 @@ public class Outils {
         } catch (InvalidKeySpecException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    /**
+     * Méthode qui permet la saisie d'un string jusqu'à ce qu'elle soit correcte.
+     *
+     * @param message Message pour inviter l'utilisateur à saisir un message
+     * @return Chaîne de caractères saisie
+     */
+    protected static String saisirString(String message) {
+        Scanner scanner = new Scanner(System.in);
+        String saisie = "";
+        while (saisie.isEmpty()) {
+            System.out.print(message);
+            saisie = scanner.nextLine();
+        }
+        return saisie;
+    }
+
+    protected static int saisirInt(int min, int max) {
+        int choixSaisi = -1;
+        Scanner scanner = new Scanner(System.in);
+        String messageErreur = "/!\\ Erreur : veuillez saisir un nombre entre 1 et " + max;
+
+        while (choixSaisi <= min || choixSaisi > max) {
+            try {
+                System.out.print("\nQuel est votre choix ? : ");
+                choixSaisi = scanner.nextInt();
+                scanner.nextLine();
+                if (choixSaisi <= min || choixSaisi > max) {
+                    System.out.println(messageErreur);
+                }
+            } catch (InputMismatchException e) {
+                System.out.println(messageErreur);
+                scanner.nextLine();
+            }
+        }
+        System.out.println();
+        return choixSaisi;
     }
 
 }
