@@ -1,13 +1,13 @@
 package fr.ul.miage;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Classe qui contient les tests pour la classe Outils.
@@ -130,7 +130,7 @@ public class OutilsTests {
         assertTrue(result);
     }
 
-    @ParameterizedTest(name= "Les numéros de carte qui ont le bon format sont acceptés.")
+    @ParameterizedTest(name= "Les numéros de carte qui ont le mauvais format sont refusés.")
     @CsvSource({
 
             "1974",
@@ -144,5 +144,60 @@ public class OutilsTests {
         System.out.println(numeroCarte);
         assertFalse(result);
     }
+
+    @ParameterizedTest(name= "Les mots de passe qui ont le bon format sont acceptés.")
+    @CsvSource({
+            "mdp12345",
+            "vz200zerf2828282",
+            "37ez1!49@3598431"
+
+    })
+    public void motDePasseCorrect(String motDePasse) {
+        boolean result = Outils.verificationMotDePasse(motDePasse);
+        System.out.println(motDePasse);
+        assertTrue(result);
+    }
+
+    @ParameterizedTest(name= "Les mots de passe qui ont le mauvais format sont refusés.")
+    @CsvSource({
+            "mdp15",
+            "blablablablabla",
+            "DROP DATABASE NAME;"
+
+    })
+    public void motDePasseIncorrect(String motDePasse) {
+        boolean result = Outils.verificationMotDePasse(motDePasse);
+        System.out.println(motDePasse);
+        assertFalse(result);
+    }
+
+    @DisplayName("Convertir des byte arrays en String.")
+    @Test
+    public void testConvertByteArrayToString() {
+        byte[] bytes = new byte[] { 0x61, 0x62, 0x63 };
+        String expected = "abc";
+        String actual = Outils.convertByteArrayToString(bytes);
+        assertEquals(expected, actual);
+    }
+
+    @DisplayName("Convertir des String en byte array.")
+    @Test
+    public void testConvertStringToByteArray() {
+        String str = "abc";
+        byte[] expected = new byte[] { 0x61, 0x62, 0x63 };
+        byte[] actual = Outils.convertStringToByteArray(str);
+        assertArrayEquals(expected, actual);
+    }
+
+    @DisplayName("Générer du sel de manière bien aléatoire.")
+    @Test
+    public void testGenerateSalt() {
+        byte[] salt1 = Outils.generateSalt(16);
+        byte[] salt2 = Outils.generateSalt(16);
+        assertNotNull(salt1);
+        assertNotNull(salt2);
+        assertNotEquals(salt1, salt2);
+    }
+
 
 }
