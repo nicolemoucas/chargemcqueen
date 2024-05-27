@@ -16,6 +16,7 @@ public class BorneMere {
      */
     public static void main(String[] args) {
 
+        OutilsBaseSQL.connexionBase();
         optionsMenuInitial = chargerOptionsMenuInitial();
         bienvenue();
         System.out.println("\nMenu principal");

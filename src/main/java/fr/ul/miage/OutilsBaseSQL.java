@@ -3,9 +3,9 @@ package fr.ul.miage;
 import java.sql.*;
 
 public class OutilsBaseSQL {
-    private Connection conn = null;
+    private static Connection conn = null;
 
-    public void connexionBase() {
+    public static void connexionBase() {
         try {
             // Charger le pilote JDBC PostgreSQL
             Class.forName("org.postgresql.Driver");
