@@ -189,5 +189,5 @@ public class Main {
 
     private static void inscription() {
         System.out.println("S'inscrire");
-    }
 }
+    }

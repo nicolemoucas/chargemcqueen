@@ -31,7 +31,7 @@ CREATE TABLE Facture (
 
 CREATE TABLE Immatriculation (
     idImmat SERIAL PRIMARY KEY,
-    numeroImmat INT NOT NULL,
+    numeroImmat CHAR(7) NOT NULL,
     typeImmat  EtypeImmat NOT NULL
 );
 
@@ -60,8 +60,9 @@ CREATE TABLE Reservation (
     FOREIGN KEY (idBorne) REFERENCES BorneRecharge(idBorne)
 );
 
--- Insertions
+--              Insertions
 
+-- Insérer les clients
 INSERT INTO Client (nom, prenom, adresse, numTelephone, numCarte) VALUES
 ('Dupont', 'Jean', '123 Rue de Paris, 75001 Paris', '0102030405', '1234567812345678'),
 ('Martin', 'Marie', '456 Avenue des Champs, 75002 Paris', '0102030406', '2345678923456789'),
@@ -73,3 +74,16 @@ INSERT INTO Client (nom, prenom, adresse, numTelephone, numCarte) VALUES
 ('Richard', 'Emilie', '505 Rue de la Pompe, 75016 Paris', '0102030412', '8901234589012345'),
 ('Durand', 'Antoine', '606 Rue de Rennes, 75006 Paris', '0102030413', '9012345690123456'),
 ('Lefevre', 'Nathalie', '707 Rue du Faubourg Saint-Antoine, 75012 Paris', '0102030414', '0123456701234567');
+
+-- Insérer les comptes pour les clients
+INSERT INTO Compte (idClient, identifiant, motDePasse, sel) VALUES
+(1, 'jdupont', 'password123', 'salt123'),
+(2, 'mmartin', 'password456', 'salt456'),
+(3, 'lbernard', 'password789', 'salt789'),
+(4, 'cdubois', 'password101', 'salt101'),
+(5, 'pthomas', 'password202', 'salt202'),
+(6, 'jpetit', 'password303', 'salt303'),
+(7, 'srobert', 'password404', 'salt404'),
+(8, 'erichard', 'password505', 'salt505'),
+(9, 'adurand', 'password606', 'salt606'),
+(10, 'nlefevre', 'password707', 'salt707');
