@@ -1,0 +1,29 @@
+Installer PostgreSQL :
+
+1/ Télécharger depuis le lien :
+
+https://www.postgresql.org/download/
+
+2/ Exécuter
+
+C:\Serveurs\PostgreSQL\
+
+Cocher ce que vous voulez
+
+C:\Serveurs\PostgreSQL\16\data
+
+postgres
+postgres
+
+PORT : 5433
+
+Locale par défaut
+
+
+3/ Utiliser PgAdmin
+
+Aller dans SERVERS --> PostgreSQL 16 (si votre version)
+
+Create database --> db_charge_mcqueen
+
+Exécuter ensuite le fichier bases.sql
