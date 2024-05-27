@@ -18,6 +18,10 @@
         <project.main.classname>${project.groupId}.${project.artifactId}.Launcher</project.main.classname>
         <!-- Nom du script -->
         <project.bin.appname>hello</project.bin.appname>
+        <assertj.version>3.24.2</assertj.version>
+        <junit.version>5.10.0</junit.version>
+        <mockito.version>5.6.0</mockito.version>
+        <jacoco.version>0.8.10</jacoco.version>
     </properties>
 
     <build>
@@ -112,12 +116,40 @@
             <artifactId>commons-cli</artifactId>
             <version>1.7.0</version>
         </dependency>
-
+      
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <version>42.3.1</version>
         </dependency>
 
+        <!-- Langage DSL pour les tests -->
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>${assertj.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <!-- Tests unitaires en Java -->
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <!-- Mocking en Java -->
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-junit-jupiter</artifactId>
+            <version>${mockito.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>${mockito.version}</version>
+            <scope>test</scope>
+        </dependency>
+      
     </dependencies>
 </project>

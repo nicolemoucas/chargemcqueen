@@ -24,8 +24,10 @@ public class Main {
                 System.out.println("Connexion à la base de données réussie !");
 
                 bienvenue();
+                afficherMenu();
 
                 // Créer une nouvelle instruction SQL
+              /**
                 stmt = conn.createStatement();
 
                 // Exécuter une requête SQL pour récupérer des données à partir d'une table
@@ -34,6 +36,7 @@ public class Main {
                 while (rs.next()) {
                     System.out.println(rs.getString("nom"));
                 }
+                **/
 
 
             }
@@ -53,6 +56,7 @@ public class Main {
                 System.err.println(e.getMessage());
             }
         }
+
     }
 
     private static void bienvenue() {
