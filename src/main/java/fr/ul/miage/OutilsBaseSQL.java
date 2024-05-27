@@ -3,6 +3,7 @@ package fr.ul.miage;
 import java.sql.*;
 
 public class OutilsBaseSQL {
+
     private static Connection conn = null;
 
     public static void connexionBase() {
@@ -38,16 +39,17 @@ public class OutilsBaseSQL {
         } catch (SQLException e) {
             // Une erreur s'est produite lors de la connexion à la base de données
             System.err.println(e.getMessage());
-        } finally {
-            try {
-                if (conn != null) {
-                    // Fermer la connexion à la base de données
-                    conn.close();
-                }
-            } catch (SQLException e) {
-                System.err.println(e.getMessage());
-            }
         }
     }
 
+    public static void fermerConnexion() {
+        try {
+            if (conn != null) {
+                // Fermer la connexion à la base de données
+                conn.close();
+            }
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
+    }
 }

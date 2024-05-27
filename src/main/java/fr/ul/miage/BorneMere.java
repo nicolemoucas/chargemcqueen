@@ -1,6 +1,8 @@
 package fr.ul.miage;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Classe principale de l'application Charge McQueen.
@@ -22,6 +24,7 @@ public class BorneMere {
         System.out.println("\nMenu principal");
         runMenuLoop(optionsMenuInitial, "menuPrincipal");
         auRevoir();
+        OutilsBaseSQL.fermerConnexion();
     }
 
     public static boolean getEstAdmin() {
