@@ -35,10 +35,16 @@ CREATE TABLE Facture (
 
 CREATE TABLE Immatriculation (
     idImmat INT AUTO_INCREMENT PRIMARY KEY,
-    idClient INT,
     numeroImmat INT NOT NULL,
-    typeImmat  EtypeImmats NOT NULL,
-    FOREIGN KEY (idClient) REFERENCES Client(idClient)
+    typeImmat  EtypeImmats NOT NULL
+);
+
+CREATE TABLE Utilise (
+    idUtilise INT AUTO_INCREMENT PRIMARY KEY,
+    idClient INT NOT NULL,
+    idImmat  INT NOT NULL,
+    FOREIGN KEY (idClient) REFERENCES Client(idClient),
+    FOREIGN KEY (idImmat) REFERENCES Immatriculation(idImmat)
 );
 
 CREATE TABLE BorneRecharge (
