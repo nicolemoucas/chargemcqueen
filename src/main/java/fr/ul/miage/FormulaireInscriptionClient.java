@@ -160,7 +160,7 @@ public class FormulaireInscriptionClient {
      * @return {String} le mot de passe valide de l'utilisateur.
      */
     protected static String recupererMotDePasse(Scanner scanner) {
-        System.out.println("Choisissez un mot de passe : ");
+        System.out.println("Entrez votre mot de passe : ");
 
         String motDePasse = scanner.nextLine();
 

@@ -28,13 +28,6 @@ public class BorneMere {
         //Statement stmt = outilsBaseSQL.getConn().createStatement();
         optionsMenuInitial = chargerOptionsMenuInitial();
         bienvenue();
-        // remove
-        try {
-            OutilsCompteAdmin.testClientsBDD();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        // end remove
         System.out.println("\nMenu principal");
         runMenuLoop(optionsMenuInitial, "menuPrincipal");
         auRevoir();
@@ -148,7 +141,7 @@ public class BorneMere {
                 OutilsCompte.connexion();
                 break;
             case 4:
-                inscription();
+                OutilsCompte.inscription();
                 break;
             case 5:
                 return true; // stopApp
@@ -172,12 +165,5 @@ public class BorneMere {
 
     private static void saisirPlaque() {
         System.out.println("Saisir une plaque d'immatriculation");
-    }
-
-    private static void inscription() throws SQLException {
-        ClientDto client = new FormulaireInscriptionClient().procedureInscription();
-        int idClient = OutilsCompte.insererClientBDD(client);
-        OutilsCompte.creerCompteClient(idClient);
-        System.out.println("Bienvenue, " + client.getPrenom()+ " !");
     }
 }

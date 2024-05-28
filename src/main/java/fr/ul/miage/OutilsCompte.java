@@ -41,6 +41,13 @@ public class OutilsCompte {
         return false;
     }
 
+    protected static void inscription() throws SQLException {
+        ClientDto client = new FormulaireInscriptionClient().procedureInscription();
+        int idClient = OutilsCompte.insererClientBDD(client);
+        OutilsCompte.creerCompteClient(idClient);
+        System.out.println("Bienvenue, " + client.getPrenom()+ " !");
+    }
+
     protected static void connexion() throws SQLException {
         Scanner scanner = new Scanner(System.in);
         List<String> optionsMenuCompte = chargerOptionsMenuCompte();
@@ -51,11 +58,11 @@ public class OutilsCompte {
         ResultSet result = null;
 
         // Exécuter une requête SQL pour récupérer des données à partir d'une table
-        String query = "SELECT prenom FROM Client WHERE ";
-        result = stmt.executeQuery(query);
-        while (result.next()) {
-            System.out.println(result.getString("nom"));
-        }
+//        String query = "SELECT prenom FROM Compte WHERE ";
+//        result = stmt.executeQuery(query);
+//        while (result.next()) {
+//            System.out.println(result.getString("nom"));
+//        }
 
         System.out.println("Bienvenue [nom] !");
         BorneMere.runMenuLoop(optionsMenuCompte, "menuCompte");
