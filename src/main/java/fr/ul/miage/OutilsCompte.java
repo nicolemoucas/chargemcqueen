@@ -109,10 +109,29 @@ public class OutilsCompte {
         String motDePasse = FormulaireInscriptionClient.recupererMotDePasse(scanner);
         byte[] selBytes = Outils.generateSalt(16);
         byte[] hashedPasswordBytes = Outils.hashPassword(motDePasse.toCharArray(), selBytes);
-        //TODO : Quand il y aura la BDD, il faut récupérer l'ID du client pour lui lier le compte.
-        return new CompteClientDto("1",
+        return new CompteClientDto(idClient,
                 new MotDePasseDto(
                         Outils.convertByteArrayToString(hashedPasswordBytes),
                         Outils.convertByteArrayToString(selBytes)));
+    }
+
+    public static void insererCompteClientBDD(int idClient, CompteClientDto compteClient) throws SQLException {
+//        Scanner scanner = new Scanner(System.in);
+//        String query = "INSERT INTO Compte (idClient, identifiant, motDePasse, sel) VALUES (?, ?, ?, ?)" ;
+//        PreparedStatement stmt = OutilsBaseSQL.getConn().prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
+//        stmt.setInt(1, idClient);
+//        stmt.setString(2, client.getPrenom());
+//        stmt.setString(3, client.getEmail());
+//        stmt.setString(4, client.getTelephone());
+//
+//        int lignesAffectees = stmt.executeUpdate();
+//        if (lignesAffectees == 1) {
+//            resultIdClient = stmt.getGeneratedKeys();
+//            if (resultIdClient.next()) {
+//                return resultIdClient.getInt(1);
+//            }
+//        }
+//        System.out.println("Une erreur s'est produite lors de l'insertion du client.");
+//        return 0;
     }
 }

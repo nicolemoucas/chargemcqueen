@@ -1,6 +1,7 @@
 package fr.ul.miage;
 
 import fr.ul.miage.dtos.ClientDto;
+import fr.ul.miage.dtos.CompteClientDto;
 
 import java.sql.SQLException;
 import java.text.Normalizer;
