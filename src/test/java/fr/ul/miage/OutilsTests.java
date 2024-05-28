@@ -171,29 +171,29 @@ public class OutilsTests {
         assertFalse(result);
     }
 
-    @DisplayName("Convertir des byte arrays en String.")
+    @DisplayName("Convertir des byte arrays en hexadécimal.")
     @Test
     public void testConvertByteArrayToString() {
         byte[] bytes = new byte[] { 0x61, 0x62, 0x63 };
-        String expected = "abc";
-        String actual = Outils.convertByteArrayToString(bytes);
+        String expected = "616263";
+        String actual = Outils.convertBytesToHex(bytes);
         assertEquals(expected, actual);
     }
 
-    @DisplayName("Convertir des String en byte array.")
+    @DisplayName("Convertir des héxadécimaux en byte array.")
     @Test
     public void testConvertStringToByteArray() {
-        String str = "abc";
+        String str = "616263";
         byte[] expected = new byte[] { 0x61, 0x62, 0x63 };
-        byte[] actual = Outils.convertStringToByteArray(str);
+        byte[] actual = Outils.convertHexToBytes(str);
         assertArrayEquals(expected, actual);
     }
 
     @DisplayName("Générer du sel de manière bien aléatoire.")
     @Test
     public void testGenerateSalt() {
-        byte[] salt1 = Outils.generateSalt(16);
-        byte[] salt2 = Outils.generateSalt(16);
+        byte[] salt1 = Outils.generateSalt();
+        byte[] salt2 = Outils.generateSalt();
         assertNotNull(salt1);
         assertNotNull(salt2);
         assertNotEquals(salt1, salt2);

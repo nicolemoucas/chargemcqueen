@@ -1,5 +1,8 @@
 package fr.ul.miage;
 
+import fr.ul.miage.dtos.ClientDto;
+import org.apache.commons.codec.DecoderException;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -11,14 +14,17 @@ public class BorneMere {
     protected static List<String> optionsMenuInitial = new ArrayList<>();
     private static final boolean estAdmin = true;
     private static OutilsBaseSQL outilsBaseSQL;
-
+    /**
+     * Si un client est connecté, il est stocké ici. A sa déconnexion, il repassera a null.
+     */
+    private static ClientDto currentlyConnectedClient = null;
 
     /**
      * Méthode principale de l'application qui permet de la lancer et de gérer le flux de l'utilisateur.
      *
      * @param args Arguments de la ligne de commande
      */
-    private static void main(String[] args) {
+    public static void main(String[] args) throws DecoderException {
         outilsBaseSQL = OutilsBaseSQL.getInstance();
         outilsBaseSQL.makeConnexion();
         //Statement stmt = outilsBaseSQL.getConn().createStatement();
@@ -27,7 +33,7 @@ public class BorneMere {
         System.out.println("\nMenu principal");
         runMenuLoop(optionsMenuInitial, "menuPrincipal");
         auRevoir();
-        outilsBaseSQL.fermerConnexion();
+        OutilsBaseSQL.fermerConnexion();
     }
 
     public static boolean getEstAdmin() {
@@ -165,8 +171,12 @@ public class BorneMere {
 
     private static void connexion() {
         List<String> optionsMenuCompte = chargerOptionsMenuCompte();
-        System.out.println("Vous êtes connecté à votre compte");
-        runMenuLoop(optionsMenuCompte, "menuCompte");
+        ClientDto connectedClient = new ConnexionCompteClient().procedureConnexionCompte();
+        if(connectedClient != null) {
+            System.out.println("Vous êtes connecté à votre compte");
+            currentlyConnectedClient = connectedClient;
+            runMenuLoop(optionsMenuCompte, "menuCompte");
+        } else System.out.println("La connexion a échoué. Veuillez réessayer.");
     }
 
     private static List<String> chargerOptionsMenuCompte() {
@@ -179,6 +189,9 @@ public class BorneMere {
     }
 
     private static void inscription() {
-        new FormulaireInscriptionClient().procedureInscription();
+        ClientDto newClient = new FormulaireInscriptionClient().procedureInscription();
+        if (newClient != null) {
+            currentlyConnectedClient = newClient;
+        }
     }
 }

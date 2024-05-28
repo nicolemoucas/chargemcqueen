@@ -1,12 +1,13 @@
 package fr.ul.miage;
 
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
+import fr.ul.miage.dtos.MotDePasseDto;
+import org.apache.commons.codec.DecoderException;
+import org.apache.commons.codec.binary.Hex;
+
 import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
-import java.security.spec.InvalidKeySpecException;
-import java.security.spec.KeySpec;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.regex.Pattern;
@@ -36,9 +37,26 @@ public class Outils {
      */
     private static final String regexCarteBancaire = "^[0-9]{14,16}$";
 
+    /**
+     * Constante qui contient le pattern de mots de passe acceptés par l'application.
+     */
     private static final String mdpRegex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])*(?=.*[@#$!%^&+=])*(?=\\S+$).{8,}$";
 
+    /**
+     * Constante qui contient le pattern de numéros de plaque d'immatriculation acceptés par l'application.
+     */
     private static final String regexPlaqueImmatriculation = "^[a-zA-Z]{2}[0-9]{3}[a-zA-Z]{2}$";
+
+    /**
+     * Constante qui définit la longueur du sel utilisé pour chiffrer les mots de passe..
+     */
+    private static final int SALT_LENGTH = 16;
+
+    /**
+     * Constante qui définit le nombre d'itérations de la méthode qui chiffre le mot de passe.
+     */
+    private static final int HASH_ITERATIONS = 10000;
+
     /**
      * Méthode utilisée pour controler que l'adresse mail est valide.
      *
@@ -87,50 +105,96 @@ public class Outils {
                 .matches();
     }
 
-
+    /**
+     * Méthode utilisée pour contrôler que le mot de passe est valide.
+     *
+     * @param motDePasse le mot de passe à contrôler.
+     * @return {boolean} true si le mot de passe est valide, false sinon.
+     */
     public static boolean verificationMotDePasse(String motDePasse) {
         return Pattern.compile(mdpRegex)
                 .matcher(motDePasse)
                 .matches();
     }
 
+    /**
+     * Méthode utilisée pour contrôler que le numéro de la plaque d'immatriculation est valide.
+     *
+     * @param immat le numéro de la plaque d'immatriculation à contrôler.
+     * @return {boolean} true si le numéro de la plaque d'immatriculation est valide, false sinon.
+     */
     public static boolean verificationPlaqueImmatriculation(String immat) {
         return Pattern.compile(regexPlaqueImmatriculation)
                 .matcher(immat)
                 .matches();
     }
 
-
-    public static String convertByteArrayToString(byte[] bytes) {
-        return new String(bytes, StandardCharsets.UTF_8);
-    }
-
-    public static byte[] convertStringToByteArray(String str) {
-        return str.getBytes(StandardCharsets.UTF_8);
-    }
-
-    private static final int ITERATIONS = 10000;
-    private static final int KEY_LENGTH = 128;
-    private static final String ALGORITHM = "PBKDF2WithHmacSHA1";
-
-    public static byte[] generateSalt(int saltLength) {
-        SecureRandom secureRandom = new SecureRandom();
-        byte[] salt = new byte[saltLength];
-        secureRandom.nextBytes(salt);
+    /**
+     * Méthode utilisée pour générer aléatoirement du sel pour chiffrer les mots de passe.
+     * @return {byte[]} le sel généré.
+     */
+    protected static byte[] generateSalt() {
+        SecureRandom random = new SecureRandom();
+        byte[] salt = new byte[SALT_LENGTH];
+        random.nextBytes(salt);
         return salt;
     }
 
-    public static byte[] hashPassword(char[] password, byte[] salt) {
-        KeySpec keySpec = new PBEKeySpec(password, salt, ITERATIONS, KEY_LENGTH);
-        SecretKeyFactory secretKeyFactory = null;
+    /**
+     * Méthode appelée par hashPassword(String) pour chiffrer le mot de passe.
+     * @param password le mot de passe qu'on veut chiffrer.
+     * @param salt le sel qui sert à chiffrer le mot de passe.
+     * @return le tableau de byte qui correspond au mot de passe "password" chiffré.
+     */
+    static byte[] hashPassword(String password, byte[] salt) {
+        MessageDigest messageDigest = null;
+        byte[] hash = new byte[0];
+
         try {
-            secretKeyFactory = SecretKeyFactory.getInstance(ALGORITHM);
+            messageDigest = MessageDigest.getInstance("SHA-512");
+            messageDigest.reset();
+            messageDigest.update(salt);
+            messageDigest.update(password.getBytes(StandardCharsets.UTF_8));
+            for (int i = 0; i < HASH_ITERATIONS; i++) {
+                hash = messageDigest.digest(hash);
+            }
         } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
+            // Handle the exception here
+            e.printStackTrace();
         }
+
+        return hash;
+    }
+
+    /**
+     * Méthode utilisée pour hasher le mot de passe donné par l'utilisateur.
+     * @param password le mot de passe de l'utilisateur.
+     * @return {MotDePasseDto} le mot de passe construit à partir du sel et du mot de passe chiffré.
+     */
+    public static MotDePasseDto hashPassword(String password) {
+        byte[] salt = generateSalt();
+        byte[] hash = hashPassword(password, salt);
+        return new MotDePasseDto(convertBytesToHex(hash), convertBytesToHex(salt));
+    }
+
+    /**
+     * Méthode utilisée pour convertir un tableau de bytes en chaine hexadecimale.
+     * @param bytes le tableau de bytes a convertir.
+     * @return la chaine hexadécimale convertie.
+     */
+    protected static String convertBytesToHex(byte[] bytes) {
+        return Hex.encodeHexString(bytes);
+    }
+
+    /**
+     * Méthode utilisée pour convertir un Hexadécimal en tableau de bytes.
+     * @param hex la chaine hexadécimale a convertir.
+     * @return le tableau de bytes converti.
+     */
+    protected static byte[] convertHexToBytes(String hex) {
         try {
-            return secretKeyFactory.generateSecret(keySpec).getEncoded();
-        } catch (InvalidKeySpecException e) {
+            return Hex.decodeHex(hex);
+        } catch (DecoderException e) {
             throw new RuntimeException(e);
         }
     }
@@ -171,6 +235,24 @@ public class Outils {
         }
         System.out.println();
         return choixSaisi;
+    }
+
+    /**
+     * Méthode utilisée pour récupérer les inputs utilisateurs pour l'adresse mail.
+     * On continue de lui demander de rentrer une adresse mail tant que son adresse est invalide.
+     * @param scanner le scanner qui va écouter les réponses.
+     * @return {String} l'adresse mail valide de l'utilisateur.
+     */
+
+    protected static String recupererMail(Scanner scanner) {
+        System.out.println("Entrez votre adresse mail :");
+        String mail = scanner.nextLine();
+        while(!Outils.verificationMails(mail)){
+            System.out.println("Votre adresse mail doit contenir un @, et être de la forme suivante : \"adresse@domain.ext\". \n" +
+                    "Veuillez entrer une adresse mail valide :");
+            mail = scanner.nextLine();
+        }
+        return mail;
     }
 
 }

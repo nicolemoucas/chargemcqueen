@@ -1,5 +1,8 @@
 package fr.ul.miage.dtos;
 
+/**
+ * Objet représentant un client.
+ */
 public class ClientDto {
 
     /**
@@ -26,6 +29,7 @@ public class ClientDto {
      * Le numéro de carte bancaire du client.
      */
     String carteBancaire;
+
 
     /**
      * Constructeur de l'objet ClientDto.
@@ -60,5 +64,9 @@ public class ClientDto {
     public String getEmail() {
         return email;
     }
+
+    public String getCarteBancaire() {return carteBancaire;}
+
+
     // Fin Getters et Setters
 }
