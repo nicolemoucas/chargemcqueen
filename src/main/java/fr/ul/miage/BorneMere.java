@@ -18,7 +18,7 @@ public class BorneMere {
      *
      * @param args Arguments de la ligne de commande
      */
-    private static void main(String[] args) {
+    public static void main(String[] args) {
         outilsBaseSQL = OutilsBaseSQL.getInstance();
         outilsBaseSQL.makeConnexion();
         //Statement stmt = outilsBaseSQL.getConn().createStatement();
