@@ -18,23 +18,26 @@ public class FormulaireInscriptionClient {
         String nomDeFamille = recupererNomDeFamille(scanner);
         String prenom = recupererPrenom(scanner);
         String telephone = recupererTelephone(scanner);
-        String mail = recupererMail(scanner);
+        String mail = Outils.recupererMail(scanner);
         String carteBancaire = recupererCarteBancaire(scanner);
-        creerCompteClient(scanner);
+        // Le compte créé pour l'insérer en BDD
+        CompteClientDto compteClient = creerCompteClient(scanner);
         plaqueDImmatriculation(scanner);
         System.out.println("Client enregistré avec succès ! Bienvenue à vous, " + prenom + ".");
         return new ClientDto(nomDeFamille, prenom, telephone, mail, carteBancaire);
     }
 
+    /**
+     * Méthode utilisée pour créer le compte de l'utilisateur.
+     *
+     * @param scanner le scanner qui écoute les inputs utilisateurs.
+     * @return le compte créé
+     */
     private CompteClientDto creerCompteClient(Scanner scanner){
         String motDePasse = recupererMotDePasse(scanner);
-        byte[] selBytes = Outils.generateSalt(16);
-        byte[] hashedPasswordBytes = Outils.hashPassword(motDePasse.toCharArray(), selBytes);
-        //TODO : Quand il y aura la BDD, il faut récupérer l'ID du client pour lui lier le compte.
-        return new CompteClientDto("1",
-                new MotDePasseDto(
-                        Outils.convertByteArrayToString(hashedPasswordBytes),
-                        Outils.convertByteArrayToString(selBytes)));
+        MotDePasseDto motDePasseChiffre = Outils.hashPassword(motDePasse);
+        //TODO : Quand il y aura la BDD, il faut récupérer l'ID du client pour lui lier le compte. Ne pas hésiter à réorganiser.
+        return new CompteClientDto("1", motDePasseChiffre);
     }
 
     /**
@@ -82,6 +85,7 @@ public class FormulaireInscriptionClient {
     /**
      * Méthode utilisée pour récupérer les inputs utilisateurs pour le numéro de plaque d'immatriculation.
      * On continue de lui demander de rentrer un numéro tant que sa plaque est invalide.
+     *
      * @param scanner le scanner qui va écouter les réponses.
      * @return {String} la plaque d'immatriculation valide de l'utilisateur.
      */
@@ -97,25 +101,9 @@ public class FormulaireInscriptionClient {
     }
 
     /**
-     * Méthode utilisée pour récupérer les inputs utilisateurs pour l'adresse mail.
-     * On continue de lui demander de rentrer une adresse mail tant que son adresse est invalide.
-     * @param scanner le scanner qui va écouter les réponses.
-     * @return {String} l'adresse mail valide de l'utilisateur.
-     */
-    private String recupererMail(Scanner scanner) {
-        System.out.println("Entrez votre adresse mail :");
-        String mail = scanner.nextLine();
-        while(!Outils.verificationMails(mail)){
-            System.out.println("Votre adresse mail doit contenir un @, et être de la forme suivante : \"adresse@domain.ext\". \n" +
-                    "Veuillez entrer une adresse mail valide :");
-            mail = scanner.nextLine();
-        }
-        return mail;
-    }
-
-    /**
      * Méthode utilisée pour récupérer les inputs utilisateurs pour le numéro de téléphone.
      * On continue de lui demander de rentrer un numéro tant que son numéro est invalide.
+     *
      * @param scanner le scanner qui va écouter les réponses.
      * @return {String} le numéro de téléphone valide de l'utilisateur.
      */
