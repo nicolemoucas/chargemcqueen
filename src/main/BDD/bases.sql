@@ -82,13 +82,13 @@ VALUES ('Dupont', 'Jean', '123 Rue de Paris, 75001 Paris', '0102030405', '123456
 
 -- Insérer les comptes pour les clients
 INSERT INTO Compte (idClient, motDePasse, sel)
-VALUES (1, 'password123', 'salt123'),
-       (2, 'password456', 'salt456'),
-       (3, 'password789', 'salt789'),
-       (4, 'password101', 'salt101'),
-       (5, 'password202', 'salt202'),
-       (6, 'password303', 'salt303'),
-       (7, 'password404', 'salt404'),
-       (8, 'password505', 'salt505'),
-       (9, 'password606', 'salt606'),
-       (10,	'password707', 'salt707');
+VALUES (1, 'password123', 'f25a123f46db6518'),
+       (2, 'password456', '27fc8c1371cde837'),
+       (3, 'password789', 'c2ac666b74031b7a'),
+       (4, 'password101', '8a2578990e6817e7'),
+       (5, 'password202', '7627a414ede42f7c'),
+       (6, 'password303', 'b8f08f593e36c85a'),
+       (7, 'password404', 'c3fa8aa91ad50920'),
+       (8, 'password505', 'afa123520d9739e9'),
+       (9, 'password606', '59968d69477e258d'),
+       (10,	'password707', '6b06138f183249a3');
