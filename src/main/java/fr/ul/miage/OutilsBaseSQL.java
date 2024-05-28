@@ -4,7 +4,7 @@ import java.sql.*;
 
 public class OutilsBaseSQL {
 
-    private static OutilsBaseSQL intance;
+    private static OutilsBaseSQL instance;
     private static Connection conn = null;
 
     private OutilsBaseSQL(){
@@ -39,10 +39,10 @@ public class OutilsBaseSQL {
     }
 
     public static OutilsBaseSQL getInstance() {
-        if (intance == null){
-            intance = new OutilsBaseSQL();
+        if (instance == null){
+            instance = new OutilsBaseSQL();
         }
-        return intance;
+        return instance;
     }
 
     public static void fermerConnexion() {
