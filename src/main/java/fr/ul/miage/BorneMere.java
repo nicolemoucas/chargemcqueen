@@ -1,5 +1,9 @@
 package fr.ul.miage;
 
+import fr.ul.miage.dtos.ClientDto;
+
+import java.sql.SQLException;
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -18,12 +22,19 @@ public class BorneMere {
      *
      * @param args Arguments de la ligne de commande
      */
-    private static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
         outilsBaseSQL = OutilsBaseSQL.getInstance();
         outilsBaseSQL.makeConnexion();
         //Statement stmt = outilsBaseSQL.getConn().createStatement();
         optionsMenuInitial = chargerOptionsMenuInitial();
         bienvenue();
+        // remove
+        try {
+            OutilsCompteAdmin.testClientsBDD();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        // end remove
         System.out.println("\nMenu principal");
         runMenuLoop(optionsMenuInitial, "menuPrincipal");
         auRevoir();
@@ -34,7 +45,7 @@ public class BorneMere {
         return estAdmin;
     }
 
-    private static void runMenuLoop(List<String> optionsMenu, String typeMenu) {
+    protected static void runMenuLoop(List<String> optionsMenu, String typeMenu) throws SQLException {
         int ordreUtilisateur = -1;
         boolean stopApp = false;
 
@@ -45,7 +56,7 @@ public class BorneMere {
                     stopApp = executerOrdreMenuPrincipal(ordreUtilisateur);
                     break;
                 case "menuCompte":
-                    stopApp = OutilsCompteClient.executerOrdreMenuCompte(ordreUtilisateur);
+                    stopApp = OutilsCompte.executerOrdreMenuCompte(ordreUtilisateur);
                     break;
                 default:
                     break;
@@ -125,7 +136,7 @@ public class BorneMere {
      *
      * @param ordreUtilisateur Instruction (int) choisie par l'utilisateur
      */
-    private static boolean executerOrdreMenuPrincipal(int ordreUtilisateur) {
+    private static boolean executerOrdreMenuPrincipal(int ordreUtilisateur) throws SQLException {
         switch (ordreUtilisateur) {
             case 1:
                 chercherReservation();
@@ -134,7 +145,7 @@ public class BorneMere {
                 saisirPlaque();
                 break;
             case 3:
-                connexion();
+                OutilsCompte.connexion();
                 break;
             case 4:
                 inscription();
@@ -163,22 +174,10 @@ public class BorneMere {
         System.out.println("Saisir une plaque d'immatriculation");
     }
 
-    private static void connexion() {
-        List<String> optionsMenuCompte = chargerOptionsMenuCompte();
-        System.out.println("Vous êtes connecté à votre compte");
-        runMenuLoop(optionsMenuCompte, "menuCompte");
-    }
-
-    private static List<String> chargerOptionsMenuCompte() {
-        List<String> options = new ArrayList<String>(Arrays.asList("Trouver ma réservation",
-                "Faire une réservation", "Ajouter un véhicule", "Se déconnecter"));
-        if (BorneMere.estAdmin) {
-            options.add("Rechercher un client");
-        }
-        return options;
-    }
-
-    private static void inscription() {
-        new FormulaireInscriptionClient().procedureInscription();
+    private static void inscription() throws SQLException {
+        ClientDto client = new FormulaireInscriptionClient().procedureInscription();
+        int idClient = OutilsCompte.insererClientBDD(client);
+        OutilsCompte.creerCompteClient(idClient);
+        System.out.println("Bienvenue, " + client.getPrenom()+ " !");
     }
 }

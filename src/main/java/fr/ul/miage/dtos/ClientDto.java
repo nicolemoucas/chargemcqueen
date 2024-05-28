@@ -60,5 +60,9 @@ public class ClientDto {
     public String getEmail() {
         return email;
     }
+
+    public String getCarteBancaire() {
+        return carteBancaire;
+    }
     // Fin Getters et Setters
 }

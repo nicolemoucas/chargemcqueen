@@ -20,21 +20,8 @@ public class FormulaireInscriptionClient {
         String telephone = recupererTelephone(scanner);
         String mail = recupererMail(scanner);
         String carteBancaire = recupererCarteBancaire(scanner);
-        creerCompteClient(scanner);
         plaqueDImmatriculation(scanner);
-        System.out.println("Client enregistré avec succès ! Bienvenue à vous, " + prenom + ".");
         return new ClientDto(nomDeFamille, prenom, telephone, mail, carteBancaire);
-    }
-
-    private CompteClientDto creerCompteClient(Scanner scanner){
-        String motDePasse = recupererMotDePasse(scanner);
-        byte[] selBytes = Outils.generateSalt(16);
-        byte[] hashedPasswordBytes = Outils.hashPassword(motDePasse.toCharArray(), selBytes);
-        //TODO : Quand il y aura la BDD, il faut récupérer l'ID du client pour lui lier le compte.
-        return new CompteClientDto("1",
-                new MotDePasseDto(
-                        Outils.convertByteArrayToString(hashedPasswordBytes),
-                        Outils.convertByteArrayToString(selBytes)));
     }
 
     /**
@@ -102,7 +89,7 @@ public class FormulaireInscriptionClient {
      * @param scanner le scanner qui va écouter les réponses.
      * @return {String} l'adresse mail valide de l'utilisateur.
      */
-    private String recupererMail(Scanner scanner) {
+    protected static String recupererMail(Scanner scanner) {
         System.out.println("Entrez votre adresse mail :");
         String mail = scanner.nextLine();
         while(!Outils.verificationMails(mail)){
@@ -172,7 +159,7 @@ public class FormulaireInscriptionClient {
      * @param scanner le scanner qui va écouter les réponses.
      * @return {String} le mot de passe valide de l'utilisateur.
      */
-    private String recupererMotDePasse(Scanner scanner) {
+    protected static String recupererMotDePasse(Scanner scanner) {
         System.out.println("Choisissez un mot de passe : ");
 
         String motDePasse = scanner.nextLine();

@@ -2,39 +2,14 @@ package fr.ul.miage;
 
 import fr.ul.miage.dtos.ClientDto;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class OutilsCompteClient {
-
-    /**
-     * Redirige vers l'action choisie par l'utilisateur en fonction du numéro d'ordre passé en paramètre
-     * pour le menu quand le client est connecté à son compte.
-     *
-     * @param ordreUtilisateur Instruction (int) choisie par l'utilisateur
-     */
-    protected static boolean executerOrdreMenuCompte(int ordreUtilisateur) {
-        switch (ordreUtilisateur) {
-            case 1:
-                BorneMere.chercherReservation();
-                break;
-            case 2:
-                BorneMere.faireReservation();
-                break;
-            case 3:
-                BorneMere.ajouterPlaque();
-                break;
-            case 4:
-                return deconnexion();
-            case 5:
-                chercherClient();
-            default:
-                break;
-        }
-        return false;
-    }
-
+public class OutilsCompteAdmin {
     protected static void afficherClients(List<ClientDto> listeClients, String nom, String prenom) {
         if (listeClients.isEmpty()) {
             System.out.println("Aucun client appelé \"" + nom + " " + prenom + "\" n'a été trouvé");
@@ -70,7 +45,7 @@ public class OutilsCompteClient {
      * Affiche les clients à partir d'un nom et prénom saisis par l'utilisateur (qui doit être
      * administrateur).
      */
-    private static void chercherClient() {
+    protected static void chercherClient() {
         String nom;
         String prenom;
         List<ClientDto> listeClients = new ArrayList<ClientDto>();
@@ -79,15 +54,10 @@ public class OutilsCompteClient {
         System.out.println("Chercher un client");
         nom = Outils.saisirString("Nom du client : ");
         prenom = Outils.saisirString("Prénom du client : ");
-        listeClients = OutilsCompteClient.getListeClientsBDD(nom, prenom);
+        listeClients = OutilsCompteAdmin.getListeClientsBDD(nom, prenom);
         afficherClients(listeClients, nom, prenom);
         numClient = Outils.saisirInt(0, listeClients.size()) - 1;
         afficherProfilClient(listeClients, numClient);
-    }
-
-    private static boolean deconnexion() {
-        System.out.println("Se déconnecter");
-        return true; // stopApp
     }
 
     protected static List<ClientDto> getListeClientsBDD(String nom, String prenom) {
@@ -108,5 +78,18 @@ public class OutilsCompteClient {
             return clients;
         }
         return new ArrayList<ClientDto>();
+    }
+
+    protected static void testClientsBDD() throws SQLException {
+        // Créer une nouvelle instruction SQL
+        Statement stmt = OutilsBaseSQL.getConn().createStatement();
+        ResultSet result = null;
+
+        // Exécuter une requête SQL pour récupérer des données à partir d'une table
+        String query = "SELECT * FROM Client";
+        result = stmt.executeQuery(query);
+        while (result.next()) {
+            System.out.println(result.getString("nom"));
+        }
     }
 }
