@@ -10,21 +10,24 @@ import java.util.List;
 public class BorneMere {
     protected static List<String> optionsMenuInitial = new ArrayList<>();
     private static final boolean estAdmin = true;
+    private static OutilsBaseSQL outilsBaseSQL;
+
 
     /**
      * Méthode principale de l'application qui permet de la lancer et de gérer le flux de l'utilisateur.
      *
      * @param args Arguments de la ligne de commande
      */
-    public static void main(String[] args) {
-
-        OutilsBaseSQL.connexionBase();
+    private static void main(String[] args) {
+        outilsBaseSQL = OutilsBaseSQL.getInstance();
+        outilsBaseSQL.makeConnexion();
+        //Statement stmt = outilsBaseSQL.getConn().createStatement();
         optionsMenuInitial = chargerOptionsMenuInitial();
         bienvenue();
         System.out.println("\nMenu principal");
         runMenuLoop(optionsMenuInitial, "menuPrincipal");
         auRevoir();
-        OutilsBaseSQL.fermerConnexion();
+        outilsBaseSQL.fermerConnexion();
     }
 
     public static boolean getEstAdmin() {

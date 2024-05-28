@@ -19,7 +19,6 @@ PORT : 5433
 
 Locale par défaut
 
-
 3/ Utiliser PgAdmin
 
 Aller dans SERVERS --> PostgreSQL 16 (si votre version)
