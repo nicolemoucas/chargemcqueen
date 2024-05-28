@@ -3,6 +3,7 @@ package fr.ul.miage;
 import fr.ul.miage.dtos.ClientDto;
 import org.apache.commons.codec.DecoderException;
 
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -24,7 +25,7 @@ public class BorneMere {
      *
      * @param args Arguments de la ligne de commande
      */
-    public static void main(String[] args) throws DecoderException {
+    public static void main(String[] args) {
         outilsBaseSQL = OutilsBaseSQL.getInstance();
         outilsBaseSQL.makeConnexion();
         //Statement stmt = outilsBaseSQL.getConn().createStatement();
