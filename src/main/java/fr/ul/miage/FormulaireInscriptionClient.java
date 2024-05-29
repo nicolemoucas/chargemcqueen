@@ -17,7 +17,7 @@ public class FormulaireInscriptionClient {
         String nomDeFamille = recupererNomDeFamille(scanner);
         String prenom = recupererPrenom(scanner);
         String telephone = recupererTelephone(scanner);
-        String mail = recupererMail(scanner);
+        String mail = Outils.recupererMail(scanner);
         String carteBancaire = recupererCarteBancaire(scanner);
         plaqueDImmatriculation(scanner);
         System.out.println("Client enregistré avec succès ! Bienvenue à vous, " + prenom + ".");
@@ -83,24 +83,6 @@ public class FormulaireInscriptionClient {
             immat = scanner.nextLine().toUpperCase();
         }
         return immat;
-    }
-
-    /**
-     * Méthode utilisée pour récupérer les inputs utilisateurs pour l'adresse mail.
-     * On continue de lui demander de rentrer une adresse mail tant que son adresse est invalide.
-     *
-     * @param scanner le scanner qui va écouter les réponses.
-     * @return {String} l'adresse mail valide de l'utilisateur.
-     */
-    protected static String recupererMail(Scanner scanner) {
-        System.out.println("Entrez votre adresse mail :");
-        String mail = scanner.nextLine();
-        while(!Outils.verificationMails(mail)){
-            System.out.println("Votre adresse mail doit contenir un @, et être de la forme suivante : \"adresse@domain.ext\". \n" +
-                    "Veuillez entrer une adresse mail valide :");
-            mail = scanner.nextLine();
-        }
-        return mail;
     }
 
     /**

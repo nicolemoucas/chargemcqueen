@@ -240,6 +240,7 @@ public class Outils {
     /**
      * Méthode utilisée pour récupérer les inputs utilisateurs pour l'adresse mail.
      * On continue de lui demander de rentrer une adresse mail tant que son adresse est invalide.
+     *
      * @param scanner le scanner qui va écouter les réponses.
      * @return {String} l'adresse mail valide de l'utilisateur.
      */

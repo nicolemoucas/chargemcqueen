@@ -50,28 +50,42 @@ public class OutilsCompte {
     }
 
     protected static void connexion() {
-        Scanner scanner = new Scanner(System.in);
+        boolean connexionOK = new ConnexionCompteClient().procedureConnexionCompte();
         List<String> optionsMenuCompte = chargerOptionsMenuCompte();
-        String mail = FormulaireInscriptionClient.recupererMail(scanner);
-        String mdp = FormulaireInscriptionClient.recupererMotDePasse(scanner);
 
+        if (connexionOK) {
+            System.out.println("\nBienvenue !");
+            BorneMere.runMenuLoop(optionsMenuCompte, "menuCompte");
+        } else {
+            System.out.println("La connexion a échoué.\nVous serez redirigé vers le menu principal. ");
+        }
+    }
+
+    protected static CompteClientDto getCompteClientBDD(String mail) {
+        ResultSet result = null;
+        PreparedStatement stmt = null;
+
+        String query = "SELECT cl.idclient, motdepasse, sel FROM Client cl LEFT JOIN Compte co \n" +
+                "\tON cl.idclient = co.idclient WHERE LOWER(cl.email) LIKE LOWER(?);";
         try {
-            Statement stmt = OutilsBaseSQL.getConn().createStatement();
+            stmt = OutilsBaseSQL.getConn().prepareStatement(query);
+            stmt.setString(1, mail);
+
+            result = stmt.executeQuery();
+            if (result.next()) {
+                int idclient = result.getInt("idclient");
+                MotDePasseDto mdpDto = new MotDePasseDto(result.getString("motdepasse"),
+                        result.getString("sel"));
+                return new CompteClientDto(idclient, mdpDto);
+            }
+            System.out.println("Aucun client n'existe avec le mail '" + mail + "', veuillez vous inscrire.");
         } catch (SQLException e) {
+            System.out.println("Une erreur s'est produite lors de la connexion, veuillez réessayer.");
             throw new RuntimeException(e);
         }
-        ResultSet result = null;
-
-        // Exécuter une requête SQL pour récupérer des données à partir d'une table
-//        String query = "SELECT prenom FROM Compte WHERE ";
-//        result = stmt.executeQuery(query);
-//        while (result.next()) {
-//            System.out.println(result.getString("nom"));
-//        }
-
-        System.out.println("Bienvenue [nom] !");
-        BorneMere.runMenuLoop(optionsMenuCompte, "menuCompte");
+        return null;
     }
+
 
     private static boolean deconnexion() {
         System.out.println("Se déconnecter");

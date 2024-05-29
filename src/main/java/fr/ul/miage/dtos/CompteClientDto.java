@@ -1,7 +1,7 @@
 package fr.ul.miage.dtos;
 
 /**
- * Objet représentant le compte d'un client?
+ * Objet représentant le compte d'un client
  */
 public class CompteClientDto {
 
@@ -17,6 +17,7 @@ public class CompteClientDto {
 
     /**
      * Constructeur de CompteClientDto
+     *
      * @param idClient l'id du client à qui appartient le compte.
      * @param motDePasse le mot de passe du client.
      */
