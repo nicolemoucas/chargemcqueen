@@ -29,15 +29,4 @@ public class InscriptionCompteClientTest {
         String testHash = Outils.convertBytesToHex(Outils.hashPassword(mdp, salt));
         assertNotEquals(testHash, storedHash);
     }
-
-    @DisplayName("Retourne false si le hash du mot de passe est le bon.")
-    @Test
-    public void testIsHashCorrect3()  {
-        String storedHash = "fa73";
-        byte[] salt = Outils.generateSalt();
-        String mdp = "Ch1ck3nNug";
-        String testHash = Outils.convertBytesToHex(Outils.hashPassword(mdp, salt));
-        System.out.println("salt: " + Outils.convertBytesToHex(salt));
-        assertEquals(storedHash, testHash);
-    }
 }
