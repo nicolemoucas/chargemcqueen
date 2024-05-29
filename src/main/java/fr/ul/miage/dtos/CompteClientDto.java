@@ -7,7 +7,7 @@ public class CompteClientDto {
     /**
      * L'id du client a qui appartient le compte.
      */
-    String idClient;
+    int idClient;
 
     /**
      * Le mot de passe du client. Contient le mot de passe chiffré et le sel.
@@ -19,7 +19,7 @@ public class CompteClientDto {
      * @param idClient l'id du client a qui appartient le compte.
      * @param motDePasse le mot de passe du client.
      */
-    public CompteClientDto(String idClient, MotDePasseDto motDePasse) {
+    public CompteClientDto(int idClient, MotDePasseDto motDePasse) {
         this.idClient = idClient;
         this.motDePasse = motDePasse;
     }

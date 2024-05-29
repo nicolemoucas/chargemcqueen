@@ -6,6 +6,9 @@ import fr.ul.miage.dtos.MotDePasseDto;
 
 import java.util.Scanner;
 
+import static fr.ul.miage.Outils.checkYesOrNoAnswer;
+import static fr.ul.miage.Outils.recupererPlaqueImmat;
+
 public class FormulaireInscriptionClient {
 
     /**
@@ -37,7 +40,7 @@ public class FormulaireInscriptionClient {
         String motDePasse = recupererMotDePasse(scanner);
         MotDePasseDto motDePasseChiffre = Outils.hashPassword(motDePasse);
         //TODO : Quand il y aura la BDD, il faut récupérer l'ID du client pour lui lier le compte. Ne pas hésiter à réorganiser.
-        return new CompteClientDto("1", motDePasseChiffre);
+        return new CompteClientDto(1, motDePasseChiffre);
     }
 
     /**
@@ -51,7 +54,7 @@ public class FormulaireInscriptionClient {
                 "O - Oui / N - Non");
         String choix = scanner.nextLine();
         int timeout = 0;
-        while((!choix.equalsIgnoreCase("o") && !choix.equalsIgnoreCase("n"))|| timeout >= 3) {
+        while(!checkYesOrNoAnswer(choix)|| timeout >= 3) {
             timeout++;
             System.out.println("Je n'ai pas compris votre choix. \n" +
                     "Souhaitez-vous entrer la plaque d'immatriculation de votre véhicule personnel ? \n" +
@@ -80,24 +83,6 @@ public class FormulaireInscriptionClient {
             carteBancaire = scanner.nextLine();
         }
         return carteBancaire;
-    }
-
-    /**
-     * Méthode utilisée pour récupérer les inputs utilisateurs pour le numéro de plaque d'immatriculation.
-     * On continue de lui demander de rentrer un numéro tant que sa plaque est invalide.
-     *
-     * @param scanner le scanner qui va écouter les réponses.
-     * @return {String} la plaque d'immatriculation valide de l'utilisateur.
-     */
-    private String recupererPlaqueImmat(Scanner scanner) {
-        System.out.println("Entrez votre numéro de plaque d'immatriculation sans séparateurs ni espaces :");
-        String immat = scanner.nextLine().toUpperCase();
-        while(!Outils.verificationPlaqueImmatriculation(immat)){
-            System.out.println("Votre numéro de plaque d'immatriculation doit respecter la forme suivante : AA123BB\n" +
-                    "Veuillez entrer un numéro de plaque d'immatriculation valide.");
-            immat = scanner.nextLine().toUpperCase();
-        }
-        return immat;
     }
 
     /**

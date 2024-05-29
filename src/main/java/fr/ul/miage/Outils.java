@@ -255,4 +255,39 @@ public class Outils {
         return mail;
     }
 
+    /**
+     * Méthode utilisée pour vérifier que l'input utilisateur est correct quand la réponse est oui ou non.
+     * @param input l'input de l'utilisateur.
+     * @return true si l'input est "o", "n", "oui" ou "non" (sans tenir compte des majuscules); false sinon.
+     */
+    protected static boolean checkYesOrNoAnswer(String input){
+        return input.equalsIgnoreCase("o") || input.equalsIgnoreCase("n") ||
+                input.equalsIgnoreCase("oui") || input.equalsIgnoreCase("non");
+    }
+
+    protected static String miseEnFormeImmat(String immat) {
+        return immat.substring(0, 2) +
+                '-' +
+                immat.substring(2, 5) +
+                '-' +
+                immat.substring(5, 7);
+    }
+
+    /**
+     * Méthode utilisée pour récupérer les inputs utilisateurs pour le numéro de plaque d'immatriculation.
+     * On continue de lui demander de rentrer un numéro tant que sa plaque est invalide.
+     *
+     * @param scanner le scanner qui va écouter les réponses.
+     * @return {String} la plaque d'immatriculation valide de l'utilisateur.
+     */
+    protected static String recupererPlaqueImmat(Scanner scanner) {
+        System.out.println("Entrez votre numéro de plaque d'immatriculation sans séparateurs ni espaces :");
+        String immat = scanner.nextLine().toUpperCase();
+        while(!Outils.verificationPlaqueImmatriculation(immat)){
+            System.out.println("Votre numéro de plaque d'immatriculation doit respecter la forme suivante : AA123BB\n" +
+                    "Veuillez entrer un numéro de plaque d'immatriculation valide.");
+            immat = scanner.nextLine().toUpperCase();
+        }
+        return immat;
+    }
 }
