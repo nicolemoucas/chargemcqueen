@@ -29,7 +29,7 @@ public class OutilsBaseSQL {
     /**
      * Méthode pour établir une connexion à la base de données si elle n'existe pas.
      */
-    public void makeConnexion(){
+    private static void makeConnexion(){
         if (conn == null){
             try {
                 // Charger le pilote JDBC PostgreSQL
@@ -59,6 +59,7 @@ public class OutilsBaseSQL {
     /**
      * Méthode pour obtenir l'instance unique de la classe OutilsBaseSQL si elle existe, sinon elle
      * est créée.
+     * Utilisation du patron Singleton
      *
      * @return L'instance unique de la classe OutilsBaseSQL
      */
@@ -70,13 +71,16 @@ public class OutilsBaseSQL {
     }
 
     /**
-     * Méthode qui ferme la connexion à la base de données si elle existe.
+     *  Méthode qui ferme la connexion à la base de données si elle existe.
      */
     public static void fermerConnexion() {
         try {
             if (conn != null) {
                 // Fermer la connexion à la base de données
-                conn.close();
+                if (!(conn.isClosed())){
+                    conn.close();
+                }
+                conn = null;
             }
         } catch (SQLException e) {
             System.err.println(e.getMessage());
@@ -85,10 +89,14 @@ public class OutilsBaseSQL {
 
     /**
      * Méthode pour obtenir l'objet Connection qui représente la connexion à la base de données.
+     * Si la connexion n'est pas faite, on l'a fait
      *
      * @return L'object Connection
      */
-    public static Connection getConn() {
+    public static Connection getConn() throws SQLException {
+        if (conn == null){
+            makeConnexion();
+        }
         return conn;
     }
 }

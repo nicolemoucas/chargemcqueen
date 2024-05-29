@@ -25,7 +25,6 @@ public class BorneMere {
      */
     public static void main(String[] args) {
         outilsBaseSQL = OutilsBaseSQL.getInstance();
-        outilsBaseSQL.makeConnexion();
         optionsMenuInitial = chargerOptionsMenuInitial();
         bienvenue();
         System.out.println("\nMenu principal");
