@@ -1,8 +1,6 @@
 package fr.ul.miage;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 
 /**
  * Cette classe est une boite à outils, et contient des méthodes versatiles liées à la base de données
@@ -98,5 +96,63 @@ public class OutilsBaseSQL {
             makeConnexion();
         }
         return conn;
+    }
+
+    /**
+     * Méthode qui permet d'effectuer les SELECT en SQL
+     *
+     * @param requete, String  : la requête à éxécuter
+     * @param erreur, String  : le message d'erreur à envoyer en cas de problème
+     * @return
+     */
+    public static ResultSet rechercheSQL(String requete, String erreur){
+        ResultSet resultat = null;
+        try {
+            problemeConnexion();
+            Statement stmt = conn.createStatement();
+            resultat = stmt.executeQuery(requete);
+        } catch (SQLException e){
+            System.out.println(erreur);
+        } finally {
+            return resultat;
+        }
+    }
+
+
+    /**
+     * Méthode qui s'occupe des update et insertion en SQL
+     *
+     * @param requete, String  : la requête à éxécuter
+     * @param erreur, String  : le message d'erreur à envoyer en cas de problème
+     * @return
+     */
+    public static boolean majSQL(String requete, String erreur){
+        int resultat = 0;
+        try {
+            problemeConnexion();
+            Statement stmt = conn.createStatement();
+            resultat = stmt.executeUpdate(requete);
+        } catch (SQLException e){
+            System.out.println(erreur);
+        } finally {
+            return (resultat == 1);
+        }
+    }
+
+
+    /**
+     * Méthode qui gère le problème de connexion
+     */
+    private static void problemeConnexion(){
+        try {
+            if (conn == null){
+                makeConnexion();
+            } else if(conn.isClosed()){
+                fermerConnexion();
+                makeConnexion();
+            }
+        } catch (SQLException e){
+            System.out.println("Problème de connexion");
+        }
     }
 }
