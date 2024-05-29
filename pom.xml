@@ -150,6 +150,13 @@
             <version>${mockito.version}</version>
             <scope>test</scope>
         </dependency>
-      
+
+        <!-- https://mvnrepository.com/artifact/commons-codec/commons-codec -->
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>1.17.0</version>
+        </dependency>
+
     </dependencies>
 </project>

@@ -1,5 +1,8 @@
 package fr.ul.miage.dtos;
 
+/**
+ * Objet représentant un client.
+ */
 public class ClientDto {
 
     /**

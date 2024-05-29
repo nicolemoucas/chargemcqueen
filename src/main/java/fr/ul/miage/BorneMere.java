@@ -1,6 +1,10 @@
 package fr.ul.miage;
 
 import fr.ul.miage.dtos.ClientDto;
+import org.apache.commons.codec.DecoderException;
+
+
+import fr.ul.miage.dtos.ClientDto;
 import fr.ul.miage.dtos.CompteClientDto;
 
 import java.sql.SQLException;
@@ -16,14 +20,17 @@ public class BorneMere {
     protected static List<String> optionsMenuInitial = new ArrayList<>();
     private static final boolean estAdmin = true;
     private static OutilsBaseSQL outilsBaseSQL;
-
+    /**
+     * Si un client est connecté, il est stocké ici. A sa déconnexion, il repassera a null.
+     */
+    private static ClientDto currentlyConnectedClient = null;
 
     /**
      * Méthode principale de l'application qui permet de la lancer et de gérer le flux de l'utilisateur.
      *
      * @param args Arguments de la ligne de commande
      */
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args) {
         outilsBaseSQL = OutilsBaseSQL.getInstance();
         outilsBaseSQL.makeConnexion();
         //Statement stmt = outilsBaseSQL.getConn().createStatement();
@@ -39,7 +46,7 @@ public class BorneMere {
         return estAdmin;
     }
 
-    protected static void runMenuLoop(List<String> optionsMenu, String typeMenu) throws SQLException {
+    protected static void runMenuLoop(List<String> optionsMenu, String typeMenu) {
         int ordreUtilisateur = -1;
         boolean stopApp = false;
 
@@ -130,7 +137,7 @@ public class BorneMere {
      *
      * @param ordreUtilisateur Instruction (int) choisie par l'utilisateur
      */
-    private static boolean executerOrdreMenuPrincipal(int ordreUtilisateur) throws SQLException {
+    private static boolean executerOrdreMenuPrincipal(int ordreUtilisateur) {
         switch (ordreUtilisateur) {
             case 1:
                 chercherReservation();

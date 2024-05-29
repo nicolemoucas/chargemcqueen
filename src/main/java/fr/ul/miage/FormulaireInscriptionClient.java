@@ -20,13 +20,17 @@ public class FormulaireInscriptionClient {
         String telephone = recupererTelephone(scanner);
         String mail = recupererMail(scanner);
         String carteBancaire = recupererCarteBancaire(scanner);
+        // Le compte créé pour l'insérer en BDD
+        CompteClientDto compteClient = creerCompteClient(scanner);
         plaqueDImmatriculation(scanner);
+        System.out.println("Client enregistré avec succès ! Bienvenue à vous, " + prenom + ".");
         return new ClientDto(nomDeFamille, prenom, telephone, mail, carteBancaire);
     }
 
     /**
      * Méthode utilisée pour écouter les inputs utilisateurs dans le cadre de l'ajout d'une plaqwue d'immatriculation lors de l'inscription .
      * L'utilisateur n'est pas obligé de le faire, donc on lui laisse le choix.
+     *
      * @param scanner le scanner qui écoute les inputs utilisateurs.
      */
     private void plaqueDImmatriculation(Scanner scanner) {
@@ -69,6 +73,7 @@ public class FormulaireInscriptionClient {
     /**
      * Méthode utilisée pour récupérer les inputs utilisateurs pour le numéro de plaque d'immatriculation.
      * On continue de lui demander de rentrer un numéro tant que sa plaque est invalide.
+     *
      * @param scanner le scanner qui va écouter les réponses.
      * @return {String} la plaque d'immatriculation valide de l'utilisateur.
      */
@@ -86,6 +91,7 @@ public class FormulaireInscriptionClient {
     /**
      * Méthode utilisée pour récupérer les inputs utilisateurs pour l'adresse mail.
      * On continue de lui demander de rentrer une adresse mail tant que son adresse est invalide.
+     *
      * @param scanner le scanner qui va écouter les réponses.
      * @return {String} l'adresse mail valide de l'utilisateur.
      */
@@ -103,6 +109,7 @@ public class FormulaireInscriptionClient {
     /**
      * Méthode utilisée pour récupérer les inputs utilisateurs pour le numéro de téléphone.
      * On continue de lui demander de rentrer un numéro tant que son numéro est invalide.
+     *
      * @param scanner le scanner qui va écouter les réponses.
      * @return {String} le numéro de téléphone valide de l'utilisateur.
      */
