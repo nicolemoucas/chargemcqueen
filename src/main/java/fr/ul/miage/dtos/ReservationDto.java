@@ -4,14 +4,49 @@ import fr.ul.miage.Enums.ETypeImmat;
 
 import java.time.LocalDateTime;
 
+/**
+ * Objet représentant une réservation pour une borne.
+ */
 public class ReservationDto {
+    /**
+     * L'identifiant de l'immatriculation du véhicule associé à la réservation.
+     */
     private int idImmat;
+
+    /**
+     * L'identifiant de la borne associée à la réservation.
+     */
     private int idBorne;
+
+    /**
+     * L'heure de début de la réservation.
+     */
     private LocalDateTime heureDebut;
+
+    /**
+     * L'heure de fin de la réservation.
+     */
     private LocalDateTime heureFin;
+
+    /**
+     * Indique si la plaque est permanante (normale) ou temporaire (dans le cadre des locations).
+     */
     private ETypeImmat typeImmat;
+
+    /**
+     * Le nombre de prolongations qu'il y a sur la réservation. Pour le moment, toujours 0 car non traité.
+     */
     private int nbProlongations;
 
+    /**
+     * Constructeur d'une réservation.
+     * @param idImmat l'identifiant de la plaque d'immatriculation du véhicule associé à la réservation.
+     * @param idBorne l'identifiant de la borne associée à la réservation.
+     * @param heureDebut l'heure de début de la réservation.
+     * @param heureFin l'heure de fin de la réservation.
+     * @param typeImmat le type de la plaque d'immatriculation (normale ou temporaire).
+     * @param nbProlongations le nombre de prolongations (non traité actuellement).
+     */
     public ReservationDto(int idImmat,
                           int idBorne,
                           LocalDateTime heureDebut,
@@ -26,9 +61,7 @@ public class ReservationDto {
         this.nbProlongations = nbProlongations;
     }
 
-    public int getIdImmat() {
-        return idImmat;
-    }
+    // Getters
 
     public int getIdBorne() {
         return idBorne;

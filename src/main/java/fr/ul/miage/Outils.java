@@ -8,6 +8,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.time.format.DateTimeFormatter;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.regex.Pattern;
@@ -56,6 +57,11 @@ public class Outils {
      * Constante qui définit le nombre d'itérations de la méthode qui chiffre le mot de passe.
      */
     private static final int HASH_ITERATIONS = 10000;
+
+    /**
+     * Constante qui contient le patter pour formatter les LocalDateTime des horaires de début et de fin de réservations.
+     */
+    static final DateTimeFormatter FORMAT_DATES_RESERVATIONS = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
 
     /**
      * Méthode utilisée pour contrôler que l'adresse mail est valide.
@@ -305,4 +311,6 @@ public class Outils {
         }
         return immat;
     }
+
+
 }
