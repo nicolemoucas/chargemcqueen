@@ -41,20 +41,25 @@ public class OutilsCompte {
         return false;
     }
 
-    protected static void inscription() throws SQLException {
+    protected static void inscription() {
         ClientDto client = new FormulaireInscriptionClient().procedureInscription();
         int idClient = OutilsCompte.insererClientBDD(client);
-        OutilsCompte.creerCompteClient(idClient);
+        CompteClientDto compteClient = creerCompteClient(idClient);
+
         System.out.println("Bienvenue, " + client.getPrenom()+ " !");
     }
 
-    protected static void connexion() throws SQLException {
+    protected static void connexion() {
         Scanner scanner = new Scanner(System.in);
         List<String> optionsMenuCompte = chargerOptionsMenuCompte();
         String mail = FormulaireInscriptionClient.recupererMail(scanner);
         String mdp = FormulaireInscriptionClient.recupererMotDePasse(scanner);
 
-        Statement stmt = OutilsBaseSQL.getConn().createStatement();
+        try {
+            Statement stmt = OutilsBaseSQL.getConn().createStatement();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         ResultSet result = null;
 
         // Exécuter une requête SQL pour récupérer des données à partir d'une table
@@ -82,23 +87,28 @@ public class OutilsCompte {
         return options;
     }
 
-    protected static int insererClientBDD(ClientDto client) throws SQLException {
+    protected static int insererClientBDD(ClientDto client) {
         Scanner scanner = new Scanner(System.in);
         ResultSet resultIdClient = null;
         String query = "INSERT INTO Client (nom, prenom, adresse, numTelephone, numCarte) VALUES (?, ?, ?, ?, ?)" ;
-        PreparedStatement stmt = OutilsBaseSQL.getConn().prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
-        stmt.setString(1, client.getNom());
-        stmt.setString(2, client.getPrenom());
-        stmt.setString(3, client.getEmail());
-        stmt.setString(4, client.getTelephone());
-        stmt.setString(5, client.getCarteBancaire());
+        PreparedStatement stmt = null;
+        try {
+            stmt = OutilsBaseSQL.getConn().prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
+            stmt.setString(1, client.getNom());
+            stmt.setString(2, client.getPrenom());
+            stmt.setString(3, client.getEmail());
+            stmt.setString(4, client.getTelephone());
+            stmt.setString(5, client.getCarteBancaire());
 
-        int lignesAffectees = stmt.executeUpdate();
-        if (lignesAffectees == 1) {
-            resultIdClient = stmt.getGeneratedKeys();
-            if (resultIdClient.next()) {
-                return resultIdClient.getInt(1);
+            int lignesAffectees = stmt.executeUpdate();
+            if (lignesAffectees == 1) {
+                resultIdClient = stmt.getGeneratedKeys();
+                if (resultIdClient.next()) {
+                    return resultIdClient.getInt(1);
+                }
             }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
         System.out.println("Une erreur s'est produite lors de l'insertion du client.");
         return 0;
@@ -107,12 +117,8 @@ public class OutilsCompte {
     protected static CompteClientDto creerCompteClient(int idClient){
         Scanner scanner = new Scanner(System.in);
         String motDePasse = FormulaireInscriptionClient.recupererMotDePasse(scanner);
-        byte[] selBytes = Outils.generateSalt(16);
-        byte[] hashedPasswordBytes = Outils.hashPassword(motDePasse.toCharArray(), selBytes);
-        return new CompteClientDto(idClient,
-                new MotDePasseDto(
-                        Outils.convertByteArrayToString(hashedPasswordBytes),
-                        Outils.convertByteArrayToString(selBytes)));
+        MotDePasseDto motDePasseChiffre = Outils.hashPassword(motDePasse);
+        return new CompteClientDto(idClient, motDePasseChiffre);
     }
 
     public static void insererCompteClientBDD(int idClient, CompteClientDto compteClient) throws SQLException {
@@ -134,4 +140,5 @@ public class OutilsCompte {
 //        System.out.println("Une erreur s'est produite lors de l'insertion du client.");
 //        return 0;
     }
+
 }

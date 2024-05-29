@@ -1,10 +1,9 @@
 package fr.ul.miage;
 
 import fr.ul.miage.dtos.ClientDto;
-import fr.ul.miage.dtos.CompteClientDto;
-import fr.ul.miage.dtos.MotDePasseDto;
 
 import java.util.Scanner;
+
 
 public class FormulaireInscriptionClient {
 
@@ -20,8 +19,6 @@ public class FormulaireInscriptionClient {
         String telephone = recupererTelephone(scanner);
         String mail = recupererMail(scanner);
         String carteBancaire = recupererCarteBancaire(scanner);
-        // Le compte créé pour l'insérer en BDD
-        CompteClientDto compteClient = creerCompteClient(scanner);
         plaqueDImmatriculation(scanner);
         System.out.println("Client enregistré avec succès ! Bienvenue à vous, " + prenom + ".");
         return new ClientDto(nomDeFamille, prenom, telephone, mail, carteBancaire);

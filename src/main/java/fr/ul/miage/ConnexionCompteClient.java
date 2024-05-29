@@ -27,7 +27,7 @@ public class ConnexionCompteClient {
                     "0612345678",
                     "jean.dupont@gmail.com",
                     "123456789012345");
-            CompteClientDto fetchedComptePlaceholder = new CompteClientDto("1", new MotDePasseDto("mdp", "ab1e01e4663b8e69"));
+            CompteClientDto fetchedComptePlaceholder = new CompteClientDto(1, new MotDePasseDto("mdp", "ab1e01e4663b8e69"));
             MotDePasseDto motDePasseComptePlaceholder = fetchedComptePlaceholder.getMotDePasse();
             String mdp = recupererMotDePasse(scanner);
             if (isMotDePasseCorrect(mdp, motDePasseComptePlaceholder)) {
