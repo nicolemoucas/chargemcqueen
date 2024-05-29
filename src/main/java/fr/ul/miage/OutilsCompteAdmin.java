@@ -79,17 +79,4 @@ public class OutilsCompteAdmin {
         }
         return new ArrayList<ClientDto>();
     }
-
-    protected static void testClientsBDD() throws SQLException {
-        // Créer une nouvelle instruction SQL
-        Statement stmt = OutilsBaseSQL.getConn().createStatement();
-        ResultSet result = null;
-
-        // Exécuter une requête SQL pour récupérer des données à partir d'une table
-        String query = "SELECT * FROM Client";
-        result = stmt.executeQuery(query);
-        while (result.next()) {
-            System.out.println(result.getString("nom"));
-        }
-    }
 }

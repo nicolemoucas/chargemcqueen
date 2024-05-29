@@ -20,7 +20,6 @@ public class FormulaireInscriptionClient {
         String mail = Outils.recupererMail(scanner);
         String carteBancaire = recupererCarteBancaire(scanner);
         plaqueDImmatriculation(scanner);
-        System.out.println("Client enregistré avec succès ! Bienvenue à vous, " + prenom + ".");
         return new ClientDto(nomDeFamille, prenom, telephone, mail, carteBancaire);
     }
 

@@ -44,9 +44,14 @@ public class OutilsCompte {
     protected static void inscription() {
         ClientDto client = new FormulaireInscriptionClient().procedureInscription();
         int idClient = OutilsCompte.insererClientBDD(client);
-        CompteClientDto compteClient = creerCompteClient(idClient);
-
-        System.out.println("Bienvenue, " + client.getPrenom()+ " !");
+        if (idClient > 0) {
+            CompteClientDto compteClient = creerCompteClient(idClient);
+            OutilsCompte.insererCompteClientBDD(compteClient);
+            System.out.println("\nVotre compte a été créé. Bienvenue à vous, " + client.getPrenom()+ " !" +
+                    "\nVeuillez vous connecter.");
+        } else {
+            System.out.println("\nUne erreur s'est produite lors de l'inscription. Veuillez réessayer");
+        }
     }
 
     protected static void connexion() {
@@ -78,7 +83,6 @@ public class OutilsCompte {
                         result.getString("sel"));
                 return new CompteClientDto(idclient, mdpDto);
             }
-            System.out.println("Aucun client n'existe avec le mail '" + mail + "', veuillez vous inscrire.");
         } catch (SQLException e) {
             System.out.println("Une erreur s'est produite lors de la connexion, veuillez réessayer.");
             throw new RuntimeException(e);
@@ -104,7 +108,13 @@ public class OutilsCompte {
     protected static int insererClientBDD(ClientDto client) {
         Scanner scanner = new Scanner(System.in);
         ResultSet resultIdClient = null;
-        String query = "INSERT INTO Client (nom, prenom, adresse, numTelephone, numCarte) VALUES (?, ?, ?, ?, ?)" ;
+        // TODO vérifier si email déjà enregistré pour un client
+        if (getCompteClientBDD(client.getEmail()) != null) {
+            System.out.println("Cet email est déjà utilisé par un autre client.\nVeuillez utiliser un email différent.");
+            return -1;
+        }
+
+        String query = "INSERT INTO Client (nom, prenom, email, numTelephone, numCarte) VALUES (?, ?, ?, ?, ?)" ;
         PreparedStatement stmt = null;
         try {
             stmt = OutilsBaseSQL.getConn().prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
@@ -125,7 +135,7 @@ public class OutilsCompte {
             throw new RuntimeException(e);
         }
         System.out.println("Une erreur s'est produite lors de l'insertion du client.");
-        return 0;
+        return -1;
     }
 
     protected static CompteClientDto creerCompteClient(int idClient){
@@ -135,24 +145,22 @@ public class OutilsCompte {
         return new CompteClientDto(idClient, motDePasseChiffre);
     }
 
-    public static void insererCompteClientBDD(int idClient, CompteClientDto compteClient) throws SQLException {
-//        Scanner scanner = new Scanner(System.in);
-//        String query = "INSERT INTO Compte (idClient, identifiant, motDePasse, sel) VALUES (?, ?, ?, ?)" ;
-//        PreparedStatement stmt = OutilsBaseSQL.getConn().prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
-//        stmt.setInt(1, idClient);
-//        stmt.setString(2, client.getPrenom());
-//        stmt.setString(3, client.getEmail());
-//        stmt.setString(4, client.getTelephone());
-//
-//        int lignesAffectees = stmt.executeUpdate();
-//        if (lignesAffectees == 1) {
-//            resultIdClient = stmt.getGeneratedKeys();
-//            if (resultIdClient.next()) {
-//                return resultIdClient.getInt(1);
-//            }
-//        }
-//        System.out.println("Une erreur s'est produite lors de l'insertion du client.");
-//        return 0;
+    public static void insererCompteClientBDD(CompteClientDto compteClient) {
+        ResultSet resultIdClient = null;
+        String query = "INSERT INTO Compte (idClient, motDePasse, sel) VALUES (?, ?, ?)" ;
+        PreparedStatement stmt = null;
+        try {
+            stmt = OutilsBaseSQL.getConn().prepareStatement(query);
+            stmt.setInt(1, compteClient.getIdClient());
+            stmt.setString(2, compteClient.getMotDePasse().getMotDePasseChiffre());
+            stmt.setString(3, compteClient.getMotDePasse().getSel());
+            int lignesAffectees = stmt.executeUpdate();
+            if (lignesAffectees == 0) {
+                System.out.println("Une erreur s'est produite lors de l'insertion du compte client.");
+            }
+        } catch (SQLException e) {
+            System.out.println("Une erreur s'est produite lors de l'insertion du compte client.");
+            throw new RuntimeException(e);
+        }
     }
-
 }

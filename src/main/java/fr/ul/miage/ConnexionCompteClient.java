@@ -24,16 +24,20 @@ public class ConnexionCompteClient {
         int nbEssaisLeft = 3;
 
         CompteClientDto compteclient = getCompteClientBDD(mail);
-        while (nbEssaisLeft > 0 && compteclient != null) {
-            MotDePasseDto mdpCompte = compteclient.getMotDePasse();
-            String mdpSaisi = recupererMotDePasse(scanner);
-            if (isMotDePasseCorrect(mdpSaisi, mdpCompte)) {
-                return true;
+        if (compteclient == null) {
+            System.out.println("Aucun client n'existe avec le mail '" + mail + "', veuillez vous inscrire.");
+        } else {
+            while (nbEssaisLeft > 0) {
+                MotDePasseDto mdpCompte = compteclient.getMotDePasse();
+                String mdpSaisi = recupererMotDePasse(scanner);
+                if (isMotDePasseCorrect(mdpSaisi, mdpCompte)) {
+                    return true;
+                }
+                nbEssaisLeft--;
+                System.out.println("Le mot de passe est incorrect.\nVous avez encore " + nbEssaisLeft + " essai(s).");
             }
-            nbEssaisLeft--;
-            System.out.println("Le mot de passe est incorrect.\nVous avez encore " + nbEssaisLeft + " essai(s).");
+            System.out.println("L'accès à votre compte a été bloqué. Veuillez contacter un administrateur.");
         }
-        System.out.println("L'accès à votre compte a été bloqué. Veuillez contacter un administrateur.");
         return false;
     }
 
