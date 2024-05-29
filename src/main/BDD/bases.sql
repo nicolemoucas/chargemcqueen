@@ -9,7 +9,7 @@ CREATE TABLE Client
     idClient     SERIAL PRIMARY KEY,
     nom          VARCHAR(50)  NOT NULL,
     prenom       VARCHAR(50)  NOT NULL,
-    adresse      VARCHAR(200) NOT NULL,
+    email      VARCHAR(200) NOT NULL,
     numTelephone CHAR(10)     NOT NULL,
     numCarte     CHAR(16)     NOT NULL
 );
@@ -68,17 +68,17 @@ CREATE TABLE Reservation
 
 --              Insertions
 
-INSERT INTO Client (nom, prenom, adresse, numTelephone, numCarte)
-VALUES ('Dupont', 'Jean', '123 Rue de Paris, 75001 Paris', '0102030405', '1234567812345678'),
-       ('Martin', 'Marie', '456 Avenue des Champs, 75002 Paris', '0102030406', '2345678923456789'),
-       ('Bernard', 'Luc', '789 Boulevard Saint-Michel, 75005 Paris', '0102030407', '3456789034567890'),
-       ('Dubois', 'Claire', '101 Rue de Rivoli, 75004 Paris', '0102030408', '4567890145678901'),
-       ('Thomas', 'Pierre', '202 Rue Saint-Honoré, 75001 Paris', '0102030409', '5678901256789012'),
-       ('Petit', 'Julien', '303 Rue Lafayette, 75010 Paris', '0102030410', '6789012367890123'),
-       ('Robert', 'Sophie', '404 Rue Oberkampf, 75011 Paris', '0102030411', '7890123478901234'),
-       ('Richard', 'Emilie', '505 Rue de la Pompe, 75016 Paris', '0102030412', '8901234589012345'),
-       ('Durand', 'Antoine', '606 Rue de Rennes, 75006 Paris', '0102030413', '9012345690123456'),
-       ('Lefevre', 'Nathalie', '707 Rue du Faubourg Saint-Antoine, 75012 Paris', '0102030414', '0123456701234567');
+INSERT INTO Client (nom, prenom, email, numTelephone, numCarte)
+VALUES ('Dupont', 'Jean', 'j@dupont.fr', '0102030405', '1234567812345678'),
+       ('Martin', 'Marie', 'm@marie.fr', '0102030406', '2345678923456789'),
+       ('Bernard', 'Luc', 'l@bernard.com', '0102030407', '3456789034567890'),
+       ('Dubois', 'Claire', 'claire@dubois.eu', '0102030408', '4567890145678901'),
+       ('Thomas', 'Pierre', 'pierre@thomas.fr', '0102030409', '5678901256789012'),
+       ('Petit', 'Julien', 'julien.petit@petit.com', '0102030410', '6789012367890123'),
+       ('Robert', 'Sophie', 's.robert@cool.fr', '0102030411', '7890123478901234'),
+       ('Richard', 'Emilie', 'em123@richard.com', '0102030412', '8901234589012345'),
+       ('Durand', 'Antoine', 'antoined@durand.co', '0102030413', '9012345690123456'),
+       ('Lefevre', 'Nathalie', 'nath@lefevre.lu', '0102030414', '0123456701234567');
 
 -- Insérer les comptes pour les clients
 INSERT INTO Compte (idClient, motDePasse, sel)
