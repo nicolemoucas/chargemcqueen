@@ -191,20 +191,13 @@ public class BorneMere {
      * @return listes des bornes disponibles
      */
     private ResultSet getBornesDisponibles() {
-        ResultSet resultIdBornes = null;
-        try {
-            String query = "Select * \n" +
-                    "from bornerecharge br\n" +
-                    "left join reservation res\n" +
-                    "on br.idborne = res.idborne\n" +
-                    "where br.etatBorne = 'disponible';" ;
-            Statement stmt = outilsBaseSQL.getConn().createStatement();
-            resultIdBornes = stmt.executeQuery(query);
-        } catch (SQLException e){
-            System.out.println("Une erreur s'est produite lors de la recherche des bornes disponibles !");
-        } finally {
-            return resultIdBornes;
-        }
+        String query = "Select * \n" +
+                "from bornerecharge br\n" +
+                "left join reservation res\n" +
+                "on br.idborne = res.idborne\n" +
+                "where br.etatBorne = 'disponible';" ;
+        String erreur = "Une erreur s'est produite lors de la recherche des bornes disponibles !";
+        return outilsBaseSQL.rechercheSQL(query, erreur);
     }
 
 }
