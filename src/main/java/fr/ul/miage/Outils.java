@@ -178,7 +178,8 @@ public class Outils {
     }
 
     /**
-     * Méthode utilisée pour convertir un tableau de bytes en chaine hexadecimale.
+     * Méthode utilisée pour convertir un tableau de bytes en chaine hexadécimale.
+     *
      * @param bytes le tableau de bytes a convertir.
      * @return la chaine hexadécimale convertie.
      */
@@ -188,6 +189,7 @@ public class Outils {
 
     /**
      * Méthode utilisée pour convertir un Hexadécimal en tableau de bytes.
+     *
      * @param hex la chaine hexadécimale a convertir.
      * @return le tableau de bytes converti.
      */

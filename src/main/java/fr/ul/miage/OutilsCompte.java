@@ -108,7 +108,6 @@ public class OutilsCompte {
     protected static int insererClientBDD(ClientDto client) {
         Scanner scanner = new Scanner(System.in);
         ResultSet resultIdClient = null;
-        // TODO vérifier si email déjà enregistré pour un client
         if (getCompteClientBDD(client.getEmail()) != null) {
             System.out.println("Cet email est déjà utilisé par un autre client.\nVeuillez utiliser un email différent.");
             return -1;
