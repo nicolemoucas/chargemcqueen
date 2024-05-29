@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
 public class Outils {
 
     /**
-     * Constante qui contient le pattern d'adresse mail acceptées par l'application.
+     * Constante qui contient le pattern d'adresse mail acceptée par l'application.
      */
     private static final String emailRegex = "^(?=.{1,64}@)[A-Za-z0-9]+([_.-][A-Za-z0-9]+)*@[A-Za-z0-9]+([-.][A-Za-z0-9]+)*\\.[A-Za-z]{2,}$";
 
@@ -58,7 +58,7 @@ public class Outils {
     private static final int HASH_ITERATIONS = 10000;
 
     /**
-     * Méthode utilisée pour controler que l'adresse mail est valide.
+     * Méthode utilisée pour contrôler que l'adresse mail est valide.
      *
      * @param mail l'adresse mail à contrôler.
      * @return {boolean} true si l'adresse est valide, false sinon.
@@ -131,6 +131,7 @@ public class Outils {
 
     /**
      * Méthode utilisée pour générer aléatoirement du sel pour chiffrer les mots de passe.
+     *
      * @return {byte[]} le sel généré.
      */
     protected static byte[] generateSalt() {
@@ -142,6 +143,7 @@ public class Outils {
 
     /**
      * Méthode appelée par hashPassword(String) pour chiffrer le mot de passe.
+     *
      * @param password le mot de passe qu'on veut chiffrer.
      * @param salt le sel qui sert à chiffrer le mot de passe.
      * @return le tableau de byte qui correspond au mot de passe "password" chiffré.
@@ -168,6 +170,7 @@ public class Outils {
 
     /**
      * Méthode utilisée pour hasher le mot de passe donné par l'utilisateur.
+     *
      * @param password le mot de passe de l'utilisateur.
      * @return {MotDePasseDto} le mot de passe construit à partir du sel et du mot de passe chiffré.
      */
@@ -178,7 +181,8 @@ public class Outils {
     }
 
     /**
-     * Méthode utilisée pour convertir un tableau de bytes en chaine hexadecimale.
+     * Méthode utilisée pour convertir un tableau de bytes en chaine hexadécimale.
+     *
      * @param bytes le tableau de bytes a convertir.
      * @return la chaine hexadécimale convertie.
      */
@@ -188,6 +192,7 @@ public class Outils {
 
     /**
      * Méthode utilisée pour convertir un Hexadécimal en tableau de bytes.
+     *
      * @param hex la chaine hexadécimale a convertir.
      * @return le tableau de bytes converti.
      */
@@ -215,6 +220,15 @@ public class Outils {
         return saisie;
     }
 
+    /**
+     * Permet de saisir un entier compris entre deux valeurs passées en paramètre.
+     * Elle affiche un message d'erreur en cas de saisie invalide et répète la saisie
+     * jusqu'à ce que la saisie soit valide.
+     *
+     * @param min La borne minimale de la saisie
+     * @param max La borne maximale de la saisie
+     * @return La valeur entière saisie
+     */
     protected static int saisirInt(int min, int max) {
         int choixSaisi = -1;
         Scanner scanner = new Scanner(System.in);
@@ -240,6 +254,7 @@ public class Outils {
     /**
      * Méthode utilisée pour récupérer les inputs utilisateurs pour l'adresse mail.
      * On continue de lui demander de rentrer une adresse mail tant que son adresse est invalide.
+     *
      * @param scanner le scanner qui va écouter les réponses.
      * @return {String} l'adresse mail valide de l'utilisateur.
      */
@@ -254,5 +269,4 @@ public class Outils {
         }
         return mail;
     }
-
 }

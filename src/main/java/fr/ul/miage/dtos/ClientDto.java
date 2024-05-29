@@ -30,7 +30,6 @@ public class ClientDto {
      */
     String carteBancaire;
 
-
     /**
      * Constructeur de l'objet ClientDto.
      *
@@ -65,8 +64,8 @@ public class ClientDto {
         return email;
     }
 
-    public String getCarteBancaire() {return carteBancaire;}
-
-
+    public String getCarteBancaire() {
+        return carteBancaire;
+    }
     // Fin Getters et Setters
 }

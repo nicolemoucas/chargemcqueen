@@ -1,15 +1,18 @@
 package fr.ul.miage;
 
 import fr.ul.miage.dtos.ClientDto;
-import fr.ul.miage.dtos.CompteClientDto;
-import fr.ul.miage.dtos.MotDePasseDto;
 
 import java.util.Scanner;
 
+/**
+ * Classe qui gère le formulaire d'inscription d'un nouveau client.
+ */
 public class FormulaireInscriptionClient {
 
     /**
-     * Méthode qui déroule la procédure d'inscription de l'utilisateur, et qui construit l'objet Client une fois toutes les informations récupérées.
+     * Méthode qui déroule la procédure d'inscription de l'utilisateur, et qui construit l'objet Client
+     * une fois toutes les informations récupérées.
+     *
      * @return {ClientDto} le client ainsi inscrit pour qu'il soit rajouté en base de données.
      */
     public ClientDto procedureInscription() {
@@ -20,29 +23,14 @@ public class FormulaireInscriptionClient {
         String telephone = recupererTelephone(scanner);
         String mail = Outils.recupererMail(scanner);
         String carteBancaire = recupererCarteBancaire(scanner);
-        // Le compte créé pour l'insérer en BDD
-        CompteClientDto compteClient = creerCompteClient(scanner);
         plaqueDImmatriculation(scanner);
-        System.out.println("Client enregistré avec succès ! Bienvenue à vous, " + prenom + ".");
         return new ClientDto(nomDeFamille, prenom, telephone, mail, carteBancaire);
-    }
-
-    /**
-     * Méthode utilisée pour créer le compte de l'utilisateur.
-     *
-     * @param scanner le scanner qui écoute les inputs utilisateurs.
-     * @return le compte créé
-     */
-    private CompteClientDto creerCompteClient(Scanner scanner){
-        String motDePasse = recupererMotDePasse(scanner);
-        MotDePasseDto motDePasseChiffre = Outils.hashPassword(motDePasse);
-        //TODO : Quand il y aura la BDD, il faut récupérer l'ID du client pour lui lier le compte. Ne pas hésiter à réorganiser.
-        return new CompteClientDto("1", motDePasseChiffre);
     }
 
     /**
      * Méthode utilisée pour écouter les inputs utilisateurs dans le cadre de l'ajout d'une plaqwue d'immatriculation lors de l'inscription .
      * L'utilisateur n'est pas obligé de le faire, donc on lui laisse le choix.
+     *
      * @param scanner le scanner qui écoute les inputs utilisateurs.
      */
     private void plaqueDImmatriculation(Scanner scanner) {
@@ -68,6 +56,7 @@ public class FormulaireInscriptionClient {
     /**
      * Méthode utilisée pour récupérer les inputs utilisateurs pour la carte bancaire.
      * On continue de lui demander de rentrer un numéro tant que son numéro est invalide.
+     *
      * @param scanner le scanner qui va écouter les réponses.
      * @return {String} le numéro de carte bancaire valide de l'utilisateur.
      */
@@ -121,6 +110,7 @@ public class FormulaireInscriptionClient {
     /**
      * Méthode utilisée pour récupérer les inputs utilisateurs pour le prénom de l'utilisateur.
      * On continue de lui demander de rentrer un prénom tant que son prénom est invalide.
+     *
      * @param scanner le scanner qui va écouter les réponses.
      * @return {String} le prénom valide de l'utilisateur.
      */
@@ -138,6 +128,7 @@ public class FormulaireInscriptionClient {
     /**
      * Méthode utilisée pour récupérer les inputs utilisateurs pour le nom de famille de l'utilisateur.
      * On continue de lui demander de rentrer un nom tant que son nom est invalide.
+     *
      * @param scanner le scanner qui va écouter les réponses.
      * @return {String} le nom de famille valide de l'utilisateur.
      */
@@ -157,11 +148,12 @@ public class FormulaireInscriptionClient {
     /**
      * Méthode utilisée pour récupérer les inputs utilisateurs pour le mot de passe de l'utilisateur.
      * On continue de lui demander de rentrer un mot de passe tant que celui choisi ne respecte pas les contraintes.
+     *
      * @param scanner le scanner qui va écouter les réponses.
      * @return {String} le mot de passe valide de l'utilisateur.
      */
-    private String recupererMotDePasse(Scanner scanner) {
-        System.out.println("Choisissez un mot de passe : ");
+    protected static String recupererMotDePasse(Scanner scanner) {
+        System.out.println("Entrez votre mot de passe : ");
 
         String motDePasse = scanner.nextLine();
 
