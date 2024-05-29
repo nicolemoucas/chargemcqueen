@@ -22,7 +22,7 @@ public class OutilsBaseSQL {
     /**
      * Constructeur privé pour la classe OutilsBaseSQL
      */
-    private OutilsBaseSQL(){
+    protected OutilsBaseSQL(){
         makeConnexion();
     }
 

@@ -81,15 +81,13 @@ public class BorneMere {
      * Affiche un message de bienvenue à l'utilisateur.
      */
     private static void bienvenue() {
-        System.out.println("Bienvenue chez Charge McQueen !");
+        System.out.println("Bienvenue chez Charge McQueen ! ⚡️");
         System.out.println(
                 """
-                                   .--------.
-                              ____/_____|___ \\___
-                             O    _   - |   _   ,*
-                              '--(_)-------(_)--' \s
-
-                        """);
+                                  ______
+                          *-- *- /|_||_\\`.__
+                        *-- *-  (   _    _ _\\
+                          *- *--`-(_)--(_)-'""");
     }
 
     /**
@@ -97,12 +95,13 @@ public class BorneMere {
      */
     private static void auRevoir() {
         System.out.println("\nÀ bientôt chez Charge McQueen ! ⚡️");
-        System.out.println(
-                """
-                                  ______
-                          *-- *- /|_||_\\`.__
-                        *-- *-  (   _    _ _\\
-                          *- *--`-(_)--(_)-'""");
+        System.out.println("""
+                   _                      _                          ⚡️\s
+                  | |__   __ _     __    | |_      ___   __ __ __     ⚡️
+                  | / /  / _` |   / _|   | ' \\    / _ \\  \\ V  V /      ⚡️
+                  |_\\_\\  \\__,_|   \\__|_  |_||_|   \\___/   \\_/\\_/        ⚡️\s
+                 |""\"""|_|""\"""|_|""\"""|_|""\"""|_|""\"""|_|""\"""|         ⚡️\s
+                 `-0-0-'"`-0-0-'"`-0-0-'"`-0-0-'"`-0-0-'"`-0-0-'          ⚡️\s""");
     }
 
     /**
