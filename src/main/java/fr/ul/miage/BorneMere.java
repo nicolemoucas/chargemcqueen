@@ -5,6 +5,7 @@ import fr.ul.miage.dtos.ClientDto;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -197,7 +198,8 @@ public class BorneMere {
                     "left join reservation res\n" +
                     "on br.idborne = res.idborne\n" +
                     "where br.etatBorne = 'disponible';" ;
-            PreparedStatement stmt = OutilsBaseSQL.getConn().prepareStatement(query);
+            Statement stmt = outilsBaseSQL.getConn().createStatement();
+            resultIdBornes = stmt.executeQuery(query);
         } catch (SQLException e){
             System.out.println("Une erreur s'est produite lors de la recherche des bornes disponibles !");
         } finally {
