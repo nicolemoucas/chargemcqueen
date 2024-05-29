@@ -4,11 +4,15 @@ import fr.ul.miage.dtos.ClientDto;
 
 import java.util.Scanner;
 
-
+/**
+ * Classe qui gère le formulaire d'inscription d'un nouveau client.
+ */
 public class FormulaireInscriptionClient {
 
     /**
-     * Méthode qui déroule la procédure d'inscription de l'utilisateur, et qui construit l'objet Client une fois toutes les informations récupérées.
+     * Méthode qui déroule la procédure d'inscription de l'utilisateur, et qui construit l'objet Client
+     * une fois toutes les informations récupérées.
+     *
      * @return {ClientDto} le client ainsi inscrit pour qu'il soit rajouté en base de données.
      */
     public ClientDto procedureInscription() {
@@ -52,6 +56,7 @@ public class FormulaireInscriptionClient {
     /**
      * Méthode utilisée pour récupérer les inputs utilisateurs pour la carte bancaire.
      * On continue de lui demander de rentrer un numéro tant que son numéro est invalide.
+     *
      * @param scanner le scanner qui va écouter les réponses.
      * @return {String} le numéro de carte bancaire valide de l'utilisateur.
      */
@@ -105,6 +110,7 @@ public class FormulaireInscriptionClient {
     /**
      * Méthode utilisée pour récupérer les inputs utilisateurs pour le prénom de l'utilisateur.
      * On continue de lui demander de rentrer un prénom tant que son prénom est invalide.
+     *
      * @param scanner le scanner qui va écouter les réponses.
      * @return {String} le prénom valide de l'utilisateur.
      */
@@ -122,6 +128,7 @@ public class FormulaireInscriptionClient {
     /**
      * Méthode utilisée pour récupérer les inputs utilisateurs pour le nom de famille de l'utilisateur.
      * On continue de lui demander de rentrer un nom tant que son nom est invalide.
+     *
      * @param scanner le scanner qui va écouter les réponses.
      * @return {String} le nom de famille valide de l'utilisateur.
      */
@@ -141,6 +148,7 @@ public class FormulaireInscriptionClient {
     /**
      * Méthode utilisée pour récupérer les inputs utilisateurs pour le mot de passe de l'utilisateur.
      * On continue de lui demander de rentrer un mot de passe tant que celui choisi ne respecte pas les contraintes.
+     *
      * @param scanner le scanner qui va écouter les réponses.
      * @return {String} le mot de passe valide de l'utilisateur.
      */

@@ -7,18 +7,21 @@ import fr.ul.miage.dtos.MotDePasseDto;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * Cette classe est une boite à outils, et contient des méthodes versatiles pour le compte client.
+ */
 public class OutilsCompte {
     /**
      * Redirige vers l'action choisie par l'utilisateur en fonction du numéro d'ordre passé en paramètre
      * pour le menu quand le client est connecté à son compte.
      *
-     * @param ordreUtilisateur Instruction (int) choisie par l'utilisateur
+     * @param ordreUtilisateur L'instruction (int) choisie par l'utilisateur
+     * @return Un booléen qui indique si l'utilisateur a choisi de se déconnecter
      */
     protected static boolean executerOrdreMenuCompte(int ordreUtilisateur) {
         switch (ordreUtilisateur) {
@@ -41,6 +44,9 @@ public class OutilsCompte {
         return false;
     }
 
+    /**
+     * Méthode qui gère le processus d'inscription d'un nouveau client.
+     */
     protected static void inscription() {
         ClientDto client = new FormulaireInscriptionClient().procedureInscription();
         int idClient = OutilsCompte.insererClientBDD(client);
@@ -54,6 +60,9 @@ public class OutilsCompte {
         }
     }
 
+    /**
+     * Méthode qui gère le processus de connexion d'un client.
+     */
     protected static void connexion() {
         boolean connexionOK = new ConnexionCompteClient().procedureConnexionCompte();
         List<String> optionsMenuCompte = chargerOptionsMenuCompte();
@@ -66,6 +75,13 @@ public class OutilsCompte {
         }
     }
 
+    /**
+     * Méthode qui récupère le compte client d'un utilisateur de la base de données à partir de son
+     * adresse email.
+     *
+     * @param mail L'adresse email de l'utilisateur
+     * @return Le compte client de l'utilisateur ou null s'il n'y a aucun compte avec ce mail
+     */
     protected static CompteClientDto getCompteClientBDD(String mail) {
         ResultSet result = null;
         PreparedStatement stmt = null;
@@ -91,11 +107,21 @@ public class OutilsCompte {
     }
 
 
+    /**
+     * Méthode qui gère la déconnexion de l'utilisateur.
+     *
+     * @return Un booléen qui indique si l'utilisateur a choisi de se déconnecter
+     */
     private static boolean deconnexion() {
         System.out.println("Se déconnecter");
         return true; // stopApp
     }
 
+    /**
+     * Méthode qui charge les options du menu compte.
+     *
+     * @return Une liste d'options pour le menu compte
+     */
     private static List<String> chargerOptionsMenuCompte() {
         List<String> options = new ArrayList<String>(Arrays.asList("Trouver ma réservation",
                 "Faire une réservation", "Ajouter un véhicule", "Se déconnecter"));
@@ -105,6 +131,12 @@ public class OutilsCompte {
         return options;
     }
 
+    /**
+     * Méthode qui insère un nouveau client dans la base de données.
+     *
+     * @param client Le client à insérer
+     * @return L'identifiant du client inséré, ou -1 s'il y a une erreur
+     */
     protected static int insererClientBDD(ClientDto client) {
         Scanner scanner = new Scanner(System.in);
         ResultSet resultIdClient = null;
@@ -137,6 +169,12 @@ public class OutilsCompte {
         return -1;
     }
 
+    /**
+     * Méthode qui crée un nouveau compte client à partir de l'identifiant d'un client.
+     *
+     * @param idClient L'identifiant du client
+     * @return Le compte client créé
+     */
     protected static CompteClientDto creerCompteClient(int idClient){
         Scanner scanner = new Scanner(System.in);
         String motDePasse = FormulaireInscriptionClient.recupererMotDePasse(scanner);
@@ -144,6 +182,11 @@ public class OutilsCompte {
         return new CompteClientDto(idClient, motDePasseChiffre);
     }
 
+    /**
+     * Méthode qui insère un novueau compte client dans la base de données.
+     *
+     * @param compteClient Le compte client à insérer
+     */
     public static void insererCompteClientBDD(CompteClientDto compteClient) {
         ResultSet resultIdClient = null;
         String query = "INSERT INTO Compte (idClient, motDePasse, sel) VALUES (?, ?, ?)" ;

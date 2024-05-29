@@ -1,12 +1,8 @@
 package fr.ul.miage;
 
-import fr.ul.miage.dtos.ClientDto;
 import fr.ul.miage.dtos.CompteClientDto;
 import fr.ul.miage.dtos.MotDePasseDto;
-import org.apache.commons.codec.DecoderException;
-import org.apache.commons.codec.binary.Hex;
 
-import java.util.Arrays;
 import java.util.Scanner;
 
 import static fr.ul.miage.OutilsCompte.getCompteClientBDD;

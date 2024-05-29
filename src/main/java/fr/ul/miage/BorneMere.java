@@ -1,14 +1,7 @@
 package fr.ul.miage;
 
 import fr.ul.miage.dtos.ClientDto;
-import org.apache.commons.codec.DecoderException;
 
-
-import fr.ul.miage.dtos.ClientDto;
-import fr.ul.miage.dtos.CompteClientDto;
-
-import java.sql.SQLException;
-import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -33,7 +26,6 @@ public class BorneMere {
     public static void main(String[] args) {
         outilsBaseSQL = OutilsBaseSQL.getInstance();
         outilsBaseSQL.makeConnexion();
-        //Statement stmt = outilsBaseSQL.getConn().createStatement();
         optionsMenuInitial = chargerOptionsMenuInitial();
         bienvenue();
         System.out.println("\nMenu principal");
@@ -42,10 +34,13 @@ public class BorneMere {
         outilsBaseSQL.fermerConnexion();
     }
 
-    public static boolean getEstAdmin() {
-        return estAdmin;
-    }
-
+    /**
+     * Exécute une boucle pour afficher un menu et attendre une saisie de l'utilisateur
+     * jusqu'à ce qu'il choisisse de quitter l'application.
+     *
+     * @param optionsMenu La liste des options à afficher dans le menu
+     * @param typeMenu Le type de menu à afficher ("menuPrincipal", "menuCompte")
+     */
     protected static void runMenuLoop(List<String> optionsMenu, String typeMenu) {
         int ordreUtilisateur = -1;
         boolean stopApp = false;
@@ -111,7 +106,9 @@ public class BorneMere {
     }
 
     /**
-     * Affiche les options d'un menu à l'utilisateur.
+     * Affiche les options d'un menu (liste) à l'utilisateur.
+     *
+     * @param optionsMenu La liste des options à afficher
      */
     private static void afficherMenu(List<String> optionsMenu) {
         for (int i = 1; i <= optionsMenu.size(); i++) {
@@ -122,7 +119,8 @@ public class BorneMere {
     /**
      * Demande à l'utilisateur de saisir un choix à partir d'une liste d'options.
      *
-     * @return choix (int) saisi par l'utilisateur
+     * @param optionsMenu La liste des options à afficher
+     * @return Choix (int) saisi par l'utilisateur
      */
     protected static int saisirChoixMenu(List<String> optionsMenu) {
         System.out.println("\nChoissisez une option parmi les suivantes (ex : 1) :");
@@ -136,6 +134,7 @@ public class BorneMere {
      * pour le menu principal de l'application.
      *
      * @param ordreUtilisateur Instruction (int) choisie par l'utilisateur
+     * @return true si l'application doit s'arrêter, false sinon
      */
     private static boolean executerOrdreMenuPrincipal(int ordreUtilisateur) {
         switch (ordreUtilisateur) {
@@ -173,5 +172,12 @@ public class BorneMere {
 
     private static void saisirPlaque() {
         System.out.println("Saisir une plaque d'immatriculation");
+    }
+
+    /**
+     * @return
+     */
+    public static boolean getEstAdmin() {
+        return estAdmin;
     }
 }

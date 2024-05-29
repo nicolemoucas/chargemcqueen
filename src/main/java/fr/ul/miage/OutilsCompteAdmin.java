@@ -2,14 +2,20 @@ package fr.ul.miage;
 
 import fr.ul.miage.dtos.ClientDto;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * Cette classe est une boite à outils, et contient des méthodes versatiles pour le Compte administrateur.
+ */
 public class OutilsCompteAdmin {
+    /**
+     * Affiche la liste des clients dont le nom et le prénom correspondent aux saisies de l'utilisateur.
+     *
+     * @param listeClients La liste des clients à afficher
+     * @param nom Le nom saisi par l'utilisateur
+     * @param prenom Le prénom saisi par l'utilisateur
+     */
     protected static void afficherClients(List<ClientDto> listeClients, String nom, String prenom) {
         if (listeClients.isEmpty()) {
             System.out.println("Aucun client appelé \"" + nom + " " + prenom + "\" n'a été trouvé");
@@ -24,6 +30,12 @@ public class OutilsCompteAdmin {
         }
     }
 
+    /**
+     * Affiche le profil du client sélectionné par l'utilisateur.
+     *
+     * @param listeClients La liste des clients
+     * @param numClient L'index du client sélectionné par l'utilisateur
+     */
     private static void afficherProfilClient(List<ClientDto> listeClients, int numClient) {
         System.out.println("""
                 _\\|/^
@@ -60,6 +72,14 @@ public class OutilsCompteAdmin {
         afficherProfilClient(listeClients, numClient);
     }
 
+    /**
+     * Récupère depuis la base de données la liste des clients dont le nom et le prénom correspondent
+     * à ceux passés en paramètre.
+     *
+     * @param nom Le nom du client
+     * @param prenom Le prénom du client
+     * @return La liste des clients correspondants
+     */
     protected static List<ClientDto> getListeClientsBDD(String nom, String prenom) {
         // mock pour simuler le retour de la bdd
         List<ClientDto> clients = new ArrayList<ClientDto>();
