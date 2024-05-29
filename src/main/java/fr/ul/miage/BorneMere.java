@@ -2,8 +2,13 @@ package fr.ul.miage;
 
 import fr.ul.miage.dtos.ClientDto;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -180,4 +185,27 @@ public class BorneMere {
     public static boolean getEstAdmin() {
         return estAdmin;
     }
+
+    /**
+     * La méthode revoie les bornes disponibles à l'instant présent
+     *
+     * @return listes des bornes disponibles
+     */
+    private ResultSet getBornesDisponibles() {
+        ResultSet resultIdBornes = null;
+        try {
+            String query = "Select * \n" +
+                    "from bornerecharge br\n" +
+                    "left join reservation res\n" +
+                    "on br.idborne = res.idborne\n" +
+                    "where br.etatBorne = 'disponible';" ;
+            Statement stmt = outilsBaseSQL.getConn().createStatement();
+            resultIdBornes = stmt.executeQuery(query);
+        } catch (SQLException e){
+            System.out.println("Une erreur s'est produite lors de la recherche des bornes disponibles !");
+        } finally {
+            return resultIdBornes;
+        }
+    }
+
 }
