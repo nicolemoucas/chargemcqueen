@@ -68,6 +68,7 @@ CREATE TABLE Reservation
 
 --              Insertions
 
+-- Insérer les clients
 INSERT INTO Client (nom, prenom, email, numTelephone, numCarte)
 VALUES ('Dupont', 'Jean', 'j@dupont.fr', '0102030405', '1234567812345678'),
        ('Martin', 'Marie', 'm@marie.fr', '0102030406', '2345678923456789'),
@@ -93,3 +94,38 @@ VALUES (1, 'b22c108e17dd0136ca2aaacc505c49890c4cf209b47c5117b0479a670958a921f601
        (9, 'c6b4d5636678f9ae72b82004996cb7daf319a89b4d7915a756f653c23c812504319e522f0e868816c0fd49c6eb5431adebfd54e4b444577ef975407ff37bb32e', '922b9c1d626378f6a5aafdb6f9799f07'), -- P1zz4P1zz4
        (10,	'b2f945c05333a6f8b4e1328de35288e7f1eb6ce95f7ddaa6ab3ae076eed954869755410b1f97eedaff114a7c7dd69853b1f03c05e46fcac016fe1e96f7537132', '9082d5548d52225269b9788196a3a735'); -- F1zzB33r!!B33r
 
+
+
+-- Insérer les immatriculations
+INSERT INTO Immatriculation (numeroImmat, typeImmat)
+VALUES
+    ('AB123CD', 'Normale'),
+    ('EF456GH', 'Normale'),
+    ('IJ789KL', 'Normale'),
+    ('MN012OP', 'Normale'),
+    ('QR345ST', 'Normale'),
+    ('UV678WX', 'Normale'),
+    ('YZ901AB', 'Normale'),
+    ('CD234EF', 'Normale');
+
+-- Insérer les utilisations
+INSERT INTO Utilise (idClient, idImmat)
+VALUES
+    (1, 1),
+    (2, 2),
+    (3, 3),
+    (4, 4),
+    (5, 5),
+    (6, 6),
+    (7, 7),
+    (8, 8);
+
+
+-- Insérer les bornes (elles sont disponibles)
+
+INSERT INTO BorneRecharge (etatBorne)
+VALUES
+    ('disponible'),
+    ('disponible'),
+    ('disponible'),
+    ('disponible');
