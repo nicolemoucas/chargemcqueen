@@ -14,6 +14,14 @@ public class MotDePasseDto {
      */
     String sel;
 
+    @Override
+    public String toString() {
+        return "MotDePasseDto{" +
+                "motDePasseChiffre='" + motDePasseChiffre + '\'' +
+                ", \nsel='" + sel + '\'' +
+                '}';
+    }
+
     /**
      * Constructeur de MotDePasseDto.
      * @param motDePasseChiffre le mot de passe chiffré en hexadécimal.

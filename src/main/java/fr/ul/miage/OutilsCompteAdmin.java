@@ -5,36 +5,17 @@ import fr.ul.miage.dtos.ClientDto;
 import java.util.ArrayList;
 import java.util.List;
 
-
-public class OutilsCompteClient {
-
+/**
+ * Cette classe est une boite à outils, et contient des méthodes versatiles pour le Compte administrateur.
+ */
+public class OutilsCompteAdmin {
     /**
-     * Redirige vers l'action choisie par l'utilisateur en fonction du numéro d'ordre passé en paramètre
-     * pour le menu quand le client est connecté à son compte.
+     * Affiche la liste des clients dont le nom et le prénom correspondent aux saisies de l'utilisateur.
      *
-     * @param ordreUtilisateur Instruction (int) choisie par l'utilisateur
+     * @param listeClients La liste des clients à afficher
+     * @param nom Le nom saisi par l'utilisateur
+     * @param prenom Le prénom saisi par l'utilisateur
      */
-    protected static boolean executerOrdreMenuCompte(int ordreUtilisateur) {
-        switch (ordreUtilisateur) {
-            case 1:
-                BorneMere.chercherReservation();
-                break;
-            case 2:
-                BorneMere.faireReservation();
-                break;
-            case 3:
-                BorneMere.ajouterPlaque();
-                break;
-            case 4:
-                return deconnexion();
-            case 5:
-                chercherClient();
-            default:
-                break;
-        }
-        return false;
-    }
-
     protected static void afficherClients(List<ClientDto> listeClients, String nom, String prenom) {
         if (listeClients.isEmpty()) {
             System.out.println("Aucun client appelé \"" + nom + " " + prenom + "\" n'a été trouvé");
@@ -49,6 +30,12 @@ public class OutilsCompteClient {
         }
     }
 
+    /**
+     * Affiche le profil du client sélectionné par l'utilisateur.
+     *
+     * @param listeClients La liste des clients
+     * @param numClient L'index du client sélectionné par l'utilisateur
+     */
     private static void afficherProfilClient(List<ClientDto> listeClients, int numClient) {
         System.out.println("""
                 _\\|/^
@@ -70,7 +57,7 @@ public class OutilsCompteClient {
      * Affiche les clients à partir d'un nom et prénom saisis par l'utilisateur (qui doit être
      * administrateur).
      */
-    private static void chercherClient() {
+    protected static void chercherClient() {
         String nom;
         String prenom;
         List<ClientDto> listeClients = new ArrayList<ClientDto>();
@@ -79,17 +66,20 @@ public class OutilsCompteClient {
         System.out.println("Chercher un client");
         nom = Outils.saisirString("Nom du client : ");
         prenom = Outils.saisirString("Prénom du client : ");
-        listeClients = OutilsCompteClient.getListeClientsBDD(nom, prenom);
+        listeClients = OutilsCompteAdmin.getListeClientsBDD(nom, prenom);
         afficherClients(listeClients, nom, prenom);
         numClient = Outils.saisirInt(0, listeClients.size()) - 1;
         afficherProfilClient(listeClients, numClient);
     }
 
-    private static boolean deconnexion() {
-        System.out.println("Se déconnecter");
-        return true; // stopApp
-    }
-
+    /**
+     * Récupère depuis la base de données la liste des clients dont le nom et le prénom correspondent
+     * à ceux passés en paramètre.
+     *
+     * @param nom Le nom du client
+     * @param prenom Le prénom du client
+     * @return La liste des clients correspondants
+     */
     protected static List<ClientDto> getListeClientsBDD(String nom, String prenom) {
         // mock pour simuler le retour de la bdd
         List<ClientDto> clients = new ArrayList<ClientDto>();

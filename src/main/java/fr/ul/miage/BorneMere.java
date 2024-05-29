@@ -1,8 +1,6 @@
 package fr.ul.miage;
 
 import fr.ul.miage.dtos.ClientDto;
-import org.apache.commons.codec.DecoderException;
-
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,20 +26,22 @@ public class BorneMere {
     public static void main(String[] args) {
         outilsBaseSQL = OutilsBaseSQL.getInstance();
         outilsBaseSQL.makeConnexion();
-        //Statement stmt = outilsBaseSQL.getConn().createStatement();
         optionsMenuInitial = chargerOptionsMenuInitial();
         bienvenue();
         System.out.println("\nMenu principal");
         runMenuLoop(optionsMenuInitial, "menuPrincipal");
         auRevoir();
-        OutilsBaseSQL.fermerConnexion();
+        outilsBaseSQL.fermerConnexion();
     }
 
-    public static boolean getEstAdmin() {
-        return estAdmin;
-    }
-
-    private static void runMenuLoop(List<String> optionsMenu, String typeMenu) {
+    /**
+     * Exécute une boucle pour afficher un menu et attendre une saisie de l'utilisateur
+     * jusqu'à ce qu'il choisisse de quitter l'application.
+     *
+     * @param optionsMenu La liste des options à afficher dans le menu
+     * @param typeMenu Le type de menu à afficher ("menuPrincipal", "menuCompte")
+     */
+    protected static void runMenuLoop(List<String> optionsMenu, String typeMenu) {
         int ordreUtilisateur = -1;
         boolean stopApp = false;
 
@@ -52,7 +52,7 @@ public class BorneMere {
                     stopApp = executerOrdreMenuPrincipal(ordreUtilisateur);
                     break;
                 case "menuCompte":
-                    stopApp = OutilsCompteClient.executerOrdreMenuCompte(ordreUtilisateur);
+                    stopApp = OutilsCompte.executerOrdreMenuCompte(ordreUtilisateur);
                     break;
                 default:
                     break;
@@ -106,7 +106,9 @@ public class BorneMere {
     }
 
     /**
-     * Affiche les options d'un menu à l'utilisateur.
+     * Affiche les options d'un menu (liste) à l'utilisateur.
+     *
+     * @param optionsMenu La liste des options à afficher
      */
     private static void afficherMenu(List<String> optionsMenu) {
         for (int i = 1; i <= optionsMenu.size(); i++) {
@@ -117,7 +119,8 @@ public class BorneMere {
     /**
      * Demande à l'utilisateur de saisir un choix à partir d'une liste d'options.
      *
-     * @return choix (int) saisi par l'utilisateur
+     * @param optionsMenu La liste des options à afficher
+     * @return Choix (int) saisi par l'utilisateur
      */
     protected static int saisirChoixMenu(List<String> optionsMenu) {
         System.out.println("\nChoissisez une option parmi les suivantes (ex : 1) :");
@@ -131,6 +134,7 @@ public class BorneMere {
      * pour le menu principal de l'application.
      *
      * @param ordreUtilisateur Instruction (int) choisie par l'utilisateur
+     * @return true si l'application doit s'arrêter, false sinon
      */
     private static boolean executerOrdreMenuPrincipal(int ordreUtilisateur) {
         switch (ordreUtilisateur) {
@@ -141,10 +145,10 @@ public class BorneMere {
                 saisirPlaque();
                 break;
             case 3:
-                connexion();
+                OutilsCompte.connexion();
                 break;
             case 4:
-                inscription();
+                OutilsCompte.inscription();
                 break;
             case 5:
                 return true; // stopApp
@@ -170,29 +174,10 @@ public class BorneMere {
         System.out.println("Saisir une plaque d'immatriculation");
     }
 
-    private static void connexion() {
-        List<String> optionsMenuCompte = chargerOptionsMenuCompte();
-        ClientDto connectedClient = new ConnexionCompteClient().procedureConnexionCompte();
-        if(connectedClient != null) {
-            System.out.println("Vous êtes connecté à votre compte");
-            currentlyConnectedClient = connectedClient;
-            runMenuLoop(optionsMenuCompte, "menuCompte");
-        } else System.out.println("La connexion a échoué. Veuillez réessayer.");
-    }
-
-    private static List<String> chargerOptionsMenuCompte() {
-        List<String> options = new ArrayList<String>(Arrays.asList("Trouver ma réservation",
-                "Faire une réservation", "Ajouter un véhicule", "Se déconnecter"));
-        if (BorneMere.estAdmin) {
-            options.add("Rechercher un client");
-        }
-        return options;
-    }
-
-    private static void inscription() {
-        ClientDto newClient = new FormulaireInscriptionClient().procedureInscription();
-        if (newClient != null) {
-            currentlyConnectedClient = newClient;
-        }
+    /**
+     * @return
+     */
+    public static boolean getEstAdmin() {
+        return estAdmin;
     }
 }
