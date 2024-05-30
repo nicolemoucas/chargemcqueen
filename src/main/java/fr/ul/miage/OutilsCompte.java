@@ -205,7 +205,7 @@ public class OutilsCompte {
     }
 
     /**
-     * Méthode qui insère un novueau compte client dans la base de données.
+     * Méthode qui insère un nouveau compte client dans la base de données.
      *
      * @param compteClient Le compte client à insérer
      */

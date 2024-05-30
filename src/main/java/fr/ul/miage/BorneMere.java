@@ -163,27 +163,51 @@ public class BorneMere {
         return false;
     }
 
+    /**
+     * WIP : Permet à l'utilisateur d'ajouter un véhicule à son compte.
+     */
     protected static void ajouterPlaque() {
         System.out.println("Ajouter un véhicule");
     }
 
+    /**
+     * WIP : Permet à l'utilisateur de faire une réservation.
+     */
     protected static void faireReservation() {
         ReservationDto reservationDto = new ReservationClientInscrit().procedureReservation();
     }
 
+    /**
+     * WIP : Permet à l'utilisateur de chercher une réservation à partir du numéro de réservation.
+     */
     protected static void chercherReservation() {
         System.out.println("Chercher une réservation");
     }
 
+    /**
+     * WIP : Permet à l'utilisateur de saisir une plaque d'immatriculation pour chercher les
+     * réservations associées.
+     */
     private static void saisirPlaque() {
         System.out.println("Saisir une plaque d'immatriculation");
     }
 
+    /**
+     * Renvoie le client actuellement connecté.
+     *
+     * @return L'objet ClientDto du client actuellement connecté ou null s'il n'y en a pas.
+     */
     // Getters et Setters
     public static ClientDto getCurrentlyConnectedClient() {
         return currentlyConnectedClient;
     }
 
+    /**
+     * Définir le client actuellement connecté.
+     *
+     * @param currentlyConnectedClient L'objet ClientDto qui représente le client à connecter ou
+     *                                 null si le client se déconnecte
+     */
     public static void setCurrentlyConnectedClient(ClientDto currentlyConnectedClient) {
         BorneMere.currentlyConnectedClient = currentlyConnectedClient;
     }

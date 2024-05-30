@@ -4,7 +4,6 @@ import fr.ul.miage.dtos.ClientDto;
 import fr.ul.miage.dtos.CompteClientDto;
 import fr.ul.miage.dtos.MotDePasseDto;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 

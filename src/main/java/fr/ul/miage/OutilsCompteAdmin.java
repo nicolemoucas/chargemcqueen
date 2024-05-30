@@ -46,6 +46,9 @@ public class OutilsCompteAdmin {
         System.out.println("Numéro de téléphone : " + client.getTelephone());
     }
 
+    /**
+     * Affiche l'image ASCII art de Carlo.
+     */
     private static void afficherCarlo() {
         System.out.println("""
                      .--'''''''''--.
