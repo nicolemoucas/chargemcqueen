@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
+import java.util.Arrays;
+
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -199,5 +201,48 @@ public class OutilsTests {
         assertNotEquals(salt1, salt2);
     }
 
+    @ParameterizedTest(name = "Doit retourner true si l'input est correct")
+    @CsvSource({
+            "o",
+            "O",
+            "n",
+            "N",
+            "oui",
+            "OUI",
+            "OuI",
+            "non",
+            "NON",
+            "NoN"
+    })
+    public void testReponseOuiNon1(String input) {
+        boolean result = Outils.checkYesOrNoAnswer(input);
+        System.out.println(input);
+        assertTrue(result);
+    }
+
+    @ParameterizedTest(name = "Doit retourner false si l'input est incorrect.")
+    @CsvSource({
+            "DROP DATABASE;",
+            "a",
+            "3",
+            "kjvbnerjkbnerjkekgbneklqngerkjgjlengkejrgkejngre",
+            "immat",
+            "1337",
+            "0"
+    })
+    public void testReponseOuiNon2(String input) {
+        boolean result = Outils.checkYesOrNoAnswer(input);
+        System.out.println(input);
+        assertFalse(result);
+    }
+
+    @DisplayName("Doit mettre en forme les plaques d'immatriculation correctement.")
+    @Test
+    public void testMiseFormeImmat() {
+        String immat = "AA111BB";
+        String expectedResult = "AA-111-BB";
+        String result = Outils.miseEnFormeImmat(immat);
+        assertEquals(expectedResult, result);
+    }
 
 }

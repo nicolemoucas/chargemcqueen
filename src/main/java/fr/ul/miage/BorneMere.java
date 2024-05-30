@@ -1,7 +1,11 @@
 package fr.ul.miage;
 
 import fr.ul.miage.dtos.ClientDto;
+import fr.ul.miage.dtos.ReservationDto;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -164,7 +168,7 @@ public class BorneMere {
     }
 
     protected static void faireReservation() {
-        System.out.println("Faire une réservation");
+        ReservationDto reservationDto = new ReservationClientInscrit().procedureReservation();
     }
 
     protected static void chercherReservation() {
@@ -182,6 +186,28 @@ public class BorneMere {
 
     public static void setCurrentlyConnectedClient(ClientDto currentlyConnectedClient) {
         BorneMere.currentlyConnectedClient = currentlyConnectedClient;
+    }
+
+    /**
+     * La méthode revoie les bornes disponibles à l'instant présent
+     *
+     * @return listes des bornes disponibles
+     */
+    private ResultSet getBornesDisponibles() {
+        ResultSet resultIdBornes = null;
+        try {
+            String query = "Select * \n" +
+                    "from bornerecharge br\n" +
+                    "left join reservation res\n" +
+                    "on br.idborne = res.idborne\n" +
+                    "where br.etatBorne = 'disponible';" ;
+            Statement stmt = outilsBaseSQL.getConn().createStatement();
+            resultIdBornes = stmt.executeQuery(query);
+        } catch (SQLException e){
+            System.out.println("Une erreur s'est produite lors de la recherche des bornes disponibles !");
+        } finally {
+            return resultIdBornes;
+        }
     }
     // End Getters et Setters
 }
