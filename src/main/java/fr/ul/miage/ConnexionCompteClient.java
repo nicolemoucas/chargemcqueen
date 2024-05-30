@@ -1,11 +1,12 @@
 package fr.ul.miage;
 
+import fr.ul.miage.dtos.ClientDto;
 import fr.ul.miage.dtos.CompteClientDto;
 import fr.ul.miage.dtos.MotDePasseDto;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
-
-import static fr.ul.miage.OutilsCompte.getCompteClientBDD;
 
 public class ConnexionCompteClient {
 
@@ -14,26 +15,37 @@ public class ConnexionCompteClient {
      *
      * @return {ClientDto} le profil du client si ses identifiants sont corrects, null sinon.
      */
-    public boolean procedureConnexionCompte() {
+    public ClientDto procedureConnexionCompte() {
         Scanner scanner = new Scanner(System.in);
         String mail = Outils.recupererMail(scanner);
-        int nbEssaisLeft = 3;
 
-        CompteClientDto compteclient = getCompteClientBDD(mail);
-        if (compteclient == null) {
+        // Récupérer le client et son compte (respectivement) depuis la base
+        List<Object> client = OutilsCompte.getClientBDD(mail);
+        if (client.getFirst() == null || client.getLast() == null) {
             System.out.println("Aucun client n'existe avec le mail '" + mail + "', veuillez vous inscrire.");
         } else {
-            while (nbEssaisLeft > 0) {
-                MotDePasseDto mdpCompte = compteclient.getMotDePasse();
-                String mdpSaisi = recupererMotDePasse(scanner);
-                if (isMotDePasseCorrect(mdpSaisi, mdpCompte)) {
-                    return true;
-                }
-                nbEssaisLeft--;
-                System.out.println("Le mot de passe est incorrect.\nVous avez encore " + nbEssaisLeft + " essai(s).");
+            ClientDto clientDto = (ClientDto) client.getFirst();
+            CompteClientDto compteClientDto = (CompteClientDto) client.getLast();
+            if (verifierMdpConnexion(scanner, compteClientDto)) {
+                return clientDto;
             }
-            System.out.println("L'accès à votre compte a été bloqué. Veuillez contacter un administrateur.");
         }
+        return null;
+    }
+
+    private boolean verifierMdpConnexion(Scanner scanner, CompteClientDto compteclient) {
+        int nbEssaisLeft = 3;
+        
+        while (nbEssaisLeft > 0) {
+            MotDePasseDto mdpCompte = compteclient.getMotDePasse();
+            String mdpSaisi = recupererMotDePasse(scanner);
+            if (isMotDePasseCorrect(mdpSaisi, mdpCompte)) {
+                return true;
+            }
+            nbEssaisLeft--;
+            System.out.println("Le mot de passe est incorrect.\nVous avez encore " + nbEssaisLeft + " essai(s).");
+        }
+        System.out.println("L'accès à votre compte a été bloqué. Veuillez contacter un administrateur.");
         return false;
     }
 

@@ -11,10 +11,10 @@ import java.util.List;
  */
 public class BorneMere {
     protected static List<String> optionsMenuInitial = new ArrayList<>();
-    private static final boolean estAdmin = true;
     private static OutilsBaseSQL outilsBaseSQL;
+
     /**
-     * Si un client est connecté, il est stocké ici. A sa déconnexion, il repassera a null.
+     * Si un client est connecté, il est stocké ici. A sa déconnexion, il repassera à null.
      */
     private static ClientDto currentlyConnectedClient = null;
 
@@ -43,16 +43,18 @@ public class BorneMere {
      */
     protected static void runMenuLoop(List<String> optionsMenu, String typeMenu) {
         int ordreUtilisateur = -1;
-        boolean stopApp = false;
+        boolean stopLoop = false;
 
-        while (ordreUtilisateur != 0 && !stopApp) {
+        while (ordreUtilisateur != 0 && !stopLoop) {
             ordreUtilisateur = saisirChoixMenu(optionsMenu);
             switch (typeMenu) {
                 case "menuPrincipal":
-                    stopApp = executerOrdreMenuPrincipal(ordreUtilisateur);
+                    // false quand l'utilisateur choisit "STOP" (l'application)
+                    stopLoop = executerOrdreMenuPrincipal(ordreUtilisateur);
                     break;
                 case "menuCompte":
-                    stopApp = OutilsCompte.executerOrdreMenuCompte(ordreUtilisateur);
+                    // false quand l'utilisateur se déconnecte
+                    stopLoop = OutilsCompte.executerOrdreMenuCompte(ordreUtilisateur);
                     break;
                 default:
                     break;
@@ -150,7 +152,7 @@ public class BorneMere {
                 OutilsCompte.inscription();
                 break;
             case 5:
-                return true; // stopApp
+                return true; // arrêter l'application
             default:
                 return false;
         }
@@ -173,10 +175,13 @@ public class BorneMere {
         System.out.println("Saisir une plaque d'immatriculation");
     }
 
-    /**
-     * @return
-     */
-    public static boolean getEstAdmin() {
-        return estAdmin;
+    // Getters et Setters
+    public static ClientDto getCurrentlyConnectedClient() {
+        return currentlyConnectedClient;
     }
+
+    public static void setCurrentlyConnectedClient(ClientDto currentlyConnectedClient) {
+        BorneMere.currentlyConnectedClient = currentlyConnectedClient;
+    }
+    // End Getters et Setters
 }
