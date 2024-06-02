@@ -134,7 +134,7 @@ public class ReservationClientInscrit {
      * @return {int} l'id de la première borne disponible.
      */
     private int selectBorne(List<Integer> bornesDispo) {
-        int selectedBorneId = bornesDispo.getFirst();
+        int selectedBorneId = bornesDispo.get(0);
         System.out.println("La borne numéro " + selectedBorneId + " est disponible pour ce créneau.\n");
         return selectedBorneId;
     }
