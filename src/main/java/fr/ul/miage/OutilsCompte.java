@@ -188,21 +188,10 @@ public class OutilsCompte {
      * @param compteClient Le compte client à insérer
      */
     public static void insererCompteClientBDD(CompteClientDto compteClient) {
-        ResultSet resultIdClient = null;
-        String query = "INSERT INTO Compte (idClient, motDePasse, sel) VALUES (?, ?, ?)" ;
-        PreparedStatement stmt = null;
-        try {
-            stmt = OutilsBaseSQL.getConn().prepareStatement(query);
-            stmt.setInt(1, compteClient.getIdClient());
-            stmt.setString(2, compteClient.getMotDePasse().getMotDePasseChiffre());
-            stmt.setString(3, compteClient.getMotDePasse().getSel());
-            int lignesAffectees = stmt.executeUpdate();
-            if (lignesAffectees == 0) {
-                System.out.println("Une erreur s'est produite lors de l'insertion du compte client.");
-            }
-        } catch (SQLException e) {
+        String query = "INSERT INTO Compte (idClient, motDePasse, sel) VALUES (" + compteClient.getIdClient() + ", " + compteClient.getMotDePasse().getMotDePasseChiffre() + ", " + compteClient.getMotDePasse().getSel() + ")";
+        boolean resultat = OutilsBaseSQL.majSQL(query, "Une erreur s'est produite lors de l'insertion du compte client.");
+        if (resultat) {
             System.out.println("Une erreur s'est produite lors de l'insertion du compte client.");
-            throw new RuntimeException(e);
         }
     }
 }

@@ -4,6 +4,13 @@ CREATE TYPE EtypeImmat AS ENUM('Temporaire', 'Normale');
 
 CREATE TYPE ETypeReservation AS ENUM('unique', 'garantie');
 
+Create TABLE Tarif
+(
+    idTarif SERIAL PRIMARY KEY,
+    nomTarif VARCHAR(50) NOT NULL UNIQUE,
+    prix float  NOT NULL
+);
+
 CREATE TABLE Client
 (
     idClient     SERIAL PRIMARY KEY,
@@ -33,18 +40,17 @@ CREATE TABLE Facture
 
 CREATE TABLE Immatriculation
 (
-    idImmat     SERIAL PRIMARY KEY,
-    numeroImmat CHAR(7)    NOT NULL,
+    numeroImmat CHAR(7) PRIMARY KEY,
     typeImmat   EtypeImmat NOT NULL
 );
 
 CREATE TABLE Utilise
 (
-    idUtilise SERIAL PRIMARY KEY,
     idClient  INT NOT NULL,
-    idImmat   INT NOT NULL,
+    numeroImmat   CHAR(7) NOT NULL,
+    PRIMARY KEY (idClient, numeroImmat),
     FOREIGN KEY (idClient) REFERENCES Client (idClient),
-    FOREIGN KEY (idImmat) REFERENCES Immatriculation (idImmat)
+    FOREIGN KEY (numeroImmat) REFERENCES Immatriculation (numeroImmat)
 );
 
 CREATE TABLE BorneRecharge
@@ -56,13 +62,13 @@ CREATE TABLE BorneRecharge
 CREATE TABLE Reservation
 (
     idReservation   SERIAL PRIMARY KEY,
-    idImmat         INT        NOT NULL,
+    numeroImmat CHAR(7)      NOT NULL,
     idBorne         INT        NOT NULL,
     heureDebut      TIMESTAMP  NOT NULL,
     heureFin        TIMESTAMP  NOT NULL,
     type            EtypeImmat NOT NULL,
     nbProlongations INT        NOT NULL,
-    FOREIGN KEY (idImmat) REFERENCES Immatriculation (idImmat),
+    FOREIGN KEY (numeroImmat) REFERENCES Immatriculation (numeroImmat),
     FOREIGN KEY (idBorne) REFERENCES BorneRecharge (idBorne)
 );
 
@@ -109,16 +115,16 @@ VALUES
     ('CD234EF', 'Normale');
 
 -- Insérer les utilisations
-INSERT INTO Utilise (idClient, idImmat)
+INSERT INTO Utilise (idClient, numeroImmat)
 VALUES
-    (1, 1),
-    (2, 2),
-    (3, 3),
-    (4, 4),
-    (5, 5),
-    (6, 6),
-    (7, 7),
-    (8, 8);
+    (1, 'AB123CD'),
+    (2, 'EF456GH'),
+    (3, 'IJ789KL'),
+    (4, 'MN012OP'),
+    (5, 'QR345ST'),
+    (6, 'UV678WX'),
+    (7, 'YZ901AB'),
+    (8, 'CD234EF');
 
 
 -- Insérer les bornes (elles sont disponibles)
@@ -129,3 +135,13 @@ VALUES
     ('disponible'),
     ('disponible'),
     ('disponible');
+
+-- Création des tarifs
+
+INSERT INTO Tarif (nomTarif, prix)
+VALUES
+    ('tarifReservation', 2.0),
+    ('tarifNormal', 2.0),
+    ('tarifEleve', 4.0),
+    ('tauxTarifEleve', 5.0),
+    ('montantDedommagement', 8.5);

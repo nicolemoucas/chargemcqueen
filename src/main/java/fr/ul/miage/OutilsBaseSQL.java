@@ -135,7 +135,7 @@ public class OutilsBaseSQL {
         } catch (SQLException e){
             System.out.println(erreur);
         } finally {
-            return (resultat == 1);
+            return (resultat > 0);
         }
     }
 
