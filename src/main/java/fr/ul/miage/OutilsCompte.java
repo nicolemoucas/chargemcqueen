@@ -84,15 +84,15 @@ public class OutilsCompte {
      */
     protected static CompteClientDto getCompteClientBDD(String mail) {
         ResultSet result = null;
-        PreparedStatement stmt = null;
 
         String query = "SELECT cl.idclient, motdepasse, sel FROM Client cl LEFT JOIN Compte co \n" +
-                "\tON cl.idclient = co.idclient WHERE LOWER(cl.email) LIKE LOWER(?);";
-        try {
-            stmt = OutilsBaseSQL.getConn().prepareStatement(query);
-            stmt.setString(1, mail);
+                "\tON cl.idclient = co.idclient WHERE LOWER(cl.email) LIKE LOWER(" + mail + ");";
 
-            result = stmt.executeQuery();
+        String erreur = "Une erreur s'est produite lors de la connexion, veuillez réessayer.";
+
+        result = OutilsBaseSQL.rechercheSQL(query, erreur);
+
+        try {
             if (result.next()) {
                 int idclient = result.getInt("idclient");
                 MotDePasseDto mdpDto = new MotDePasseDto(result.getString("motdepasse"),
@@ -100,9 +100,9 @@ public class OutilsCompte {
                 return new CompteClientDto(idclient, mdpDto);
             }
         } catch (SQLException e) {
-            System.out.println("Une erreur s'est produite lors de la connexion, veuillez réessayer.");
-            throw new RuntimeException(e);
+            throw new RuntimeException(erreur);
         }
+
         return null;
     }
 
