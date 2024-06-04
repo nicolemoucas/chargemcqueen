@@ -60,7 +60,7 @@ CREATE TABLE Reservation
     idBorne         INT        NOT NULL,
     heureDebut      TIMESTAMP  NOT NULL,
     heureFin        TIMESTAMP  NOT NULL,
-    type            EtypeImmat NOT NULL,
+    type            ETypeReservation NOT NULL,
     nbProlongations INT        NOT NULL,
     FOREIGN KEY (idImmat) REFERENCES Immatriculation (idImmat),
     FOREIGN KEY (idBorne) REFERENCES BorneRecharge (idBorne)
