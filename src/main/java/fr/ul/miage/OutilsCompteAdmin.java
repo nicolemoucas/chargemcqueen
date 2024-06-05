@@ -2,6 +2,9 @@ package fr.ul.miage;
 
 import fr.ul.miage.dtos.ClientDto;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,16 +20,12 @@ public class OutilsCompteAdmin {
      * @param prenom Le prénom saisi par l'utilisateur
      */
     protected static void afficherClients(List<ClientDto> listeClients, String nom, String prenom) {
-        if (listeClients.isEmpty()) {
-            System.out.println("Aucun client appelé \"" + nom + " " + prenom + "\" n'a été trouvé");
-        } else {
-            System.out.println("\nVoici les clients trouvés appelés \"" + nom + " " + prenom + "\" :");
-            for (int i = 0; i < listeClients.size(); i++) {
-                System.out.print("\n" + (i + 1) + ". ");
-                System.out.println("Nom : " + listeClients.get(i).getNom());
-                System.out.println("Prénom : " + listeClients.get(i).getPrenom());
-                System.out.println("Mail : " + listeClients.get(i).getEmail());
-            }
+        System.out.println("\nVoici les clients trouvés appelés \"" + prenom + " " + nom + "\" :");
+        for (int i = 0; i < listeClients.size(); i++) {
+            System.out.print("\n" + (i + 1) + ". ");
+            System.out.println("Nom : " + listeClients.get(i).getNom());
+            System.out.println("Prénom : " + listeClients.get(i).getPrenom());
+            System.out.println("Mail : " + listeClients.get(i).getEmail());
         }
     }
 
@@ -37,13 +36,7 @@ public class OutilsCompteAdmin {
      * @param numClient L'index du client sélectionné par l'utilisateur
      */
     private static void afficherProfilClient(List<ClientDto> listeClients, int numClient) {
-        System.out.println("""
-                _\\|/^
-                 (_oo
-                  |     
-                 /|\\
-                  |
-                  LL""");
+        afficherCarlo();
         System.out.println("Voici le profil du client sélectionné :");
         ClientDto client = listeClients.get(numClient);
 
@@ -51,6 +44,30 @@ public class OutilsCompteAdmin {
         System.out.println("Prénom : " + client.getPrenom());
         System.out.println("Mail : " + client.getEmail());
         System.out.println("Numéro de téléphone : " + client.getTelephone());
+    }
+
+    /**
+     * Affiche l'image ASCII art de Carlo.
+     */
+    private static void afficherCarlo() {
+        System.out.println("""
+                     .--'''''''''--.
+                  .'      .---.      '.
+                 /    .-----------.    \\
+                /        .-----.        \\
+                |       .-.   .-.       |
+                |      /   \\ /   \\      |
+                 \\    | .-. | .-. |    /
+                  '-._| | | | | | |_.-'
+                      | '-' | '-' |
+                       \\___/ \\___/
+                    _.-'  /   \\  `-._
+                  .' _.--|     |--._ '.
+                  ' _...-|     |-..._ '
+                         |     |
+                         '.___.'
+                           | |
+                           | |""");
     }
 
     /**
@@ -67,9 +84,13 @@ public class OutilsCompteAdmin {
         nom = Outils.saisirString("Nom du client : ");
         prenom = Outils.saisirString("Prénom du client : ");
         listeClients = OutilsCompteAdmin.getListeClientsBDD(nom, prenom);
-        afficherClients(listeClients, nom, prenom);
-        numClient = Outils.saisirInt(0, listeClients.size()) - 1;
-        afficherProfilClient(listeClients, numClient);
+        if (!listeClients.isEmpty()) {
+            afficherClients(listeClients, nom, prenom);
+            numClient = Outils.saisirInt(0, listeClients.size()) - 1;
+            afficherProfilClient(listeClients, numClient);
+        } else {
+            System.out.println("Aucun client appelé \"" + prenom + " " + nom + "\" n'a été trouvé.");
+        }
     }
 
     /**
@@ -81,22 +102,28 @@ public class OutilsCompteAdmin {
      * @return La liste des clients correspondants
      */
     protected static List<ClientDto> getListeClientsBDD(String nom, String prenom) {
-        // mock pour simuler le retour de la bdd
         List<ClientDto> clients = new ArrayList<ClientDto>();
+        OutilsBaseSQL outilsBaseSQL = new OutilsBaseSQL();
+        ResultSet result = null;
+        PreparedStatement stmt = null;
+        String query = "SELECT nom, prenom, numtelephone, email, numcarte FROM Client WHERE LOWER(nom) like " +
+                "LOWER(?) AND LOWER(prenom) LIKE LOWER(?);";
+        try {
+            stmt = outilsBaseSQL.getConn().prepareStatement(query);
+            stmt.setString(1, nom);
+            stmt.setString(2, prenom);
 
-        if (BorneMere.getEstAdmin()) {
-            // Add some clients to the list
-            clients.add(new ClientDto("Doe", "John", "123-456-7890", "john.doe@example.com",
-                    "1234-5678-9012-3456"));
-            clients.add(new ClientDto("Doe", "John", "987-456-0439", "john.doe2@example.com",
-                    "1234-5678-9012-3456"));
-            clients.add(new ClientDto("Doe", "John", "567-123-0433", "john.doe3@example.com",
-                    "1234-5678-9012-3456"));
-            clients.add(new ClientDto("Smith", "Jane", "987-654-3210", "jane.smith@example.com",
-                    "5678-9012-3456-7890"));
-
+            result = stmt.executeQuery();
+            while (result.next()) {
+                System.out.println(result.getString("nom")+result.getString("email"));
+                clients.add(new ClientDto(result.getString("nom"), result.getString("prenom"),
+                        result.getString("numtelephone"), result.getString("email"),
+                        result.getString("numcarte")));
+            }
             return clients;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
-        return new ArrayList<ClientDto>();
     }
+
 }

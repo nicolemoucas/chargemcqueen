@@ -15,10 +15,10 @@ import java.util.List;
  */
 public class BorneMere {
     protected static List<String> optionsMenuInitial = new ArrayList<>();
-    private static final boolean estAdmin = true;
     private static OutilsBaseSQL outilsBaseSQL;
+
     /**
-     * Si un client est connecté, il est stocké ici. A sa déconnexion, il repassera a null.
+     * Si un client est connecté, il est stocké ici. A sa déconnexion, il repassera à null.
      */
     private static ClientDto currentlyConnectedClient = null;
 
@@ -47,16 +47,18 @@ public class BorneMere {
      */
     protected static void runMenuLoop(List<String> optionsMenu, String typeMenu) {
         int ordreUtilisateur = -1;
-        boolean stopApp = false;
+        boolean stopLoop = false;
 
-        while (ordreUtilisateur != 0 && !stopApp) {
+        while (ordreUtilisateur != 0 && !stopLoop) {
             ordreUtilisateur = saisirChoixMenu(optionsMenu);
             switch (typeMenu) {
                 case "menuPrincipal":
-                    stopApp = executerOrdreMenuPrincipal(ordreUtilisateur);
+                    // false quand l'utilisateur choisit "STOP" (l'application)
+                    stopLoop = executerOrdreMenuPrincipal(ordreUtilisateur);
                     break;
                 case "menuCompte":
-                    stopApp = OutilsCompte.executerOrdreMenuCompte(ordreUtilisateur);
+                    // false quand l'utilisateur se déconnecte
+                    stopLoop = OutilsCompte.executerOrdreMenuCompte(ordreUtilisateur);
                     break;
                 default:
                     break;
@@ -85,15 +87,13 @@ public class BorneMere {
      * Affiche un message de bienvenue à l'utilisateur.
      */
     private static void bienvenue() {
-        System.out.println("Bienvenue chez Charge McQueen !");
+        System.out.println("Bienvenue chez Charge McQueen ! ⚡️");
         System.out.println(
                 """
-                                   .--------.
-                              ____/_____|___ \\___
-                             O    _   - |   _   ,*
-                              '--(_)-------(_)--' \s
-
-                        """);
+                                  ______
+                          *-- *- /|_||_\\`.__
+                        *-- *-  (   _    _ _\\
+                          *- *--`-(_)--(_)-'""");
     }
 
     /**
@@ -101,12 +101,13 @@ public class BorneMere {
      */
     private static void auRevoir() {
         System.out.println("\nÀ bientôt chez Charge McQueen ! ⚡️");
-        System.out.println(
-                """
-                                  ______
-                          *-- *- /|_||_\\`.__
-                        *-- *-  (   _    _ _\\
-                          *- *--`-(_)--(_)-'""");
+        System.out.println("""
+                   _                      _                          ⚡️\s
+                  | |__   __ _     __    | |_      ___   __ __ __     ⚡️
+                  | / /  / _` |   / _|   | ' \\    / _ \\  \\ V  V /      ⚡️
+                  |_\\_\\  \\__,_|   \\__|_  |_||_|   \\___/   \\_/\\_/        ⚡️\s
+                 |""\"""|_|""\"""|_|""\"""|_|""\"""|_|""\"""|_|""\"""|         ⚡️\s
+                 `-0-0-'"`-0-0-'"`-0-0-'"`-0-0-'"`-0-0-'"`-0-0-'          ⚡️\s""");
     }
 
     /**
@@ -155,34 +156,60 @@ public class BorneMere {
                 OutilsCompte.inscription();
                 break;
             case 5:
-                return true; // stopApp
+                return true; // arrêter l'application
             default:
                 return false;
         }
         return false;
     }
 
+    /**
+     * WIP : Permet à l'utilisateur d'ajouter un véhicule à son compte.
+     */
     protected static void ajouterPlaque() {
         System.out.println("Ajouter un véhicule");
     }
 
+    /**
+     * WIP : Permet à l'utilisateur de faire une réservation.
+     */
     protected static void faireReservation() {
         ReservationDto reservationDto = new ReservationClientInscrit().procedureReservation();
     }
 
+    /**
+     * WIP : Permet à l'utilisateur de chercher une réservation à partir du numéro de réservation.
+     */
     protected static void chercherReservation() {
         System.out.println("Chercher une réservation");
     }
 
+    /**
+     * WIP : Permet à l'utilisateur de saisir une plaque d'immatriculation pour chercher les
+     * réservations associées.
+     */
     private static void saisirPlaque() {
         System.out.println("Saisir une plaque d'immatriculation");
     }
 
     /**
-     * @return
+     * Renvoie le client actuellement connecté.
+     *
+     * @return L'objet ClientDto du client actuellement connecté ou null s'il n'y en a pas.
      */
-    public static boolean getEstAdmin() {
-        return estAdmin;
+    // Getters et Setters
+    public static ClientDto getCurrentlyConnectedClient() {
+        return currentlyConnectedClient;
+    }
+
+    /**
+     * Définir le client actuellement connecté.
+     *
+     * @param currentlyConnectedClient L'objet ClientDto qui représente le client à connecter ou
+     *                                 null si le client se déconnecte
+     */
+    public static void setCurrentlyConnectedClient(ClientDto currentlyConnectedClient) {
+        BorneMere.currentlyConnectedClient = currentlyConnectedClient;
     }
 
     /**
@@ -206,5 +233,5 @@ public class BorneMere {
             return resultIdBornes;
         }
     }
-
+    // End Getters et Setters
 }
