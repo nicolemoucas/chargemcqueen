@@ -164,28 +164,28 @@ public class BorneMere {
     }
 
     /**
-     * WIP : Permet à l'utilisateur d'ajouter un véhicule à son compte.
+     * TODO : Permet à l'utilisateur d'ajouter un véhicule à son compte.
      */
     protected static void ajouterPlaque() {
         System.out.println("Ajouter un véhicule");
     }
 
     /**
-     * WIP : Permet à l'utilisateur de faire une réservation.
+     * TODO : Permet à l'utilisateur de faire une réservation.
      */
     protected static void faireReservation() {
         ReservationDto reservationDto = new ReservationClientInscrit().procedureReservation();
     }
 
     /**
-     * WIP : Permet à l'utilisateur de chercher une réservation à partir du numéro de réservation.
+     * TODO : Permet à l'utilisateur de chercher une réservation à partir du numéro de réservation.
      */
     protected static void chercherReservation() {
         System.out.println("Chercher une réservation");
     }
 
     /**
-     * WIP : Permet à l'utilisateur de saisir une plaque d'immatriculation pour chercher les
+     * TODO : Permet à l'utilisateur de saisir une plaque d'immatriculation pour chercher les
      * réservations associées.
      */
     private static void saisirPlaque() {
