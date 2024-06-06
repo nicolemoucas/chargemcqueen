@@ -1,6 +1,6 @@
-package fr.ul.miage;
+package fr.ul.miage.chargemcqueen;
 
-import fr.ul.miage.dtos.MotDePasseDto;
+import fr.ul.miage.chargemcqueen.dtos.MotDePasseDto;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
 

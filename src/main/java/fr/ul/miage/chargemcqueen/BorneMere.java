@@ -1,7 +1,7 @@
-package fr.ul.miage;
+package fr.ul.miage.chargemcqueen;
 
-import fr.ul.miage.dtos.ClientDto;
-import fr.ul.miage.dtos.ReservationDto;
+import fr.ul.miage.chargemcqueen.dtos.ClientDto;
+import fr.ul.miage.chargemcqueen.dtos.ReservationDto;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

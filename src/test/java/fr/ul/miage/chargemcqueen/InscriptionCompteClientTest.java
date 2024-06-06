@@ -1,5 +1,6 @@
-package fr.ul.miage;
+package fr.ul.miage.chargemcqueen;
 
+import fr.ul.miage.chargemcqueen.Outils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

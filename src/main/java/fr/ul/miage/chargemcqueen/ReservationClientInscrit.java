@@ -1,16 +1,16 @@
-package fr.ul.miage;
+package fr.ul.miage.chargemcqueen;
 
-import fr.ul.miage.Enums.ETypeImmat;
-import fr.ul.miage.dtos.ImmatriculationDto;
-import fr.ul.miage.dtos.ReservationDto;
+import fr.ul.miage.chargemcqueen.Enums.ETypeImmat;
+import fr.ul.miage.chargemcqueen.dtos.ImmatriculationDto;
+import fr.ul.miage.chargemcqueen.dtos.ReservationDto;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import static fr.ul.miage.Outils.checkYesOrNoAnswer;
-import static fr.ul.miage.Outils.miseEnFormeImmat;
+import static fr.ul.miage.chargemcqueen.Outils.checkYesOrNoAnswer;
+import static fr.ul.miage.chargemcqueen.Outils.miseEnFormeImmat;
 
 /**
  * Classe qui permet de gérer la création de réservations pour les clients inscrits.

@@ -1,4 +1,4 @@
-package fr.ul.miage.dtos;
+package fr.ul.miage.chargemcqueen.dtos;
 
 /**
  * Objet représentant le compte d'un client

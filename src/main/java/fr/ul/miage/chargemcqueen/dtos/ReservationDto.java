@@ -1,6 +1,6 @@
-package fr.ul.miage.dtos;
+package fr.ul.miage.chargemcqueen.dtos;
 
-import fr.ul.miage.Enums.ETypeImmat;
+import fr.ul.miage.chargemcqueen.Enums.ETypeImmat;
 
 import java.time.LocalDateTime;
 

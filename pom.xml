@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>fr.ul.miage</groupId>
-    <artifactId>ChargeMcQueen</artifactId>
+    <artifactId>chargemcqueen</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>
@@ -15,9 +15,9 @@
         <!-- Où stocker la distribution binaire -->
         <project.bindist.dir>${project.basedir}/bindist</project.bindist.dir>
         <!-- Nom de la classe principale -->
-        <project.main.classname>${project.groupId}.${project.artifactId}.Launcher</project.main.classname>
+        <project.main.classname>${project.groupId}.${project.artifactId}.BorneMere</project.main.classname>
         <!-- Nom du script -->
-        <project.bin.appname>hello</project.bin.appname>
+        <project.bin.appname>mcqueen</project.bin.appname>
         <assertj.version>3.24.2</assertj.version>
         <junit.version>5.10.0</junit.version>
         <mockito.version>5.6.0</mockito.version>

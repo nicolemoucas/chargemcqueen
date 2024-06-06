@@ -1,4 +1,4 @@
-package fr.ul.miage;
+package fr.ul.miage.chargemcqueen;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

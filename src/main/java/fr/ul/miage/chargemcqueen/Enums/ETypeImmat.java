@@ -1,4 +1,4 @@
-package fr.ul.miage.Enums;
+package fr.ul.miage.chargemcqueen.Enums;
 
 public enum ETypeImmat {
     TEMPORAIRE("Temporaire"),

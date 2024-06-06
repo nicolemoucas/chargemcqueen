@@ -1,7 +1,8 @@
-package fr.ul.miage;
+package fr.ul.miage.chargemcqueen;
 
-import fr.ul.miage.dtos.MotDePasseDto;
-import org.apache.commons.codec.DecoderException;
+import fr.ul.miage.chargemcqueen.ConnexionCompteClient;
+import fr.ul.miage.chargemcqueen.Outils;
+import fr.ul.miage.chargemcqueen.dtos.MotDePasseDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

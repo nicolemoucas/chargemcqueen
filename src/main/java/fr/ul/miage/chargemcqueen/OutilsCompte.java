@@ -1,8 +1,8 @@
-package fr.ul.miage;
+package fr.ul.miage.chargemcqueen;
 
-import fr.ul.miage.dtos.ClientDto;
-import fr.ul.miage.dtos.CompteClientDto;
-import fr.ul.miage.dtos.MotDePasseDto;
+import fr.ul.miage.chargemcqueen.dtos.ClientDto;
+import fr.ul.miage.chargemcqueen.dtos.CompteClientDto;
+import fr.ul.miage.chargemcqueen.dtos.MotDePasseDto;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

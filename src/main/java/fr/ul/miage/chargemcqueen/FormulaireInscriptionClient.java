@@ -1,13 +1,13 @@
-package fr.ul.miage;
+package fr.ul.miage.chargemcqueen;
 
-import fr.ul.miage.dtos.ClientDto;
-import fr.ul.miage.dtos.CompteClientDto;
-import fr.ul.miage.dtos.MotDePasseDto;
+import fr.ul.miage.chargemcqueen.dtos.ClientDto;
+import fr.ul.miage.chargemcqueen.dtos.CompteClientDto;
+import fr.ul.miage.chargemcqueen.dtos.MotDePasseDto;
 
 import java.util.Scanner;
 
-import static fr.ul.miage.Outils.checkYesOrNoAnswer;
-import static fr.ul.miage.Outils.recupererPlaqueImmat;
+import static fr.ul.miage.chargemcqueen.Outils.checkYesOrNoAnswer;
+import static fr.ul.miage.chargemcqueen.Outils.recupererPlaqueImmat;
 
 /**
  * Classe qui gère le formulaire d'inscription d'un nouveau client.
