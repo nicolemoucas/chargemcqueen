@@ -29,22 +29,22 @@ public class FormulaireInscriptionClient {
         String mail = Outils.recupererMail(scanner);
         String carteBancaire = recupererCarteBancaire(scanner);
         // Le compte créé pour l'insérer en BDD
-        CompteClientDto compteClient = creerCompteClient(scanner);
+       // CompteClientDto compteClient = creerCompteClient(scanner);
         plaqueDImmatriculation(scanner);
         return new ClientDto(nomDeFamille, prenom, telephone, mail, carteBancaire);
     }
 
-    /**
-     * Méthode utilisée pour créer le compte de l'utilisateur.
-     *
-     * @param scanner le scanner qui écoute les inputs utilisateurs.
-     * @return le compte créé
-     */
-    private CompteClientDto creerCompteClient(Scanner scanner){
-        String motDePasse = recupererMotDePasse(scanner);
-        MotDePasseDto motDePasseChiffre = Outils.hashPassword(motDePasse);
-        return new CompteClientDto(1, motDePasseChiffre);
-    }
+//    /**
+//     * Méthode utilisée pour créer le compte de l'utilisateur.
+//     *
+//     * @param scanner le scanner qui écoute les inputs utilisateurs.
+//     * @return le compte créé
+//     */
+//    private CompteClientDto creerCompteClient(Scanner scanner){
+//        String motDePasse = recupererMotDePasse(scanner);
+//        MotDePasseDto motDePasseChiffre = Outils.hashPassword(motDePasse);
+//        return new CompteClientDto(1, motDePasseChiffre);
+//    }
 
     /**
      * Méthode utilisée pour écouter les inputs utilisateurs dans le cadre de l'ajout d'une plaqwue d'immatriculation lors de l'inscription .

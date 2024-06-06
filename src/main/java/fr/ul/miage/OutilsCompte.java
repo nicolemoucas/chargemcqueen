@@ -64,11 +64,14 @@ public class OutilsCompte {
      * Méthode qui gère le processus de connexion d'un client.
      */
     protected static void connexion() {
-        boolean connexionOK = new ConnexionCompteClient().procedureConnexionCompte();
-        List<String> optionsMenuCompte = chargerOptionsMenuCompte();
-
-        if (connexionOK) {
-            System.out.println("\nBienvenue !");
+        List<String> optionsMenuCompte;
+        ClientDto clientConnecte = new ConnexionCompteClient().procedureConnexionCompte();
+        if (clientConnecte != null) {
+            System.out.println("\nBienvenue ! ⚡️");
+            BorneMere.setCurrentlyConnectedClient(clientConnecte);
+            System.out.println(BorneMere.getCurrentlyConnectedClient().getPrenom() + " " +
+                    BorneMere.getCurrentlyConnectedClient().getNom() + " est actuellement connecté(e). 🏎️");
+            optionsMenuCompte = chargerOptionsMenuCompte();
             BorneMere.runMenuLoop(optionsMenuCompte, "menuCompte");
         } else {
             System.out.println("La connexion a échoué.\nVous serez redirigé vers le menu principal. ");
@@ -76,17 +79,20 @@ public class OutilsCompte {
     }
 
     /**
-     * Méthode qui récupère le compte client d'un utilisateur de la base de données à partir de son
-     * adresse email.
+     * Méthode qui récupère les informations d'un client et de son compte depuis la base de données à
+     * partir de son adresse email.
      *
      * @param mail L'adresse email de l'utilisateur
-     * @return Le compte client de l'utilisateur ou null s'il n'y a aucun compte avec ce mail
+     * @return Liste avec les objets ClientDto et CompteClientDto ou une liste vide s'il n'y a aucun compte avec
+     * ce mail
      */
-    protected static CompteClientDto getCompteClientBDD(String mail) {
+    protected static List<Object> getClientBDD(String mail) {
         ResultSet result = null;
+        List<Object> client = new ArrayList<>();
 
-        String query = "SELECT cl.idclient, motdepasse, sel FROM Client cl LEFT JOIN Compte co \n" +
-                "\tON cl.idclient = co.idclient WHERE LOWER(cl.email) LIKE LOWER(" + mail + ");";
+        String query = "SELECT cl.idclient, motdepasse, sel, cl.nom, cl.prenom, cl.numTelephone, cl.email," +
+                "cl.numCarte FROM Client cl LEFT JOIN Compte co \n" +
+                "\tON cl.idclient = co.idclient WHERE LOWER(cl.email) LIKE LOWER('"+ mail +"');";
 
         String erreur = "Une erreur s'est produite lors de la connexion, veuillez réessayer.";
 
@@ -94,16 +100,23 @@ public class OutilsCompte {
 
         try {
             if (result.next()) {
-                int idclient = result.getInt("idclient");
+                String nom = result.getString("nom");
+                String prenom = result.getString("prenom");
+                String telephone = result.getString("numTelephone");
+                String email = result.getString("email");
+                String carteBancaire = result.getString("numCarte");
+                client.add(new ClientDto(nom, prenom, telephone, email, carteBancaire));
+
+                int idClient = result.getInt("idclient");
                 MotDePasseDto mdpDto = new MotDePasseDto(result.getString("motdepasse"),
                         result.getString("sel"));
-                return new CompteClientDto(idclient, mdpDto);
+                client.add(new CompteClientDto(idClient, mdpDto));
             }
+            return client;
         } catch (SQLException e) {
             throw new RuntimeException(erreur);
         }
 
-        return null;
     }
 
 
@@ -113,8 +126,13 @@ public class OutilsCompte {
      * @return Un booléen qui indique si l'utilisateur a choisi de se déconnecter
      */
     private static boolean deconnexion() {
-        System.out.println("Se déconnecter");
-        return true; // stopApp
+        System.out.println("À bientôt, " + BorneMere.getCurrentlyConnectedClient().getPrenom() + " " +
+                BorneMere.getCurrentlyConnectedClient().getNom() + " ! ⚡️");
+        BorneMere.setCurrentlyConnectedClient(null);
+        if (BorneMere.getCurrentlyConnectedClient() == null) {
+            System.out.println("Aucun utilisateur n'est actuellement connecté.");
+        }
+        return true;
     }
 
     /**
@@ -125,7 +143,8 @@ public class OutilsCompte {
     private static List<String> chargerOptionsMenuCompte() {
         List<String> options = new ArrayList<String>(Arrays.asList("Trouver ma réservation",
                 "Faire une réservation", "Ajouter un véhicule", "Se déconnecter"));
-        if (BorneMere.getEstAdmin()) {
+        if (BorneMere.getCurrentlyConnectedClient() != null &&
+                BorneMere.getCurrentlyConnectedClient().getNom().equals("admin")) {
             options.add("Rechercher un client");
         }
         return options;
@@ -140,7 +159,7 @@ public class OutilsCompte {
     protected static int insererClientBDD(ClientDto client) {
         Scanner scanner = new Scanner(System.in);
         ResultSet resultIdClient = null;
-        if (getCompteClientBDD(client.getEmail()) != null) {
+        if (!getClientBDD(client.getEmail()).isEmpty()) {
             System.out.println("Cet email est déjà utilisé par un autre client.\nVeuillez utiliser un email différent.");
             return -1;
         }
@@ -188,9 +207,10 @@ public class OutilsCompte {
      * @param compteClient Le compte client à insérer
      */
     public static void insererCompteClientBDD(CompteClientDto compteClient) {
-        String query = "INSERT INTO Compte (idClient, motDePasse, sel) VALUES (" + compteClient.getIdClient() + ", " + compteClient.getMotDePasse().getMotDePasseChiffre() + ", " + compteClient.getMotDePasse().getSel() + ")";
+        String query = "INSERT INTO Compte (idClient, motDePasse, sel) VALUES (" + compteClient.getIdClient() + ", '" + compteClient.getMotDePasse().getMotDePasseChiffre() + "', '" + compteClient.getMotDePasse().getSel() + "')";
+        System.out.println(query);
         boolean resultat = OutilsBaseSQL.majSQL(query, "Une erreur s'est produite lors de l'insertion du compte client.");
-        if (resultat) {
+        if (!resultat) {
             System.out.println("Une erreur s'est produite lors de l'insertion du compte client.");
         }
     }
