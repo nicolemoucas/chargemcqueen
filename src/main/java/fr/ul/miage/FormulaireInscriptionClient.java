@@ -43,7 +43,6 @@ public class FormulaireInscriptionClient {
     private CompteClientDto creerCompteClient(Scanner scanner){
         String motDePasse = recupererMotDePasse(scanner);
         MotDePasseDto motDePasseChiffre = Outils.hashPassword(motDePasse);
-        //TODO : Quand il y aura la BDD, il faut récupérer l'ID du client pour lui lier le compte. Ne pas hésiter à réorganiser.
         return new CompteClientDto(1, motDePasseChiffre);
     }
 
