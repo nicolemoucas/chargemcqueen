@@ -34,3 +34,9 @@ build/
 
 ### Maven ###
 /target
+
+### Documentation ###
+/javadoc
+
+### Binary distribution ###
+/bindist
