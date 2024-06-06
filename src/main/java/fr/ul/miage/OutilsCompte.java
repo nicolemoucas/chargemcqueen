@@ -66,7 +66,6 @@ public class OutilsCompte {
     protected static void connexion() {
         List<String> optionsMenuCompte;
         ClientDto clientConnecte = new ConnexionCompteClient().procedureConnexionCompte();
-
         if (clientConnecte != null) {
             System.out.println("\nBienvenue ! ⚡️");
             BorneMere.setCurrentlyConnectedClient(clientConnecte);
@@ -84,22 +83,22 @@ public class OutilsCompte {
      * partir de son adresse email.
      *
      * @param mail L'adresse email de l'utilisateur
-     * @return Liste avec les objets ClientDto et CompteClientDto ou null s'il n'y a aucun compte avec
+     * @return Liste avec les objets ClientDto et CompteClientDto ou une liste vide s'il n'y a aucun compte avec
      * ce mail
      */
     protected static List<Object> getClientBDD(String mail) {
         ResultSet result = null;
-        PreparedStatement stmt = null;
         List<Object> client = new ArrayList<>();
 
         String query = "SELECT cl.idclient, motdepasse, sel, cl.nom, cl.prenom, cl.numTelephone, cl.email," +
                 "cl.numCarte FROM Client cl LEFT JOIN Compte co \n" +
-                "\tON cl.idclient = co.idclient WHERE LOWER(cl.email) LIKE LOWER(?);";
-        try {
-            stmt = OutilsBaseSQL.getConn().prepareStatement(query);
-            stmt.setString(1, mail);
+                "\tON cl.idclient = co.idclient WHERE LOWER(cl.email) LIKE LOWER('"+ mail +"');";
 
-            result = stmt.executeQuery();
+        String erreur = "Une erreur s'est produite lors de la connexion, veuillez réessayer.";
+
+        result = OutilsBaseSQL.rechercheSQL(query, erreur);
+
+        try {
             if (result.next()) {
                 String nom = result.getString("nom");
                 String prenom = result.getString("prenom");
@@ -112,14 +111,12 @@ public class OutilsCompte {
                 MotDePasseDto mdpDto = new MotDePasseDto(result.getString("motdepasse"),
                         result.getString("sel"));
                 client.add(new CompteClientDto(idClient, mdpDto));
-
-                return client;
             }
+            return client;
         } catch (SQLException e) {
-            System.out.println("Une erreur s'est produite lors de la connexion, veuillez réessayer.");
-            throw new RuntimeException(e);
+            throw new RuntimeException(erreur);
         }
-        return null;
+
     }
 
 
@@ -162,7 +159,7 @@ public class OutilsCompte {
     protected static int insererClientBDD(ClientDto client) {
         Scanner scanner = new Scanner(System.in);
         ResultSet resultIdClient = null;
-        if (getClientBDD(client.getEmail()) != null) {
+        if (!getClientBDD(client.getEmail()).isEmpty()) {
             System.out.println("Cet email est déjà utilisé par un autre client.\nVeuillez utiliser un email différent.");
             return -1;
         }
@@ -210,21 +207,11 @@ public class OutilsCompte {
      * @param compteClient Le compte client à insérer
      */
     public static void insererCompteClientBDD(CompteClientDto compteClient) {
-        ResultSet resultIdClient = null;
-        String query = "INSERT INTO Compte (idClient, motDePasse, sel) VALUES (?, ?, ?)" ;
-        PreparedStatement stmt = null;
-        try {
-            stmt = OutilsBaseSQL.getConn().prepareStatement(query);
-            stmt.setInt(1, compteClient.getIdClient());
-            stmt.setString(2, compteClient.getMotDePasse().getMotDePasseChiffre());
-            stmt.setString(3, compteClient.getMotDePasse().getSel());
-            int lignesAffectees = stmt.executeUpdate();
-            if (lignesAffectees == 0) {
-                System.out.println("Une erreur s'est produite lors de l'insertion du compte client.");
-            }
-        } catch (SQLException e) {
+        String query = "INSERT INTO Compte (idClient, motDePasse, sel) VALUES (" + compteClient.getIdClient() + ", '" + compteClient.getMotDePasse().getMotDePasseChiffre() + "', '" + compteClient.getMotDePasse().getSel() + "')";
+        System.out.println(query);
+        boolean resultat = OutilsBaseSQL.majSQL(query, "Une erreur s'est produite lors de l'insertion du compte client.");
+        if (!resultat) {
             System.out.println("Une erreur s'est produite lors de l'insertion du compte client.");
-            throw new RuntimeException(e);
         }
     }
 }

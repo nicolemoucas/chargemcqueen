@@ -35,4 +35,13 @@ public class CompteClientDto {
         return motDePasse;
     }
     // End Getters et Setters
+
+
+    @Override
+    public String toString() {
+        return "CompteClientDto{" +
+                "idClient=" + idClient +
+                ", motDePasse=" + motDePasse +
+                '}';
+    }
 }

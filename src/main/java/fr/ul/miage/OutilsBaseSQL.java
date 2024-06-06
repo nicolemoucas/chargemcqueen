@@ -1,8 +1,6 @@
 package fr.ul.miage;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 
 /**
  * Cette classe est une boite à outils, et contient des méthodes versatiles liées à la base de données
@@ -29,7 +27,7 @@ public class OutilsBaseSQL {
     /**
      * Méthode pour établir une connexion à la base de données si elle n'existe pas.
      */
-    public void makeConnexion(){
+    private static void makeConnexion(){
         if (conn == null){
             try {
                 // Charger le pilote JDBC PostgreSQL
@@ -59,6 +57,7 @@ public class OutilsBaseSQL {
     /**
      * Méthode pour obtenir l'instance unique de la classe OutilsBaseSQL si elle existe, sinon elle
      * est créée.
+     * Utilisation du patron Singleton
      *
      * @return L'instance unique de la classe OutilsBaseSQL
      */
@@ -70,13 +69,16 @@ public class OutilsBaseSQL {
     }
 
     /**
-     * Méthode qui ferme la connexion à la base de données si elle existe.
+     *  Méthode qui ferme la connexion à la base de données si elle existe.
      */
     public static void fermerConnexion() {
         try {
             if (conn != null) {
                 // Fermer la connexion à la base de données
-                conn.close();
+                if (!(conn.isClosed())){
+                    conn.close();
+                }
+                conn = null;
             }
         } catch (SQLException e) {
             System.err.println(e.getMessage());
@@ -85,10 +87,72 @@ public class OutilsBaseSQL {
 
     /**
      * Méthode pour obtenir l'objet Connection qui représente la connexion à la base de données.
+     * Si la connexion n'est pas faite, on l'a fait
      *
      * @return L'object Connection
      */
-    public static Connection getConn() {
+    public static Connection getConn() throws SQLException {
+        if (conn == null){
+            makeConnexion();
+        }
         return conn;
+    }
+
+    /**
+     * Méthode qui permet d'effectuer les SELECT en SQL
+     *
+     * @param requete, String  : la requête à éxécuter
+     * @param erreur, String  : le message d'erreur à envoyer en cas de problème
+     * @return
+     */
+    public static ResultSet rechercheSQL(String requete, String erreur){
+        ResultSet resultat = null;
+        try {
+            problemeConnexion();
+            Statement stmt = conn.createStatement();
+            resultat = stmt.executeQuery(requete);
+        } catch (SQLException e){
+            System.out.println(erreur);
+        } finally {
+            return resultat;
+        }
+    }
+
+
+    /**
+     * Méthode qui s'occupe des update et insertion en SQL
+     *
+     * @param requete, String  : la requête à éxécuter
+     * @param erreur, String  : le message d'erreur à envoyer en cas de problème
+     * @return
+     */
+    public static boolean majSQL(String requete, String erreur){
+        int resultat = 0;
+        try {
+            problemeConnexion();
+            Statement stmt = conn.createStatement();
+            resultat = stmt.executeUpdate(requete);
+        } catch (SQLException e){
+            System.out.println(erreur);
+        } finally {
+            return (resultat > 0);
+        }
+    }
+
+
+    /**
+     * Méthode qui gère le problème de connexion
+     */
+    private static void problemeConnexion(){
+        try {
+            if (conn == null){
+                makeConnexion();
+            } else if(conn.isClosed()){
+                fermerConnexion();
+                makeConnexion();
+            }
+        } catch (SQLException e){
+            System.out.println("Problème de connexion");
+        }
     }
 }

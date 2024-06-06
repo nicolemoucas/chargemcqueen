@@ -4,6 +4,13 @@ CREATE TYPE EtypeImmat AS ENUM('Temporaire', 'Normale');
 
 CREATE TYPE ETypeReservation AS ENUM('unique', 'garantie');
 
+Create TABLE Tarif
+(
+    idTarif SERIAL PRIMARY KEY,
+    nomTarif VARCHAR(50) NOT NULL UNIQUE,
+    prix float  NOT NULL
+);
+
 CREATE TABLE Client
 (
     idClient     SERIAL PRIMARY KEY,
@@ -33,18 +40,17 @@ CREATE TABLE Facture
 
 CREATE TABLE Immatriculation
 (
-    idImmat     SERIAL PRIMARY KEY,
-    numeroImmat CHAR(7)    NOT NULL,
+    numeroImmat CHAR(7) PRIMARY KEY,
     typeImmat   EtypeImmat NOT NULL
 );
 
 CREATE TABLE Utilise
 (
-    idUtilise SERIAL PRIMARY KEY,
     idClient  INT NOT NULL,
-    idImmat   INT NOT NULL,
+    numeroImmat   CHAR(7) NOT NULL,
+    PRIMARY KEY (idClient, numeroImmat),
     FOREIGN KEY (idClient) REFERENCES Client (idClient),
-    FOREIGN KEY (idImmat) REFERENCES Immatriculation (idImmat)
+    FOREIGN KEY (numeroImmat) REFERENCES Immatriculation (numeroImmat)
 );
 
 CREATE TABLE BorneRecharge
@@ -56,18 +62,19 @@ CREATE TABLE BorneRecharge
 CREATE TABLE Reservation
 (
     idReservation   SERIAL PRIMARY KEY,
-    idImmat         INT        NOT NULL,
+    numeroImmat CHAR(7)      NOT NULL,
     idBorne         INT        NOT NULL,
     heureDebut      TIMESTAMP  NOT NULL,
     heureFin        TIMESTAMP  NOT NULL,
     type            ETypeReservation NOT NULL,
     nbProlongations INT        NOT NULL,
-    FOREIGN KEY (idImmat) REFERENCES Immatriculation (idImmat),
+    FOREIGN KEY (numeroImmat) REFERENCES Immatriculation (numeroImmat),
     FOREIGN KEY (idBorne) REFERENCES BorneRecharge (idBorne)
 );
 
 --              Insertions
 
+-- Insérer les clients
 INSERT INTO Client (nom, prenom, email, numTelephone, numCarte)
 VALUES ('Dupont', 'Jean', 'j@dupont.fr', '0102030405', '1234567812345678'),
        ('Martin', 'Marie', 'm@marie.fr', '0102030406', '2345678923456789'),
@@ -87,7 +94,7 @@ VALUES ('Dupont', 'Jean', 'j@dupont.fr', '0102030405', '1234567812345678'),
 
 -- Insérer les comptes pour les clients
 INSERT INTO Compte (idClient, motDePasse, sel)
-VALUES 
+VALUES
 	   (1, 'b22c108e17dd0136ca2aaacc505c49890c4cf209b47c5117b0479a670958a921f601b62acd95eb3e5f4957013cfc5d1b08bd52e9ed9418d79cf87dc117b8c643', 'f25a123f46db6518'), -- 1 password123
        (2, '4623b7627d0ffc1c89d87cf40b57e22c8dafd5146598049968b922c599e8f6bd9af2eabcf8b6e95b0358fc30556685c9f99d6b26e6b57a313d171297bc8cb2f3', '5685557be6ef49d49c5eaa4c14aaf945'), -- 2 Ch1ck3nNug
        (3, '2acabd5dcd6a30719c62257bcc21c04bc9d2191a055c8b633aac4b96b5a6a461455ed4b925e66e2e9a181c7744d7abfdfd816ca143c6284015de56df5d8b36e3', '0c769acd5766cb75d494fdc4c24d85af'), -- 3 M1cK3yM0us3
@@ -102,5 +109,50 @@ VALUES
        (12,	'387becff6360af2881a1a01da3468e509f73402d6b5b0984fcf751a266fa15dfae70fb61779cca7ed4fd5666abd190c3d72fced3aef3207bbc250706abb14ed4', '369ebf83915ed3f72f39591312dd3a7c'), -- 12 lav4lamp
        (13,	'8ccb47b66839ce0262b3ad6917f07527ef9b9146470889d0173823d235f59a5f2d1d7e9af57110525a291fd6bb97aa89e8b12a9d400094cd7a43677f4caae4ae', 'e06c30e8fae53fc7861891294c4260bd'), -- 13 jtm1louuuuuuuuuu
 	   (14, '6f8c68e3d3da4e7dc5db487362df07c90d5660ab5f4ba090f058a23a47ccd2ef80a9211ecceb0094f44c7e8597805a38977fb6a89e0f9d10d1e903999726edf9', 'b959b1e24c97f0630379d18c3915c18c'), -- 14 ilpleutilm0uille:/
-	   
+
 	   (15, 'f30beca919c19504c6c95c9f767c5c313c6edd2dfb0ac41aca458a051cfbf2fdc3a097678597a24070756f0b62a60fd52f549b22a1e745cf3b28444f41d292d2', '949ddb686091debe7b4a88a84c4bfd62'); -- 15 admin123 (compte admin)
+
+
+-- Insérer les immatriculations
+INSERT INTO Immatriculation (numeroImmat, typeImmat)
+VALUES
+    ('AB123CD', 'Normale'),
+    ('EF456GH', 'Normale'),
+    ('IJ789KL', 'Normale'),
+    ('MN012OP', 'Normale'),
+    ('QR345ST', 'Normale'),
+    ('UV678WX', 'Normale'),
+    ('YZ901AB', 'Normale'),
+    ('CD234EF', 'Normale');
+
+-- Insérer les utilisations
+INSERT INTO Utilise (idClient, numeroImmat)
+VALUES
+    (1, 'AB123CD'),
+    (2, 'EF456GH'),
+    (3, 'IJ789KL'),
+    (4, 'MN012OP'),
+    (5, 'QR345ST'),
+    (6, 'UV678WX'),
+    (7, 'YZ901AB'),
+    (8, 'CD234EF');
+
+
+-- Insérer les bornes (elles sont disponibles)
+
+INSERT INTO BorneRecharge (etatBorne)
+VALUES
+    ('disponible'),
+    ('disponible'),
+    ('disponible'),
+    ('disponible');
+
+-- Création des tarifs
+
+INSERT INTO Tarif (nomTarif, prix)
+VALUES
+    ('tarifReservation', 2.0),
+    ('tarifNormal', 2.0),
+    ('tarifEleve', 4.0),
+    ('tauxTarifEleve', 5.0),
+    ('montantDedommagement', 8.5);
