@@ -17,12 +17,10 @@ Pour installer Charge McQueen vous devez suivre les étapes suivantes :
 
 ## [Utilisation](#utilisation)
 Pour lancer l'application il faut suivre les étapes suivantes : 
-1. Ouvrez une fenêtre du terminal (CLI) et lancez le serveur de la base de données PostgreSQL. Sur Mac vous pouvez le faire avec la commande Homebrew `brew services start postgresql@16`. 
-2. Déplacez vous dans le dossier bin avec `cd bindist/bin`.
-3. Utilisez la commande `./mcqueen` pour lancer l'application.
-4. Le menu principal sera présenté, choisissez une option et bienvenue chez Charge McQueen !
-5. Pour quitter l'application il suffit de choisir l'option STOP dans le menu principal.
-6. N'oubliez pas d'arrêter le serveur PostgreSQL avec la commande `brew services stop postgresql@16`.
+1. Ouvrez une fenêtre du terminal (CLI) et déplacez vous dans le dossier bin avec `cd bindist/bin`.
+2. Utilisez la commande `./mcqueen` pour lancer l'application.
+3. Le menu principal sera présenté, choisissez une option et bienvenue chez Charge McQueen !
+4. Pour quitter l'application il suffit de choisir l'option STOP dans le menu principal.
 
 ## [À propos](#a-propos)
 Ce projet a été réalisé dans le cadre du cours de Génie Logiciel du Master en Méthodes Informatiques Appliquées à la Gestion des Entreprises I de l'Université de Lorraine.
