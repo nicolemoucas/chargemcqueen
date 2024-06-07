@@ -114,7 +114,7 @@ public class OutilsBaseSQL {
             Statement stmt = conn.createStatement();
             resultat = stmt.executeQuery(requete);
         } catch (SQLException e){
-            System.out.println(erreur);
+            System.out.println(e);
         } finally {
             return resultat;
         }

@@ -74,21 +74,28 @@ public class ReservationClientInscrit {
      * @return listes des bornes disponibles
      */
     private ResultSet getBornesDisponibles(String dateDeb, String dateFin, OutilsBaseSQL outilsBaseSQL) {
+
+        System.out.println(dateDeb);
+        System.out.println(dateFin);
         String query = "Select * \n" +
                 "from bornerecharge br\n" +
                 "left join reservation res\n" +
                 "on br.idborne = res.idborne\n" +
                 "where br.etatBorne = 'disponible' \n" +
-                " AND ( (res.idReservation IS NULL) OR (res.heureDebut > " + dateFin + " OR res.heureFin < " + dateDeb + "));";
+                " AND ( (res.idReservation IS NULL) OR (res.heureDebut > '" + dateFin + "' OR res.heureFin < '" + dateDeb + "'));";
         String erreur = "Une erreur s'est produite lors de la recherche des bornes disponibles !";
         return outilsBaseSQL.rechercheSQL(query, erreur);
     }
 
     private int creerReservationBDD(ImmatriculationDto plaque, int idBorne, String deb, String fin, String type, OutilsBaseSQL outilsBaseSQL){
+        System.out.println("creerReservationBDD");
         String query = "INSERT INTO Reservation (numeroImmat, idBorne, heureDebut, heureFin, type, nbProlongations)\n" +
-                " VALUES ("+ plaque.getPlaque() +", "+ idBorne +", "+ deb +", "+ fin +", "+ type +", 0)";
+                " VALUES ('"+ plaque.getPlaque() +"', "+ idBorne +", '"+ deb +"', '"+ fin +"', '"+ type +"', 0)";
+        System.out.println(query);
         String erreur = "Une erreur s'est produite lors de la réservation !";
-        return outilsBaseSQL.majSQL(query, erreur);
+        int res = outilsBaseSQL.majSQL(query, erreur);
+        System.out.println(res);
+        return res;
     }
 
     /**
@@ -114,7 +121,7 @@ public class ReservationClientInscrit {
         String resultat = "";
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         LocalDateTime dateTime = LocalDateTime.parse(debutCrenau, formatter);
-        LocalDateTime futureDateTime = dateTime.plusHours(2);
+        LocalDateTime futureDateTime = dateTime.plusHours(1);
         resultat = futureDateTime.format(formatter);
         return resultat;
     }
@@ -200,7 +207,7 @@ public class ReservationClientInscrit {
                 plaqueChoisie.getPlaque(),
                 selectedBorneId,
                 LocalDateTime.now(),
-                LocalDateTime.now().plusHours(2),
+                LocalDateTime.now().plusHours(1),
                 ETypeReservation.UNIQUE,
                 0,
                 idres
@@ -245,41 +252,29 @@ public class ReservationClientInscrit {
         String plaque = Outils.recupererPlaqueImmat(scanner);
 
         // Tester si existe en BDD
-        String query = "Select count(*) from Immatriculation where Immatriculation.numeroImmat = " + plaque + " ;";
-        String erreur = "Erreur dans la recherche des plaques";
+        String query = "SELECT * FROM immatriculation WHERE numeroimmat = '" + plaque + "' ;";
+        String erreur = "Pas de plaque " + plaque ;
         ResultSet recherche = outilsBaseSQL.rechercheSQL(query, erreur);
-        int compte=0;
         try {
-            while (recherche.next()) {
-                compte = recherche.getInt(1); // Récupère le nombre du premier (et unique) champ
-            }
-        } catch (Exception e){
-            System.out.println(e);
-        } finally {
-            if(compte > 1){
+            if (!recherche.next()) {
                 // Si non, créer
-                query = "INSERT INTO Immatriculation (numeroImmat, typeImmat) VALUES ( " + plaque + ", 'Temporaire');";
+                query = "INSERT INTO Immatriculation (numeroimmat, typeImmat) VALUES ( '" + plaque + "', 'Temporaire');";
                 erreur = "Problème de création de la plaque";
                 int insert = outilsBaseSQL.majSQL(query, erreur);
                 if(insert < 0){
                     System.out.println("Plaque crée !");
                 }
             }
+        } catch (Exception e){
+           // System.out.println(e);
         }
 
         // Tester si client utilise
-        query = "Select count(*) from Utilise where Utilise.numeroImmat = " + plaque + " AND idClient = " + currentlyConnectedClient.getIdClient() + " ;";
+        query = "Select * from Utilise where Utilise.numeroImmat = '" + plaque + "' AND idClient = " + currentlyConnectedClient.getIdClient() + " ;";
         erreur = "Erreur dans la recherche des plaques";
         recherche = outilsBaseSQL.rechercheSQL(query, erreur);
-        compte=0;
         try {
-            while (recherche.next()) {
-                compte = recherche.getInt(1); // Récupère le nombre du premier (et unique) champ
-            }
-        } catch (Exception e){
-            System.out.println(e);
-        } finally {
-            if(compte > 1){
+            if (!recherche.next()) {
                 // Si non, utilise
                 query = "INSERT INTO Utilise (idClient, numeroImmat) VALUES (" + currentlyConnectedClient.getIdClient() + ", " + plaque + ");";
                 erreur = "Problème de création de l'utilisation";
@@ -288,6 +283,8 @@ public class ReservationClientInscrit {
                     System.out.println("Utilisation ajoutée !");
                 }
             }
+        } catch (Exception e){
+            System.out.println(e);
         }
 
         return new ImmatriculationDto(plaque, ETypeImmat.TEMPORAIRE);
