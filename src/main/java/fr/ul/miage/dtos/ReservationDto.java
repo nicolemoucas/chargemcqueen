@@ -1,6 +1,7 @@
 package fr.ul.miage.dtos;
 
 import fr.ul.miage.Enums.ETypeImmat;
+import fr.ul.miage.Enums.ETypeReservation;
 
 import java.time.LocalDateTime;
 
@@ -9,9 +10,9 @@ import java.time.LocalDateTime;
  */
 public class ReservationDto {
     /**
-     * L'identifiant de l'immatriculation du véhicule associé à la réservation.
+     * La plaque d'immatriculation du véhicule associé à la réservation.
      */
-    private int idImmat;
+    private String plaque;
 
     /**
      * L'identifiant de la borne associée à la réservation.
@@ -29,9 +30,9 @@ public class ReservationDto {
     private LocalDateTime heureFin;
 
     /**
-     * Indique si la plaque est permanante (normale) ou temporaire (dans le cadre des locations).
+     * Indique si la réservation est unique ou garantie (c'est à dire qu'elle se répète chaque semaine)
      */
-    private ETypeImmat typeImmat;
+    private ETypeReservation typeReservation;
 
     /**
      * Le nombre de prolongations qu'il y a sur la réservation. Pour le moment, toujours 0 car non traité.
@@ -39,26 +40,34 @@ public class ReservationDto {
     private int nbProlongations;
 
     /**
+     * L'id de la réservation
+     */
+    private int idReservation;
+
+    /**
      * Constructeur d'une réservation.
-     * @param idImmat l'identifiant de la plaque d'immatriculation du véhicule associé à la réservation.
+     * @param plaque la plaque d'immatriculation du véhicule associé à la réservation.
      * @param idBorne l'identifiant de la borne associée à la réservation.
      * @param heureDebut l'heure de début de la réservation.
      * @param heureFin l'heure de fin de la réservation.
-     * @param typeImmat le type de la plaque d'immatriculation (normale ou temporaire).
+     * @param typeRes le type de la plaque de réservation (unique ou garantie).
      * @param nbProlongations le nombre de prolongations (non traité actuellement).
+     * @param idres l'id de la réservation
      */
-    public ReservationDto(int idImmat,
+    public ReservationDto(String plaque,
                           int idBorne,
                           LocalDateTime heureDebut,
                           LocalDateTime heureFin,
-                          ETypeImmat typeImmat,
-                          int nbProlongations) {
-        this.idImmat = idImmat;
+                          ETypeReservation typeRes,
+                          int nbProlongations,
+                          int idres) {
+        this.plaque = plaque;
         this.idBorne = idBorne;
         this.heureDebut = heureDebut;
         this.heureFin = heureFin;
-        this.typeImmat = typeImmat;
+        this.typeReservation = typeRes;
         this.nbProlongations = nbProlongations;
+        this.idReservation = idres;
     }
 
     // Getters
@@ -75,11 +84,15 @@ public class ReservationDto {
         return heureFin;
     }
 
-    public ETypeImmat getTypeImmat() {
-        return typeImmat;
+    public ETypeReservation getTypeReservation() {
+        return typeReservation;
     }
 
     public int getNbProlongations() {
         return nbProlongations;
+    }
+
+    public int getIdReservation() {
+        return idReservation;
     }
 }

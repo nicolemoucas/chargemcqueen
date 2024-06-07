@@ -1,14 +1,15 @@
 package fr.ul.miage.Enums;
 
-public enum ETypeImmat {
+public enum ETypeReservation {
 
     // Liste des valeurs possibles
-    TEMPORAIRE("Temporaire"),
-    NORMALE("Normale");
+
+    UNIQUE("Unique"),
+    GARANTIE("Garantie");
 
     private final String value;
 
-    ETypeImmat(String value) {
+    ETypeReservation(String value) {
         this.value = value;
     }
 

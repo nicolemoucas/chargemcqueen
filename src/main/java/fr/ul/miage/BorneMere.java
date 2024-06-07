@@ -178,7 +178,7 @@ public class BorneMere {
      * TODO : Permet à l'utilisateur de faire une réservation.
      */
     protected static void faireReservation() {
-        ReservationDto reservationDto = new ReservationClientInscrit().procedureReservation();
+        ReservationDto reservationDto = new ReservationClientInscrit().procedureReservation(outilsBaseSQL, currentlyConnectedClient);
     }
 
     /**
@@ -216,19 +216,5 @@ public class BorneMere {
         BorneMere.currentlyConnectedClient = currentlyConnectedClient;
     }
 
-    /**
-     * La méthode revoie les bornes disponibles à l'instant présent
-     *
-     * @return listes des bornes disponibles
-     */
-    private ResultSet getBornesDisponibles() {
-        String query = "Select * \n" +
-                "from bornerecharge br\n" +
-                "left join reservation res\n" +
-                "on br.idborne = res.idborne\n" +
-                "where br.etatBorne = 'disponible';" ;
-        String erreur = "Une erreur s'est produite lors de la recherche des bornes disponibles !";
-        return outilsBaseSQL.rechercheSQL(query, erreur);
-    }
     // End Getters et Setters
 }

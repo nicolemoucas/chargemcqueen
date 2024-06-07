@@ -16,7 +16,7 @@ CREATE TABLE Client
     idClient     SERIAL PRIMARY KEY,
     nom          VARCHAR(50)  NOT NULL,
     prenom       VARCHAR(50)  NOT NULL,
-    email      VARCHAR(200) NOT NULL,
+    email      VARCHAR(200) NOT NULL UNIQUE,
     numTelephone CHAR(10)     NOT NULL,
     numCarte     CHAR(16)     NOT NULL
 );

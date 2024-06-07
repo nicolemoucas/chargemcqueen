@@ -312,5 +312,4 @@ public class Outils {
         return immat;
     }
 
-
 }

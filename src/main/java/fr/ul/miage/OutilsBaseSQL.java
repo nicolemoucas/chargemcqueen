@@ -1,6 +1,8 @@
 package fr.ul.miage;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Cette classe est une boite à outils, et contient des méthodes versatiles liées à la base de données
@@ -112,7 +114,7 @@ public class OutilsBaseSQL {
             Statement stmt = conn.createStatement();
             resultat = stmt.executeQuery(requete);
         } catch (SQLException e){
-            System.out.println(erreur);
+            System.out.println(e);
         } finally {
             return resultat;
         }
@@ -126,17 +128,38 @@ public class OutilsBaseSQL {
      * @param erreur, String  : le message d'erreur à envoyer en cas de problème
      * @return
      */
-    public static boolean majSQL(String requete, String erreur){
-        int resultat = 0;
+    public static int  majSQL(String requete, String erreur){
+
+        int res = -1;
+        try (PreparedStatement pstmt = conn.prepareStatement(requete, Statement.RETURN_GENERATED_KEYS)) {
+            int lignesAffectees = pstmt.executeUpdate();
+
+            if (lignesAffectees > 0) {
+                try (ResultSet cles = pstmt.getGeneratedKeys()) {
+                    if (cles.next()) {
+                        res = cles.getInt(1);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(erreur);
+        } finally {
+            return res;
+        }
+
+        /*
+        ResultSet generatedKeys = null;
         try {
             problemeConnexion();
             Statement stmt = conn.createStatement();
-            resultat = stmt.executeUpdate(requete);
+            generatedKeys = stmt.executeUpdate(requete);
         } catch (SQLException e){
             System.out.println(erreur);
         } finally {
-            return (resultat > 0);
+            return generatedKeys;
         }
+
+         */
     }
 
 
