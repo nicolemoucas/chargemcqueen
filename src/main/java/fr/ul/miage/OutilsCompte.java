@@ -47,17 +47,19 @@ public class OutilsCompte {
     /**
      * Méthode qui gère le processus d'inscription d'un nouveau client.
      */
-    protected static void inscription() {
+    protected static ClientDto inscription() {
         ClientDto client = new FormulaireInscriptionClient().procedureInscription();
         int idClient = OutilsCompte.insererClientBDD(client);
         if (idClient > 0) {
             CompteClientDto compteClient = creerCompteClient(idClient);
             OutilsCompte.insererCompteClientBDD(compteClient);
+            client.setIdClient(idClient);
             System.out.println("\nVotre compte a été créé. Bienvenue à vous, " + client.getPrenom()+ " !" +
                     "\nVeuillez vous connecter.");
         } else {
             System.out.println("\nUne erreur s'est produite lors de l'inscription. Veuillez réessayer");
         }
+        return client;
     }
 
     /**
@@ -100,14 +102,16 @@ public class OutilsCompte {
 
         try {
             if (result.next()) {
+                int idClient = result.getInt("idclient");
                 String nom = result.getString("nom");
                 String prenom = result.getString("prenom");
                 String telephone = result.getString("numTelephone");
                 String email = result.getString("email");
                 String carteBancaire = result.getString("numCarte");
-                client.add(new ClientDto(nom, prenom, telephone, email, carteBancaire));
+                ClientDto cdto = new ClientDto(nom, prenom, telephone, email, carteBancaire);
+                cdto.setIdClient(idClient);
+                client.add(cdto);
 
-                int idClient = result.getInt("idclient");
                 MotDePasseDto mdpDto = new MotDePasseDto(result.getString("motdepasse"),
                         result.getString("sel"));
                 client.add(new CompteClientDto(idClient, mdpDto));
@@ -209,8 +213,8 @@ public class OutilsCompte {
     public static void insererCompteClientBDD(CompteClientDto compteClient) {
         String query = "INSERT INTO Compte (idClient, motDePasse, sel) VALUES (" + compteClient.getIdClient() + ", '" + compteClient.getMotDePasse().getMotDePasseChiffre() + "', '" + compteClient.getMotDePasse().getSel() + "')";
         System.out.println(query);
-        boolean resultat = OutilsBaseSQL.majSQL(query, "Une erreur s'est produite lors de l'insertion du compte client.");
-        if (!resultat) {
+        int resultat = OutilsBaseSQL.majSQL(query, "Une erreur s'est produite lors de l'insertion du compte client.");
+        if (resultat > 0) {
             System.out.println("Une erreur s'est produite lors de l'insertion du compte client.");
         }
     }

@@ -29,7 +29,7 @@ public class FormulaireInscriptionClient {
         String mail = Outils.recupererMail(scanner);
         String carteBancaire = recupererCarteBancaire(scanner);
         // Le compte créé pour l'insérer en BDD
-       // CompteClientDto compteClient = creerCompteClient(scanner);
+        //int id = this.inscriptionBDD(nomDeFamille, prenom, telephone, mail, carteBancaire, outilsBaseSQL);
         plaqueDImmatriculation(scanner);
         return new ClientDto(nomDeFamille, prenom, telephone, mail, carteBancaire);
     }

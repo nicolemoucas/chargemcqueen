@@ -6,6 +6,11 @@ package fr.ul.miage.dtos;
 public class ClientDto {
 
     /**
+     * L'id du client en BDD
+     */
+    int idClient;
+
+    /**
      * Le nom du client.
      */
     String nom;
@@ -29,6 +34,7 @@ public class ClientDto {
      * Le numéro de carte bancaire du client.
      */
     String carteBancaire;
+
 
     /**
      * Constructeur de l'objet ClientDto.
@@ -67,5 +73,14 @@ public class ClientDto {
     public String getCarteBancaire() {
         return carteBancaire;
     }
+
+    public int getIdClient() {
+        return idClient;
+    }
+
+    public void setIdClient(int idClient) {
+        this.idClient = idClient;
+    }
+
     // Fin Getters et Setters
 }

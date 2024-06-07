@@ -20,11 +20,11 @@ public class ConnexionCompteClient {
 
         // Récupérer le client et son compte (respectivement) depuis la base
         List<Object> client = OutilsCompte.getClientBDD(mail);
-        if (client.isEmpty() || client.getFirst() == null || client.getLast() == null) {
+        if (client.isEmpty() || client.get(0) == null || client.get(client.size() - 1) == null) {
             System.out.println("Aucun client n'existe avec le mail '" + mail + "', veuillez vous inscrire.");
         } else {
-            ClientDto clientDto = (ClientDto) client.getFirst();
-            CompteClientDto compteClientDto = (CompteClientDto) client.getLast();
+            ClientDto clientDto = (ClientDto) client.get(0);
+            CompteClientDto compteClientDto = (CompteClientDto) client.get(client.size() - 1);
             if (verifierMdpConnexion(scanner, compteClientDto)) {
                 return clientDto;
             }
