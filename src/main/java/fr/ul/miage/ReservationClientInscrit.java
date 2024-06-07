@@ -276,7 +276,7 @@ public class ReservationClientInscrit {
         try {
             if (!recherche.next()) {
                 // Si non, utilise
-                query = "INSERT INTO Utilise (idClient, numeroImmat) VALUES (" + currentlyConnectedClient.getIdClient() + ", " + plaque + ");";
+                query = "INSERT INTO Utilise (idClient, numeroImmat) VALUES (" + currentlyConnectedClient.getIdClient() + ", '" + plaque + "');";
                 erreur = "Problème de création de l'utilisation";
                 int insert = outilsBaseSQL.majSQL(query, erreur);
                 if(insert < 0){
